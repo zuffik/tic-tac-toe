@@ -1,0 +1,89 @@
+image: python:3.7
+
+stages:
+  - preprocess
+  - build
+  - deploy
+
+compile-pdf:
+  image: tianon/latex
+  stage: build
+  script:
+    - cd docs
+    - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
+    - cd out
+    - makeindex paperwork.nlo -s nomencl.ist -o paperwork.nls
+    - rm paperwork.aux || true
+    - rm paperwork.lof || true
+    - rm paperwork.blg || true
+    - rm paperwork.out || true
+    - rm paperwork.nlo || true
+    - rm paperwork.pdf || true
+    - rm paperwork.log || true
+    - rm paperwork.toc || true
+    - rm paperwork.fdb_latexmk || true
+    - rm paperwork.fls || true
+    - rm paperwork.bbl || true
+    - cd ../docs
+    - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
+    - texcount -inc paperwork.tex
+  artifacts:
+    paths:
+      - docs/out/paperwork.pdf
+
+build-unity:
+  tags:
+    - zuffik-unity
+  stage: build
+  script:
+    - "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.Build -buildTarget WebGL -quit -logFile win.log -projectPath game
+
+
+train-ann:
+  tags:
+    - zuffik-compute
+  stage: preprocess
+  before_script:
+    - cd ai
+    - python --version
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install -U pip
+    - pip --version
+    - pip install -r requirements.txt
+    - chmod +x store-ann.sh
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 start-instances --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+    - ./store-ann.sh
+    - aws ec2 stop-instances --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+  artifacts:
+    paths:
+      - ai/models
+  when: manual
+
+deploy-pdf:
+  stage: deploy
+  cache:
+    paths:
+      - gdrive
+      - venv
+  dependencies:
+    - compile-pdf
+  before_script:
+    - cd ai
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+    - if [ ! -f "./gdrive" ]; then wget -O gdrive https://github.com/gdrive-org/gdrive/releases/download/2.1.0/gdrive-linux-x64 ; fi
+    - chmod +x ./gdrive
+    - mkdir -p ~/.gdrive && echo $GOOGLE_APP_AUTH > ~/.gdrive/token.json
+  script:
+    - aws s3 sync ./out s3://storage-zuffik/ --acl public-read --exclude "*" --include "paperwork.pdf"
+    - ./gdrive -c ~/.gdrive --service-account token.json update $GOOGLE_DRIVE_FILE_ID out/paperwork.pdf

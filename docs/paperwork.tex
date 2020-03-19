@@ -1,0 +1,51 @@
+%! Author = zuffik
+%! Date = 02/02/2020
+
+\documentclass[12pt]{article}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[slovak]{babel}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{csquotes}
+\usepackage{multirow}
+\usepackage{regexpatch}
+\usepackage{longtable}
+\usepackage[notintoc]{nomencl}
+\usepackage{verbatim}
+\usepackage{comment}
+\usepackage{float}
+\usepackage{datetime}
+\usepackage{pgf,interval}
+\usepackage{anyfontsize}
+
+\input{setup.tex}
+
+\begin{document}
+    \input{sections/head.tex}
+    \input{sections/analysis.tex}
+    \input{sections/algorithms.tex}
+    \input{sections/experiments.tex}
+    \section{Hra}\label{sec:game}
+    \subsection{Ovládanie}\label{subsec:controlling}
+    \subsubsection{Unity}
+    popis unity
+    \subsubsection{Prostredie Cave}
+    popis prostredia cave + cave v unity
+    \subsection{Vývojové prostreidky pre umelú inteligenciu}\label{subsec:dev-tools-for-ai}
+    python apod
+    \subsection{Prepojenie umelej inteligencie s prostredím}\label{subsec:connection}
+    python s unity cez sockety
+
+    \bibliography{references}
+    \bibliographystyle{unsrt}
+\end{document}

@@ -1,0 +1,88 @@
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>tic-tac-toe</title>
+</head>
+<body>
+<script>
+const OUTER_MARGIN = 10;
+const INNER_MARGIN = OUTER_MARGIN * 2;
+const CELL_SIZE = 100;
+const SIGN_SIZE = CELL_SIZE - INNER_MARGIN * 2;
+const DIMENSION = 3;
+
+const LINE_CELLS = 1.5;
+const LINE_SIGNS = 5.5;
+
+function setupCanvas() {
+    const canvas = document.createElement('canvas');
+    canvas.width = OUTER_MARGIN * 2 + CELL_SIZE * DIMENSION;
+    canvas.height = OUTER_MARGIN * 2 + CELL_SIZE * DIMENSION;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = LINE_CELLS;
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, canvas.height);
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.lineTo(canvas.width, 0);
+    ctx.lineTo(0, 0);
+    for (var i = 1; i < DIMENSION; i++) {
+        ctx.moveTo(i * CELL_SIZE + OUTER_MARGIN + 0.5, OUTER_MARGIN);
+        ctx.lineTo(i * CELL_SIZE + OUTER_MARGIN + 0.5, CELL_SIZE * DIMENSION + OUTER_MARGIN);
+        ctx.moveTo(OUTER_MARGIN, i * CELL_SIZE + OUTER_MARGIN + 0.5);
+        ctx.lineTo(CELL_SIZE * DIMENSION + OUTER_MARGIN, i * CELL_SIZE + OUTER_MARGIN + 0.5);
+    }
+    ctx.stroke();
+    return ctx;
+}
+
+function drawToCell(ctx, i, j, clb) {
+    clb(ctx, i * CELL_SIZE + OUTER_MARGIN + INNER_MARGIN, j * CELL_SIZE + OUTER_MARGIN + INNER_MARGIN);
+}
+
+function drawX(ctx, x, y) {
+    ctx.beginPath();
+    ctx.strokeStyle = '#55F';
+    ctx.lineWidth = LINE_SIGNS;
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + SIGN_SIZE, y + SIGN_SIZE);
+    ctx.moveTo(x + SIGN_SIZE, y);
+    ctx.lineTo(x, y + SIGN_SIZE);
+    ctx.stroke();
+}
+
+function drawO(ctx, x, y) {
+    ctx.beginPath();
+    ctx.strokeStyle = '#F55';
+    ctx.lineWidth = LINE_SIGNS;
+    ctx.arc(x + SIGN_SIZE / 2, y + SIGN_SIZE / 2, SIGN_SIZE / 2, 0, 2 * Math.PI);
+    ctx.stroke();
+}
+
+function drawBoard(ctx, board) {
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[i].length; j++) {
+            if (board[i][j] === '') continue;
+            drawToCell(ctx, j, i, board[i][j] === 'X' ? drawX : drawO);
+        }
+    }
+}
+
+window.addEventListener('load', function () {
+    const ctx = setupCanvas();
+    const board = [
+        ['X', 'O', 'O'],
+        ['O', 'X', 'X'],
+        ['X', 'X', 'O'],
+    ];
+    drawBoard(ctx, board);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+% Document
+\makenomenclature
+
+\nomenclature{$ANN$}{Umelá neurónová sieť (Artificial neural networks)}
+
+\graphicspath{ {./images} }
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\geometry{a4paper, portrait, left=3.5cm, right=2cm, top=2.5cm, bottom=2.5cm}
+\linespread{1.25}
+\title{Záverečná práca}
+\author{Žuffa}
+\date{ }
+
+% Renew
+\let\bkupitemize\itemize
+\let\bkupenditemize\enditemize
+\renewenvironment{itemize}{\bkupitemize\addtolength{\itemsep}{-0.3\baselineskip}}{\bkupenditemize}
+\let\bkupenumerate\enumerate
+\let\bkupendenumerate\endenumerate
+\renewenvironment{enumerate}{\bkupenumerate\addtolength{\itemsep}{-0.3\baselineskip}}{\bkupendenumerate}
+
+\newcommand{\sectionbreak}{\clearpage}
+
+\makeatletter
+% Change the `-` delimiter to an active character
+\xpatchparametertext\@@@cmidrule{-}{\cA-}{}{}
+\xpatchparametertext\@cline{-}{\cA-}{}{}
+\makeatother
+\makeatletter
+\patchcmd{\thenomenclature}{\section*}{\section}{}{}
+\makeatother
+
+\renewcommand{\nomname}{Použité skratky}
+\makeatletter
+\def\thenomenclature{
+  \section*{\nomname}
+  \if@intoc\addcontentsline{toc}{section}{\nomname}\fi%
+\nompreamble
+\list{}{%
+\labelwidth\nom@tempdim
+\leftmargin\labelwidth
+\advance\leftmargin\labelsep
+\itemsep\nomitemsep
+\let\makelabel\nomlabel}}
+\makeatother

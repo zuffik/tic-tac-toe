@@ -1,0 +1,233 @@
+\subsection{Experimenty}\label{subsec:experiments}
+S popísanými algoritmami boli vykonávané experimenty pre overenie správnosti navrhnutých štruktúr a nájdenie možných
+vzorcov vo výsledkoch.
+Pre potreby natrénovania umelých neurónových sietí boli použité simulácie náhodných hier v počte 4000 až 10--000.
+Simulácie pozostávali z náhodného výberu políčok pre každého hráča.
+Náhodný výber bol navyše zlepšený predpokladom, že hráči sa počas hry (najmä na plochách väčších rozmerov) snažia
+väčšinou znemožniť protihráčovi jeho výhru výberom políčok, ktoré sú blízko jeho predchádzajúcemu ťahu
+(resp. predchádzajúcim ťahom).
+Keďže piškvorky sú hra, ktorá sa hrá na pravouhlej ploche (resp. pravouhlom priestore) bolo možné pri výpočte
+pravdepodobnosti výberu prvku použiť Manhattanskú vzdialenosť.
+Nech pre $d=3$ $c_i(b)$, $c_j(b)$, $c_k(b)$ sú súradnice ($i$ a $j$) políčka, ktoré je najbližšie k políčku $b_{ijk}$ a
+nech
+
+\begin{equation}
+    e(b_{ijk}) =
+    \begin{cases}
+        1 & \text{ak políčko }ijk\text{ je prázdne} \\
+        0 & \text{inak}
+    \end{cases}
+\end{equation}
+
+potom pravdepodobnosť výberu políčka $ijk$ je
+
+\begin{equation}
+    p(b_{ijk}) = \frac{|c_i(b) - i| + |c_j(b) - j| + |c_k(b) - k|}{\sum_{m=1}^r\sum_{n=1}^r\sum_{o=1}^r e(b_{mno})}
+\end{equation}
+
+Pre $d=2$ (teda pre hru na ploche) platia rovnaké pravidlá, pričom $k=1$ (resp. $o=1$) vo všetkých prípadoch.
+Kľúčovou informáciou je počet výhier hráča \textbf{X} (resp. podiel výhier vzhľadom na počet hier) v prípade
+neurónových sietí; čas a výhra v prípade algoritmu MinMax.
+
+\subsubsection{Experimenty s rôznymi plochami}\label{subsec:experiments-board}
+
+Experimenty boli vykonávané v 2 variantoch:
+\begin{enumerate}
+    \item Obaja hráči vykonávajú svoje ťahy pomocou rovnakého algoritmu (minmax alebo ANN).
+    \item Hráč \textbf{X} vykonáva svoj ťah na základe algoritmu (minmax alebo ANN) a druhý hráč si vyberá svoje ťahy náhodne.
+\end{enumerate}
+Každý z týchto variantov bol simulovaný 3-krát na hracích plochách o veľkosti 3 až 15 ($3 \leq r \leq 15$) s využitím oboch algoritmov.
+Hráči potrebovali 3 za sebou idúce znaky na výhru ($w = 3$).
+Výsledky sú v \hyperref[table:experiments-boards]{nasledujúcej tabuľke}.
+Výsledky zo simulácii variantu 1 sa nachádzajú v stĺpci \enquote{AI vs AI}.
+Výsledky zo simulácii variantu 2 sa nachádzajú v stĺpci \enquote{AI vs Random}.
+Tabuľka je vertikálne rozdelená na 2 časti:
+\begin{enumerate}
+    \item využitie algoritmu ANN.
+    Preferovaný hráč bol hráč \textbf{X} a teda výsledky z jeho hier znamenajú výhru.
+    Výsledky hráča \textbf{O} znamenajú prehru hráča \textbf{X}.
+    \item využitie algoritmu MinMax.
+\end{enumerate}
+
+\clearpage
+\begin{table}[H]
+    \begin{tiny}
+
+        \begin{tabular}{|l|l|l|l|l||l|||l|l|l||l|}
+            \hline
+            \multirow{2}{*}{} & &
+            \multicolumn{4}{c|}{AI vs AI} &
+            \multicolumn{4}{c|}{AI vs Random} \\
+            \hline
+            \textit{A} & \textit{r} & 1 & 2 & 3 & Priemer & 1 & 2 & 3 & Priemer \\
+            \hline
+            \hline
+            \multirow{15}{*}{\rotatebox[origin=c]{90}{Umelá neurónová sieť}}
+            & \multirow{3}{*}{3}
+            & \textbf{X}: 86.7\% & \textbf{X}: 66.7\% & \textbf{X}: 40\% & \textbf{X}: 64.5\%                           & \textbf{X}: 73.3\% & \textbf{X}: 73.3\% & \textbf{X}: 70\% & \textbf{X}: 72.2\% \\
+            & & \textbf{O}: 13.3\% & \textbf{O}: 33.3\% & \textbf{O}: 46.7\% & \textbf{O}: 31.1\%                       & \textbf{O}: 20\% & \textbf{O}: 13.3\% & \textbf{O}: 3.3\% & \textbf{O}: 12.2\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 13.3\% & \textbf{Remíza}: 4.4\%          & \textbf{Remíza}: 6.7\% & \textbf{Remíza}: 13.3\% & \textbf{Remíza}: 26.7\% & \textbf{Remíza}: 15.6\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{4}
+            & \textbf{X}: 76\% & \textbf{X}: 64\% & \textbf{X}: 60\% & \textbf{X}: 66.7\%                               & \textbf{X}: 84\% & \textbf{X}: 72\% & \textbf{X}: 76\% & \textbf{X}: 77.3\% \\
+            & & \textbf{O}: 24\% & \textbf{O}: 36\% & \textbf{O}: 40\% & \textbf{O}: 33.3\%                             & \textbf{O}: 16\% & \textbf{O}: 28\% & \textbf{O}: 24\% & \textbf{O}: 22.7\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{5}
+            & \textbf{X}: 72\% & \textbf{X}: 36\% & \textbf{X}: 68\% & \textbf{X}: 58.7\%                               & \textbf{X}: 96\% & \textbf{X}: 96\% & \textbf{X}: 84\% & \textbf{X}: 92\% \\
+            & & \textbf{O}: 28\% & \textbf{O}: 64\% & \textbf{O}: 32\% & \textbf{O}: 41.3\%                             & \textbf{O}: 4\% & \textbf{O}: 4\% & \textbf{O}: 16\% & \textbf{O}: 8\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{6}
+            & \textbf{X}: 80\% & \textbf{X}: 72\% & \textbf{X}: 40\% & \textbf{X}: 64\%                                 & \textbf{X}: 80\% & \textbf{X}: 96\% & \textbf{X}: 88\% & \textbf{X}: 88\% \\
+            & & \textbf{O}: 20\% & \textbf{O}: 28\% & \textbf{O}: 60\% & \textbf{O}: 36\%                               & \textbf{O}: 20\% & \textbf{O}: 4\% & \textbf{O}: 12\% & \textbf{O}: 12\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{7}
+            & \textbf{X}: 60\% & \textbf{X}: 73.3\% & \textbf{X}: 53.3\% & \textbf{X}: 62.2\%                           & \textbf{X}: 92\% & \textbf{X}: 100\% & \textbf{X}: 92\% & \textbf{X}: 94.7\% \\
+            & & \textbf{O}: 40\% & \textbf{O}: 26.7\% & \textbf{O}: 46.7\% & \textbf{O}: 37.8\%                         & \textbf{O}: 8\% & \textbf{O}: 0\% & \textbf{O}: 8\% & \textbf{O}: 5.3\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{8}
+            & \textbf{X}: 60\% & \textbf{X}: 66.7\% & \textbf{X}: 40\% & \textbf{X}: 55.6\%                             & \textbf{X}: 92\% & \textbf{X}: 92\% & \textbf{X}: 96\% & \textbf{X}: 93.3\% \\
+            & & \textbf{O}: 40\% & \textbf{O}: 33.3\% & \textbf{O}: 60\% & \textbf{O}: 44.4\%                           & \textbf{O}: 8\% & \textbf{O}: 8\% & \textbf{O}: 4\% & \textbf{O}: 6.7\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{9}
+            & \textbf{X}: 66.7\% & \textbf{X}: 73.4\% & \textbf{X}: 73.4\% & \textbf{X}: 71.2\%                         & \textbf{X}: 100\% & \textbf{X}: 100\% & \textbf{X}: 100\% & \textbf{X}: 100\% \\
+            & & \textbf{O}: 33.3\% & \textbf{O}: 26.6\% & \textbf{O}: 26.6\% & \textbf{O}: 28.8\%                       & \textbf{O}: 0\% & \textbf{O}: 0\% & \textbf{O}: 0\% & \textbf{O}: 0\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{10}
+            & \textbf{X}: 46.7\% & \textbf{X}: 60\% & \textbf{X}: 60\% & \textbf{X}: 55.6\%                             & \textbf{X}: 100\% & \textbf{X}: 92\% & \textbf{X}: 96\% & \textbf{X}: 96\% \\
+            & & \textbf{O}: 53.3\% & \textbf{O}: 40\% & \textbf{O}: 40\% & \textbf{O}: 44.4\%                           & \textbf{O}: 0\% & \textbf{O}: 8\% & \textbf{O}: 4\% & \textbf{O}: 4\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{11}
+            & \textbf{X}: 60\% & \textbf{X}: 66.7\% & \textbf{X}: 66.7\% & \textbf{X}: 64.5\%                           & \textbf{X}: 96\% & \textbf{X}: 100\% & \textbf{X}: 96\% & \textbf{X}: 97.3\% \\
+            & & \textbf{O}: 40\% & \textbf{O}: 33.3\% & \textbf{O}: 33.3\% & \textbf{O}: 35.5\%                         & \textbf{O}: 4\% & \textbf{O}: 0\% & \textbf{O}: 4\% & \textbf{O}: 2.7\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{12}
+            & \textbf{X}: 93.3\% & \textbf{X}: 60\% & \textbf{X}: 53.3\% & \textbf{X}: 68.9\%                           & \textbf{X}: 100\% & \textbf{X}: 96\% & \textbf{X}: 92\% & \textbf{X}: 96\% \\
+            & & \textbf{O}: 6.7\% & \textbf{O}: 40\% & \textbf{O}: 46.7\% & \textbf{O}: 31.1\%                          & \textbf{O}: 0\% & \textbf{O}: 4\% & \textbf{O}: 8\% & \textbf{O}: 4\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{13}
+            & \textbf{X}: 80\% & \textbf{X}: 60\% & \textbf{X}: 60\% & \textbf{X}: 66.7\%                               & \textbf{X}: 96\% & \textbf{X}: 100\% & \textbf{X}: 88\% & \textbf{X}: 71\% \\
+            & & \textbf{O}: 20\% & \textbf{O}: 40\% & \textbf{O}: 40\% & \textbf{O}: 33.3\%                             & \textbf{O}: 4\% & \textbf{O}: 0\% & \textbf{O}: 12\% & \textbf{O}: 29\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{14}
+            & \textbf{X}: 66.7\% & \textbf{X}: 60\% & \textbf{X}: 80\% & \textbf{X}: 68.9\%                             & \textbf{X}: 96\% & \textbf{X}: 96\% & \textbf{X}: 96\% & \textbf{X}: 4\% \\
+            & & \textbf{O}: 33.3\% & \textbf{O}: 40\% & \textbf{O}: 20\% & \textbf{O}: 31.1\%                           & \textbf{O}: 4\% & \textbf{O}: 4\% & \textbf{O}: 4\% & \textbf{O}: 4\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \cline{2-10}
+            & \multirow{3}{*}{15}
+            & \textbf{X}: 73.3\% & \textbf{X}: 70\% & \textbf{X}: 76.7\% & \textbf{X}: 73.3\%                           & \textbf{X}: 100\% & \textbf{X}: 96\% & \textbf{X}: 92\% & \textbf{X}: 96\% \\
+            & & \textbf{O}: 26.7\% & \textbf{O}: 30\% & \textbf{O}: 23.3\% & \textbf{O}: 26.7\%                         & \textbf{O}: 0\% & \textbf{O}: 4\% & \textbf{O}: 8\% & \textbf{O}: 4\% \\
+            & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+            \hline
+            \hline
+            \multirow{15}{*}{\rotatebox
+            [origin=c]{90}{MinMax}}
+            & \multirow{2}{*}{3}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{Remíza} & \textbf{Víťaz}: \textbf{X}& \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 0.36s & \textbf{Čas}: 0.41s & \textbf{Čas}: 0.4 s &  \textbf{Čas}: 0.39s & \textbf{Čas}: 0.03s & \textbf{Čas}: 0.05s & \textbf{Čas}: 0.05s & \textbf{Čas}: 0.04 s \\
+            \cline{2-10}
+            & \multirow{2}{*}{4}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X}& \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 6.91s & \textbf{Čas}: 7.64s & \textbf{Čas}: 5.80s &  \textbf{Čas}: 6.54s & \textbf{Čas}: 1.62s & \textbf{Čas}: 1.73s & \textbf{Čas}: 1.86s & \textbf{Čas}: 1.73s \\
+            \cline{2-10}
+            & \multirow{2}{*}{5}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X}& \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 0.26s & \textbf{Čas}: 0.26s & \textbf{Čas}: 0.26s &  \textbf{Čas}: 0.26s & \textbf{Čas}: 0.08s & \textbf{Čas}: 0.08s & \textbf{Čas}: 0.08s & \textbf{Čas}: 0.08s \\
+            \cline{2-10}
+            & \multirow{2}{*}{6}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X}& \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 0.85s & \textbf{Čas}: 0.99s & \textbf{Čas}: 0.85s &  \textbf{Čas}: 0.9s & \textbf{Čas}: 0.22s & \textbf{Čas}: 0.23s & \textbf{Čas}: 0.60s & \textbf{Čas}: 0.35s \\
+            \cline{2-10}
+            & \multirow{2}{*}{7}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X}& \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 1.7s & \textbf{Čas}: 1.65s & \textbf{Čas}: 1.71s &  \textbf{Čas}: 1.69s & \textbf{Čas}: 0.56s & \textbf{Čas}: 0.55s & \textbf{Čas}: 0.55s & \textbf{Čas}: 0.55s \\
+            \cline{2-10}
+            & \multirow{2}{*}{8}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X}& \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 3.58s & \textbf{Čas}: 3.70s & \textbf{Čas}: 3.56s &  \textbf{Čas}: 3.61s & \textbf{Čas}: 1.18s & \textbf{Čas}: 1.17s & \textbf{Čas}: 1.14s & \textbf{Čas}: 1.16s \\
+            \cline{2-10}
+            & \multirow{2}{*}{9}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{O}& \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 6.83s & \textbf{Čas}: 7.08s & \textbf{Čas}: 25.72s &  \textbf{Čas}: 13.21s & \textbf{Čas}: 2.3s & \textbf{Čas}: 2.25s & \textbf{Čas}: 2.26s & \textbf{Čas}: 2.27s \\
+            \cline{2-10}
+            & \multirow{2}{*}{10}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 12.24s & \textbf{Čas}: 12.38s & \textbf{Čas}: 12.04s &  \textbf{Čas}: 12.22s & \textbf{Čas}: 4.26s & \textbf{Čas}: 4.22s & \textbf{Čas}: 4.11s & \textbf{Čas}: 4.2 s \\
+            \cline{2-10}
+            & \multirow{2}{*}{11}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 20.66s & \textbf{Čas}: 20.63s & \textbf{Čas}: 20.97s &  \textbf{Čas}: 20.75s & \textbf{Čas}: 6.82s & \textbf{Čas}: 7.31s & \textbf{Čas}: 6.94s & \textbf{Čas}: 7.02s \\
+            \cline{2-10}
+            & \multirow{2}{*}{12}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 34.1s & \textbf{Čas}: 33.51s & \textbf{Čas}: 34s &  \textbf{Čas}: 33.87s & \textbf{Čas}: 11.46s & \textbf{Čas}: 11.33s & \textbf{Čas}: 11.51s & \textbf{Čas}: 11.43s \\
+            \cline{2-10}
+            & \multirow{2}{*}{13}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 53.67s & \textbf{Čas}: 53.44s & \textbf{Čas}: 53.44s &  \textbf{Čas}: 53.52s & \textbf{Čas}: 35.57s & \textbf{Čas}: 17.74s & \textbf{Čas}: 17.59s & \textbf{Čas}: 23.63s \\
+            \cline{2-10}
+            & \multirow{2}{*}{14}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 85.34s & \textbf{Čas}: 90.15s & \textbf{Čas}: 83.25s &  \textbf{Čas}: 86.25s & \textbf{Čas}: 26.94s & \textbf{Čas}: 26.78s & \textbf{Čas}: 26.86s & \textbf{Čas}: 26.86s \\
+            \cline{2-10}
+            & \multirow{2}{*}{15}
+            & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} & \textbf{Víťaz}: \textbf{X} \\
+            & & \textbf{Čas}: 119.29s & \textbf{Čas}: 119.30s & \textbf{Čas}: 119.56s &  \textbf{Čas}: 119.38s & \textbf{Čas}: 41.52s & \textbf{Čas}: 41.11s & \textbf{Čas}: 52.81s & \textbf{Čas}: 45.14s \\
+            \hline
+        \end{tabular}
+    \end{tiny}
+    \caption{Výsledky experimentov s rôznymi veľkosťami}\label{table:experiments-boards}
+\end{table}
+\clearpage
+
+\subsubsection{Experimenty s rôznymi modelmi}\label{subsec:experiments-versus}
+Pri tomto experimente boli využívané porovnania použitých algoritmov (umelá neurónová sieť a minmax) na ploche s
+veľkosťou 10x10, pričom dôraz sa kládol na vyššie popísanú umelú neurónovú sieť, ktorá bola porovnávaná s algoritmom
+MinMax a s umelou neurónovou sieťou odladenou pre rozmer 3x3.\cite{first_ann} Sieť je dopredná a vrstvy siete sú
+nasledovné:
+\begin{itemize}
+    \item na vstupe je 200 neurónov a za vstup pokladá vektor $v$ (v prípade experimentu je $|v|=100$)
+    \item \enquote{dropout} vrstva, ktorá s pravdepodobnosťou 0.2 nepoužije vstup do nasledujúcej vrstvy (\enquote{zahodí ho})
+    \item vrstva s počtom neurónov 125
+    \item vrstva s počtom neurónov 75
+    \item \enquote{dropout} vrstva, ktorá s pravdepodobnosťou 0.1 nepoužije vstup do nasledujúcej vrstvy
+    \item vrstva s počtom neurónov 25
+    \item na výstupe je \enquote{one-hot} array vyjadrujúce, ktorý z hráčov vyhral (\textbf{X}, \textbf{O}) alebo či nastala remíza
+\end{itemize}
+\clearpage
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|l||l|}
+        \hline
+        \multirow{2}{*}{} &
+        \multicolumn{3}{c|}{Experiment č.} & \\
+        \hline
+        \textit{M} & 1 & 2 & 3 & Priemer \\
+        \hline
+        \hline
+        \multirow{3}{*}{\small\rotatebox[origin=c]{90}{MinMax}}
+        & \textbf{X}: 0\% & \textbf{X}: 0\% & \textbf{X}: 0\% & \textbf{X}: 0\% \\
+        & \textbf{O}: 100\% & \textbf{O}: 100\% & \textbf{O}: 100\% & \textbf{O}: 100\% \\
+        & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
+        \hline
+        \multirow{3}{*}{\small\rotatebox[origin=c]{90}{ANN}}
+        & \textbf{X}: 95\% & \textbf{X}: 100\% & \textbf{X}: 100\% & \textbf{X}: 98.3\% \\
+        & \textbf{O}: 5\% & \textbf{O}: 0\% & \textbf{O}: 0\% & \textbf{O}: 1.7\% \\
+        & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 13.3\% & \textbf{Remíza}: 0\% \\
+        \hline
+    \end{tabular}
+    \caption{Výsledky experimentov s rôznymi modelmi}\label{table:experiments-versus}
+\end{table}
+
+\subsubsection{Vyhodnotenie experimentov}
+
+

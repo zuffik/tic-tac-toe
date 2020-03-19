@@ -1,0 +1,45 @@
+\section{Analýza}\label{sec:analysis}
+
+\subsection{Označenie}\label{subsec:label}
+
+\begin{itemize}
+    \item $d$ - rozmer hry ($d \in \{2,3\}$)
+    \item $r$ - rozmer hracieho poľa ($r \geq 3$)
+    \item $n$ - počet všetkých buniek hracieho poľa (teda $r$ x $r$ na ploche alebo $r$ x $r$ x $r$ v priestore)
+    \item $w$ - počet za sebou idúcich znakov potrebných pre výhru ($2 \leq w \leq r$)
+    \item $b_{ij}$ resp. $b_{ijk}$ - $d$-rozmerná matica vyjadrujúca hodnotu políčka v $i$-tom riadku a $j$-tom
+    stĺpci (resp. $k$-tu hodnotu v $i$-tom riadku a $j$-tom stĺpci)
+\end{itemize}
+
+\subsection{Pravidlá}\label{subsec:rules}
+
+\begin{enumerate}
+    \item Každý hráč má pridelený znak \textbf{X} alebo \textbf{O}
+    \item Začína hráč s označením \textbf{X}
+    \item Hráči sa pri hre striedajú (\textbf{X}, \textbf{O}, \textbf{X}, \textbf{O}, \ldots)
+    \item Vyhráva hráč, ktorý:
+    \begin{enumerate}
+        \item má v ktoromkoľvek riadku aspoň $w$ za sebou idúcich rovnakých znakov
+        \item má v ktoromkoľvek stĺpci aspoň $w$ za sebou idúcich rovnakých znakov
+        \item má diagonálne v ktoromkoľvek smere aspoň $w$ za sebou idúcich rovnakých znakov
+    \end{enumerate}
+    \item Pre jednoduchosť je možné uvažovať rozmery (pokiaľ nie je uvedené inak):
+    \begin{enumerate}
+        \item 3x3 pre plochu s počtom znakov potrebných pre výhru 3 ($d = 2$, $r = 3$, $w = 3$)
+        \item 3x3x3 pre priestor s počtom znakov potrebných pre výhru 3 ($d = 3$, $r = 3$, $w = 3$)
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Úloha}\label{subsec:task}
+
+Cieľom hry je ponúknuť hráčovi najlepší možný ťah, ktorý môže pri hraní aktuálneho kola vykonať.
+Ak je daný rozmer 3x3 tak hru je možné ukončiť nasledovnými spôsobmi:\cite{number_of_wins}
+\begin{itemize}
+    \item remíza: \emph{46 080 spôsobov}
+    \item výhra prvého hráča (\textbf{X}): \emph{131 184 spôsobov}
+    \item výhra druhého hráča: (\textbf{O}): \emph{77 904 spôsobov}
+\end{itemize}
+
+Z toho vyplýva, že priestor, v ktorom sa prehľadáva riešenie je konečný (ohraničený).
+S pridaním jedného rozmeru len v ploche (4x4) nebolo možné prerátať tieto počty (ani po 1h nebol výsledok známy).
+
