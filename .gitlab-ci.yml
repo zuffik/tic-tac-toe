@@ -98,7 +98,6 @@ deploy-pdf:
   dependencies:
     - compile-pdf
   before_script:
-    - cd ai
     - mkdir ~/.aws/
     - touch ~/.aws/credentials
     - python -m venv venv
@@ -118,7 +117,7 @@ build-unity-after-train:
     - zuffik-unity
   stage: stage-4
   script:
-    - start /wait "unity" c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
+    - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
     - dir
     - cd game
     - dir
@@ -128,7 +127,7 @@ build-unity-manual:
     - zuffik-unity
   stage: stage-1
   script:
-    - start /wait "unity" c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
+    - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
     - dir
     - cd game
     - dir
