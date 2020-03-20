@@ -109,7 +109,7 @@ deploy-pdf:
     - chmod +x ./gdrive
     - mkdir -p ~/.gdrive && echo $GOOGLE_APP_AUTH > ~/.gdrive/token.json
   script:
-    - aws s3 sync ./out s3://storage-zuffik/ --acl public-read --exclude "*" --include "paperwork.pdf"
+    - aws s3 sync ./docs/out s3://storage-zuffik/ --acl public-read --exclude "*" --include "paperwork.pdf"
     - ./gdrive -c ~/.gdrive --service-account token.json update $GOOGLE_DRIVE_FILE_ID out/paperwork.pdf
 
 
@@ -118,7 +118,7 @@ build-unity-after-train:
     - zuffik-unity
   stage: stage-4
   script:
-    - c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile - | rem
+    - start /wait "unity" c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
     - dir
     - cd game
     - dir
@@ -128,7 +128,7 @@ build-unity-manual:
     - zuffik-unity
   stage: stage-1
   script:
-    - c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile - | rem
+    - start /wait "unity" c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
     - dir
     - cd game
     - dir
