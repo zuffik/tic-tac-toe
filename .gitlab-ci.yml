@@ -132,3 +132,4 @@ build-unity-manual:
     - dir
     - cd game
     - dir
+  when: manual
