@@ -47,7 +47,7 @@ start-computing:
     - pip install awscli
     - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
   script:
-    - aws ec2 start-instances --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+    - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
   when: manual
 
 train-ann:
@@ -87,7 +87,7 @@ stop-computing:
     - pip install awscli
     - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
   script:
-    - aws ec2 stop-instances --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+    - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
 
 deploy-pdf:
   stage: stage-2
@@ -118,7 +118,7 @@ build-unity-after-train:
     - zuffik-unity
   stage: stage-4
   script:
-    - c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
+    - c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile - | rem
     - dir
     - cd game
     - dir
@@ -128,7 +128,7 @@ build-unity-manual:
     - zuffik-unity
   stage: stage-1
   script:
-    - c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
+    - c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile - | rem
     - dir
     - cd game
     - dir
