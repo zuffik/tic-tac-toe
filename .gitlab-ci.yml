@@ -36,7 +36,7 @@ build-unity:
     - zuffik-unity
   stage: build
   script:
-    - "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.Build -buildTarget WebGL -quit -logFile win.log -projectPath game
+    - "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.Build -quit -logFile win.log -projectPath game
 
 
 train-ann:
