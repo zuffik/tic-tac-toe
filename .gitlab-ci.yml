@@ -85,8 +85,9 @@ build-unity:
   tags:
     - zuffik-unity
   stage: build
-  dependencies:
-    - train-ann
   script:
-    - start "Unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile build.log | powershell -Command "& {Get-Content build.log -Wait}"
+    - c:\"Program Files"\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
+    - dir
+    - cd game
+    - dir
   when: manual
