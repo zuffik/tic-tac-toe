@@ -6,7 +6,7 @@ public class BuildScript
 {
     static void PerformBuild()
     {
-        Debug.Log(Environment.CurrentDirectory););
+        Debug.Log(Environment.CurrentDirectory);
         Debug.Log("*** Building Windows ***");
         var report = BuildPipeline.BuildPlayer(
             new[] {"Assets/MainScene.unity"},
