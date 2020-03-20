@@ -1,7 +1,9 @@
 image: python:3.7
 
 stages:
+  - setup
   - preprocess
+  - prebuild
   - build
   - deploy
 
@@ -24,38 +26,68 @@ compile-pdf:
     - rm paperwork.fdb_latexmk || true
     - rm paperwork.fls || true
     - rm paperwork.bbl || true
-    - cd ../docs
+    - cd ..
     - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
     - texcount -inc paperwork.tex
   artifacts:
     paths:
       - docs/out/paperwork.pdf
 
-train-ann:
-  tags:
-    - zuffik-compute
-  stage: preprocess
+start-computing:
+  stage: setup
+  cache:
+    paths:
+      - venv
   before_script:
     - cd ai
-    - python --version
     - python -m venv venv
     - source venv/bin/activate
-    - pip install -U pip
-    - pip --version
-    - pip install -r requirements.txt
-    - chmod +x store-ann.sh
     - mkdir ~/.aws/
     - touch ~/.aws/credentials
     - pip install awscli
     - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
   script:
     - aws ec2 start-instances --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+  when: manual
+
+train-ann:
+  tags:
+    - zuffik-compute
+  stage: preprocess
+  dependencies:
+    - start-computing
+  cache:
+    paths:
+      - venv
+  before_script:
+    - cd ai
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+    - chmod +x store-ann.sh
+  script:
     - ./store-ann.sh
-    - aws ec2 stop-instances --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
   artifacts:
     paths:
       - ai/models
-  when: manual
+
+stop-computing:
+  stage: prebuild
+  dependencies:
+    - train-ann
+  cache:
+    paths:
+      - venv
+  before_script:
+    - cd ai
+    - python -m venv venv
+    - source venv/bin/activate
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 stop-instances --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
 
 deploy-pdf:
   stage: deploy
