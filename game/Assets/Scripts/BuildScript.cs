@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class BuildScript
         Debug.Log("*** Building Windows ***");
         var report = BuildPipeline.BuildPlayer(
             new[] {"Assets/MainScene.unity"},
-            "Build/Win/game.exe",
+            Environment.CurrentDirectory + "/Build/Win/game.exe",
             BuildTarget.StandaloneWindows64,
             BuildOptions.None
         );
@@ -18,7 +19,7 @@ public class BuildScript
         Debug.Log("*** Building WebGL ***");
         report = BuildPipeline.BuildPlayer(
             new[] {"Assets/MainScene.unity"},
-            "Build/WebGL/",
+            Environment.CurrentDirectory + "/Build/WebGL/",
             BuildTarget.WebGL,
             BuildOptions.None
         );
