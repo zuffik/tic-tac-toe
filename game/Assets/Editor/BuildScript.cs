@@ -19,7 +19,7 @@ public class BuildScript
         Debug.Log(winBuildDirectory);
         Debug.Log("*** Building Windows ***");
         var report = BuildPipeline.BuildPlayer(
-            new[] {"Assets/MainScene.unity"},
+            new[] {"Scenes/MainScene.unity"},
             winBuildDirectory + "game.exe",
             BuildTarget.StandaloneWindows64,
             BuildOptions.None
@@ -34,7 +34,7 @@ public class BuildScript
 
         Debug.Log("*** Building WebGL ***");
         report = BuildPipeline.BuildPlayer(
-            new[] {"Assets/MainScene.unity"},
+            new[] {"Scenes/MainScene.unity"},
             webGLBuildDirectory,
             BuildTarget.WebGL,
             BuildOptions.None
