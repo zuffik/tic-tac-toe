@@ -7,7 +7,6 @@ pdf:
     include: ci/pdf.yml
   only:
     changes:
-      - .gitlab-ci.yml
       - ci/pdf.yml
       - docs/**/*
 

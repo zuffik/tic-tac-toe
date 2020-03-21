@@ -28,6 +28,7 @@ Train ANN:
   before_script:
     - cd ai
     - pip install -U pip
+    - pip --version
     - pip install -r requirements.txt
     - chmod +x store-ann.sh
   script:
