@@ -114,7 +114,7 @@ def main(argv):
     elif argv.algorithm == scripts[5]:
         with tf.compat.v1.Session() as sess:
             model = createAndTrainModel(argv, board, operations).playerModel()
-            outDir = os.getcwd() + '/../models/size-' + str(argv.size) + '-to-win-' + str(argv.to_win)
+            outDir = os.getcwd() + '/models/size-' + str(argv.size) + '-to-win-' + str(argv.to_win)
             os.makedirs(outDir, exist_ok=True)
             print(model.output.op.name)
             print(model.outputs)
