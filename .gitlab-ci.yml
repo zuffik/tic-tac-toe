@@ -39,7 +39,6 @@ start-computing:
     paths:
       - venv
   before_script:
-    - cd ai
     - python -m venv venv
     - source venv/bin/activate
     - mkdir ~/.aws/
@@ -71,7 +70,7 @@ train-ann:
     paths:
       - ai/models
 
-stop-computing:
+stop-computing-start-unity:
   stage: stage-3
   dependencies:
     - train-ann
@@ -79,7 +78,6 @@ stop-computing:
     paths:
       - venv
   before_script:
-    - cd ai
     - python -m venv venv
     - source venv/bin/activate
     - mkdir ~/.aws/
@@ -88,6 +86,8 @@ stop-computing:
     - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+    - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+    - aws ec2 wait instance-running --region us-east-1 --instance-id "$AWS_EC2_UNITY_INSTANCE"
 
 deploy-pdf:
   stage: stage-2
@@ -109,26 +109,88 @@ deploy-pdf:
     - mkdir -p ~/.gdrive && echo $GOOGLE_APP_AUTH > ~/.gdrive/token.json
   script:
     - aws s3 sync ./docs/out s3://storage-zuffik/ --acl public-read --exclude "*" --include "paperwork.pdf"
-    - ./gdrive -c ~/.gdrive --service-account token.json update $GOOGLE_DRIVE_FILE_ID out/paperwork.pdf
-
+    - ./gdrive -c ~/.gdrive --service-account token.json update $GOOGLE_DRIVE_FILE_ID docs/out/paperwork.pdf
 
 build-unity-after-train:
   tags:
     - zuffik-unity
   stage: stage-4
+  cache:
+    paths:
+      - game/Library
+  artifacts:
+    paths:
+      - game/Build
   script:
     - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
     - dir
     - cd game
     - dir
 
+stop-unity:
+  stage: stage-5
+  dependencies:
+    - build-unity-after-train
+  cache:
+    paths:
+      - venv
+  before_script:
+    - cd ai
+    - python -m venv venv
+    - source venv/bin/activate
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+
+start-unity-manual:
+  stage: stage-1
+  cache:
+    paths:
+      - venv
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+    - aws ec2 wait instance-running --region us-east-1 --instance-id "$AWS_EC2_UNITY_INSTANCE"
+  when: manual
+
 build-unity-manual:
   tags:
     - zuffik-unity
-  stage: stage-1
+  stage: stage-2
+  dependencies:
+    - start-unity-manual
+  cache:
+    paths:
+      - game/Library
+  artifacts:
+    paths:
+      - game/Build
   script:
     - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
     - dir
     - cd game
     - dir
-  when: manual
+
+stop-unity-manual:
+  stage: stage-3
+  cache:
+    paths:
+      - venv
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
