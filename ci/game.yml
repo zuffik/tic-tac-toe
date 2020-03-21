@@ -15,6 +15,7 @@ Start unity manually:
   script:
     - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
   when: manual
+  allow_failure: false
 
 Build unity manually:
   tags:
@@ -34,6 +35,7 @@ Build unity manually:
     - cd game
     - dir
   when: on_success
+  allow_failure: false
 
 Stop unity manually:
   stage: stop
@@ -47,3 +49,4 @@ Stop unity manually:
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
   when: always
+  allow_failure: false
