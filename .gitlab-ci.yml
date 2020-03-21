@@ -1,15 +1,15 @@
 image: python:3.7
 
 stages:
-  - stage-1
-  - stage-2
-  - stage-3
-  - stage-4
-  - stage-5
+  - initial
+  - build
+  - teardown
+  - optional-postprocess
+  - finish
 
 buiild-and-deploy-pdf:
   image: tianon/latex
-  stage: stage-1
+  stage: initial
   cache:
     paths:
       - gdrive
@@ -53,7 +53,7 @@ buiild-and-deploy-pdf:
   when: manual
 
 start-computing:
-  stage: stage-1
+  stage: initial
   cache:
     paths:
       - venv
@@ -67,12 +67,11 @@ start-computing:
   script:
     - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
   when: manual
-  allow_failure: false
 
 train-ann:
   tags:
     - zuffik-compute
-  stage: stage-2
+  stage: build
   dependencies:
     - start-computing
   cache:
@@ -90,10 +89,9 @@ train-ann:
     paths:
       - ai/models
   when: on_success
-  allow_failure: false
 
 stop-computing-start-unity:
-  stage: stage-3
+  stage: teardown
   dependencies:
     - train-ann
   cache:
@@ -109,14 +107,12 @@ stop-computing-start-unity:
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
     - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
-    - aws ec2 wait instance-running --region us-east-1 --instance-id "$AWS_EC2_UNITY_INSTANCE"
   when: always
-  allow_failure: false
 
 build-unity-after-train:
   tags:
     - zuffik-unity
-  stage: stage-4
+  stage: optional-postprocess
   cache:
     paths:
       - game/Library
@@ -129,10 +125,9 @@ build-unity-after-train:
     - cd game
     - dir
   when: on_success
-  allow_failure: false
 
 stop-unity:
-  stage: stage-5
+  stage: finish
   dependencies:
     - build-unity-after-train
   cache:
@@ -149,10 +144,9 @@ stop-unity:
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
   when: always
-  allow_failure: false
 
 start-unity-manual:
-  stage: stage-1
+  stage: initial
   cache:
     paths:
       - venv
@@ -165,14 +159,12 @@ start-unity-manual:
     - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
   script:
     - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
-    - aws ec2 wait instance-running --region us-east-1 --instance-id "$AWS_EC2_UNITY_INSTANCE"
   when: manual
-  allow_failure: false
 
 build-unity-manual:
   tags:
     - zuffik-unity
-  stage: stage-2
+  stage: build
   dependencies:
     - start-unity-manual
   cache:
@@ -187,10 +179,9 @@ build-unity-manual:
     - cd game
     - dir
   when: on_success
-  allow_failure: false
 
 stop-unity-manual:
-  stage: stage-3
+  stage: teardown
   cache:
     paths:
       - venv
@@ -204,4 +195,3 @@ stop-unity-manual:
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
   when: always
-  allow_failure: false
