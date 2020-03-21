@@ -1,0 +1,81 @@
+image: python:3.7
+
+stages:
+  - start-computing
+  - train
+  - stop-computing
+  - build
+  - stop-unity
+
+Start computing:
+  stage: start-computing
+  before_script:
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+  when: manual
+
+Train ANN:
+  tags:
+    - zuffik-compute
+  stage: train
+  dependencies:
+    - Start computing
+  before_script:
+    - cd ai
+    - pip install -r requirements.txt
+    - chmod +x store-ann.sh
+  script:
+    - ./store-ann.sh
+  artifacts:
+    paths:
+      - ai/models
+
+Stop computing start unity:
+  stage: stop-computing
+  dependencies:
+    - Train ANN
+  before_script:
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
+    - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+  when: always
+
+Build unity:
+  tags:
+    - zuffik-unity
+  stage: build
+  dependencies:
+    - Stop computing start unity
+  cache:
+    paths:
+      - game/Library
+  artifacts:
+    paths:
+      - game/Build
+  script:
+    - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
+    - dir
+    - cd game
+    - dir
+
+Stop unity:
+  stage: stop-unity
+  dependencies:
+    - Build unity
+  before_script:
+    - cd ai
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+  when: always

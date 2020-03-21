@@ -1,6 +1,27 @@
+stages:
+  - spawn
+
 pdf:
+  stage: spawn
   trigger:
     include: ci/pdf.yml
   only:
     changes:
       - docs/**/*
+
+ann:
+  stage: spawn
+  trigger:
+    include: ci/ann.yml
+  when: manual
+  only:
+    changes:
+      - ai/**/*
+game:
+  stage: spawn
+  trigger:
+    include: ci/game.yml
+  when: manual
+  only:
+    changes:
+      - game/**/*

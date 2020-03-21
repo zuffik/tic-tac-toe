@@ -1,0 +1,49 @@
+image: python:3.7
+
+stages:
+  - start
+  - build
+  - stop
+
+Start unity manually:
+  stage: start
+  before_script:
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+  when: manual
+
+Build unity manually:
+  tags:
+    - zuffik-unity
+  stage: build
+  dependencies:
+    - Start unity manually
+  cache:
+    paths:
+      - game/Library
+  artifacts:
+    paths:
+      - game/Build
+  script:
+    - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
+    - dir
+    - cd game
+    - dir
+  when: on_success
+
+Stop unity manually:
+  stage: stop
+  dependencies:
+    - Build unity manually
+  before_script:
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  script:
+    - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+  when: always
