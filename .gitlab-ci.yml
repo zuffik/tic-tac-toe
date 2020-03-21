@@ -16,10 +16,12 @@ ann:
   only:
     changes:
       - ai/**/*
+      - game/**/*
 game:
   stage: spawn
   trigger:
     include: ci/game.yml
   only:
     changes:
+      - ai/**/*
       - game/**/*

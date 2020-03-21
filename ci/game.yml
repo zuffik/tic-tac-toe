@@ -3,7 +3,7 @@ image: python:3.7
 stages:
   - start
   - build
-  - stop
+  - deploy-and-shutdown
 
 Start unity manually:
   stage: start
@@ -31,14 +31,11 @@ Build unity manually:
       - game/Build
   script:
     - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
-    - dir
-    - cd game
-    - dir
   when: on_success
   allow_failure: false
 
 Stop unity manually:
-  stage: stop
+  stage: deploy-and-shutdown
   dependencies:
     - Build unity manually
   before_script:
@@ -48,5 +45,6 @@ Stop unity manually:
     - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
+    - aws s3 sync game/Build/WebGL "s3://${AWS_S3_UNITY_BUCKET}/" --acl public-read
   when: always
   allow_failure: false
