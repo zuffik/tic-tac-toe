@@ -67,6 +67,7 @@ start-computing:
   script:
     - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_COMPUTING_INSTANCE"
   when: manual
+  allow_failure: false
 
 train-ann:
   tags:
@@ -89,6 +90,7 @@ train-ann:
     paths:
       - ai/models
   when: on_success
+  allow_failure: false
 
 stop-computing-start-unity:
   stage: stage-3
@@ -109,6 +111,7 @@ stop-computing-start-unity:
     - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
     - aws ec2 wait instance-running --region us-east-1 --instance-id "$AWS_EC2_UNITY_INSTANCE"
   when: always
+  allow_failure: false
 
 build-unity-after-train:
   tags:
@@ -126,6 +129,7 @@ build-unity-after-train:
     - cd game
     - dir
   when: on_success
+  allow_failure: false
 
 stop-unity:
   stage: stage-5
@@ -145,6 +149,7 @@ stop-unity:
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
   when: always
+  allow_failure: false
 
 start-unity-manual:
   stage: stage-1
@@ -162,6 +167,7 @@ start-unity-manual:
     - aws ec2 start-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
     - aws ec2 wait instance-running --region us-east-1 --instance-id "$AWS_EC2_UNITY_INSTANCE"
   when: manual
+  allow_failure: false
 
 build-unity-manual:
   tags:
@@ -181,6 +187,7 @@ build-unity-manual:
     - cd game
     - dir
   when: on_success
+  allow_failure: false
 
 stop-unity-manual:
   stage: stage-3
@@ -197,3 +204,4 @@ stop-unity-manual:
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
   when: always
+  allow_failure: false
