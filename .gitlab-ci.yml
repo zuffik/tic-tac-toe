@@ -7,6 +7,7 @@ pdf:
     include: ci/pdf.yml
   only:
     changes:
+      - .gitlab-ci.yml
       - ci/pdf.yml
       - docs/**/*
 
@@ -16,6 +17,7 @@ ann:
     include: ci/ann.yml
   only:
     changes:
+      - .gitlab-ci.yml
       - ci/ann.yml
       - ci/game.yml
       - ai/**/*
@@ -26,6 +28,7 @@ game:
     include: ci/game.yml
   only:
     changes:
+      - .gitlab-ci.yml
       - ci/ann.yml
       - ci/game.yml
       - ai/**/*
