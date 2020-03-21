@@ -421,4 +421,4 @@ node_modules
 ai/models
 ai/tmp
 game/Assets/Resources/Models
-.gitlab-ci-bkup.yml
+tmp.yml
