@@ -103,27 +103,27 @@ class Board3DOperations(IBoard[Board3D]):
             for j in range(y, y + toWin):
                 for k in range(z, z + toWin):
                     # rows
-                    index = self._possibilitiesIndex(Rows, toWin, i, j, 0)
+                    index = self._possibilitiesIndex(Rows, toWin, i - x, j - y, 0)
                     possibilities[index][k - z] = ord(board[i][j][k])
-                    index = self._possibilitiesIndex(Rows, toWin, i, 0, k)
+                    index = self._possibilitiesIndex(Rows, toWin, i - x, 0, k - z)
                     possibilities[index][j - y] = ord(board[i][j][k])
-                    index = self._possibilitiesIndex(Rows, toWin, 0, j, k)
+                    index = self._possibilitiesIndex(Rows, toWin, 0, j - y, k - z)
                     possibilities[index][i - x] = ord(board[i][j][k])
 
                     # LTR diagonals
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i, j, 0)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, j - y, 0)
                     possibilities[index][k - z] = ord(board[i][k][k])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i, 0, k)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, 0, k - z)
                     possibilities[index][j - y] = ord(board[j][j][k])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, 0, j, k)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, 0, j - y, k - z)
                     possibilities[index][i - x] = ord(board[i][j][i])
 
                     # RTL diagonals
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i, j, 0, 1)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, j - y, 0, 1)
                     possibilities[index][k - z] = ord(board[i][k][toWin - k - 1])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i, 0, k, 1)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, 0, k - z, 1)
                     possibilities[index][j - y] = ord(board[j][toWin - j - 1][k])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, 0, j, k, 1)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, 0, j - y, k - z, 1)
                     possibilities[index][i - x] = ord(board[toWin - i - 1][j][i])
 
             # space diagonals

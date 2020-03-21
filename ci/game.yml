@@ -30,6 +30,8 @@ Build unity manually:
     paths:
       - game/Build
   script:
+    - mkdir game\Assets\Resources\Models
+    - copy /B C:\Ann-Models\* game\Assets\Resources\Models
     - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
   when: on_success
   allow_failure: false
