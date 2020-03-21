@@ -20,6 +20,7 @@ Start computing:
   allow_failure: false
 
 Train ANN:
+  image: python:3.7
   tags:
     - zuffik-compute
   stage: train
