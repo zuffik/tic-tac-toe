@@ -8,9 +8,9 @@ public class BuildScript
 {
     static void PerformBuild()
     {
-        var buildDirectory = Environment.CurrentDirectory + Path.PathSeparator + "Build" + Path.PathSeparator;
-        var winBuildDirectory = buildDirectory + "Win" + Path.PathSeparator;
-        var webGLBuildDirectory = buildDirectory + "WebGL" + Path.PathSeparator;
+        var buildDirectory = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "Build" + Path.DirectorySeparatorChar;
+        var winBuildDirectory = buildDirectory + "Win" + Path.DirectorySeparatorChar;
+        var webGLBuildDirectory = buildDirectory + "WebGL" + Path.DirectorySeparatorChar;
         Debug.Log(buildDirectory);
         Debug.Log(winBuildDirectory);
         Debug.Log(winBuildDirectory);
