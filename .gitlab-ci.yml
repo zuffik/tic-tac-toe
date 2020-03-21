@@ -32,6 +32,7 @@ compile-pdf:
   artifacts:
     paths:
       - docs/out/paperwork.pdf
+  when: manual
 
 start-computing:
   stage: stage-1
@@ -109,6 +110,7 @@ deploy-pdf:
     - mkdir -p ~/.gdrive && echo $GOOGLE_APP_AUTH > ~/.gdrive/token.json
   script:
     - aws s3 sync ./docs/out s3://storage-zuffik/ --acl public-read --exclude "*" --include "paperwork.pdf"
+    - ./gdrive -c ~/.gdrive --service-account token.json list
     - ./gdrive -c ~/.gdrive --service-account token.json update $GOOGLE_DRIVE_FILE_ID docs/out/paperwork.pdf
 
 build-unity-after-train:
