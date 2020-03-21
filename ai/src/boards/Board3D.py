@@ -97,29 +97,7 @@ class Board3DOperations(IBoard[Board3D]):
 
     # check for winner in {toWin X toWin X toWin} cube
     def _getBoardWinner(self, board: Board3D, toWin: int, x: int, y: int, z: int) -> Winner:
-        """
-        :param board: int
-        :param toWin: int (w)
-        :param x: int
-        :param y: int
-        :param z: int
-        :return: Winner
-
-        Number of possible sequences:
-        - all rows (board in each dimension) (3w^2)
-        - space diagonals (4)
-        - board diagonals 2 in each board in each dimension (6w^2)
-        Thus the array is divided in 3 parts:
-        1. <0, 3w^2) - rows = number with base w {z,y,x} => max{decimal(number={z,y,x}, base=w)} = 3w^2 - 1
-        2. <3w^2, 9w^2) - board diagonals = number with base w {z,y,x} => max{decimal(number={z,y,x}, base=w)} = 3w^2 - 1
-        2a. <3w^2, 6w^2) - LTR TTB diagonal
-        2b. <6w^2, 9w^2) - RTL TTB diagonal
-        3. <9w^2, 9w^2 + 4) - space diagonals
-
-        85 for 3x3x3
-        148 for 4x4x4
-        """
-        possibilities = np.full((len(board) ** 2 * 9 + 4, toWin), ord('E'))
+        possibilities = np.full((toWin ** 3 * 3 + 4, toWin), ord('E'))
 
         for i in range(x, x + toWin):
             for j in range(y, y + toWin):
@@ -167,11 +145,11 @@ class Board3DOperations(IBoard[Board3D]):
         if indexType == Rows:
             return toDec(int(''.join([str(z), str(y), str(x)])), toWin) + extra
         if indexType == BoardDiagonals and extra <= 0:
-            return 3 * (toWin ** 2) + toDec(int(''.join([str(z), str(y), str(x)])), toWin)
+            return toWin ** 3 + toDec(int(''.join([str(z), str(y), str(x)])), toWin)
         if indexType == BoardDiagonals and extra > 0:
-            return 6 * (toWin ** 2) + toDec(int(''.join([str(z), str(y), str(x)])), toWin)
+            return 2 * toWin ** 3 + toDec(int(''.join([str(z), str(y), str(x)])), toWin)
         if indexType == SpaceDiagonals:
-            return 9 * (toWin ** 2) + extra
+            return 3 * toWin ** 3 + extra
 
     def isBoardEmpty(self, board: Board3D) -> bool:
         for i in range(len(board)):
