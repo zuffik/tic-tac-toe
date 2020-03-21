@@ -5,21 +5,21 @@ pdf:
   stage: spawn
   trigger:
     include: ci/pdf.yml
-  only:
-    changes:
-      - docs/**/*
+ # only:
+ #   changes:
+ #     - docs/**/*
 
 ann:
   stage: spawn
   trigger:
     include: ci/ann.yml
-  only:
-    changes:
-      - ai/**/*
+ # only:
+ #   changes:
+ #     - ai/**/*
 game:
   stage: spawn
   trigger:
     include: ci/game.yml
-  only:
-    changes:
-      - game/**/*
+ # only:
+ #   changes:
+ #     - game/**/*
