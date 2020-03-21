@@ -27,6 +27,9 @@ Train ANN:
     - Start computing
   before_script:
     - cd ai
+    - python -m pip --version
+    - python -m pip install -U pip
+    - python -m pip --version
     - python -m pip install -r requirements.txt
     - chmod +x store-ann.sh
   script:
