@@ -1,0 +1,48 @@
+stages:
+  - build
+  - deploy
+
+PDF build:
+  image: tianon/latex
+  stage: build
+
+  script:
+    - cd docs
+    - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
+    - cd out
+    - makeindex paperwork.nlo -s nomencl.ist -o paperwork.nls
+    - rm paperwork.aux || true
+    - rm paperwork.lof || true
+    - rm paperwork.blg || true
+    - rm paperwork.out || true
+    - rm paperwork.nlo || true
+    - rm paperwork.pdf || true
+    - rm paperwork.log || true
+    - rm paperwork.toc || true
+    - rm paperwork.fdb_latexmk || true
+    - rm paperwork.fls || true
+    - rm paperwork.bbl || true
+    - cd ..
+    - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
+    - texcount -inc paperwork.tex
+  artifacts:
+    paths:
+      - docs/out/paperwork.pdf
+
+PDF deploy:
+  stage: deploy
+  cache:
+    paths:
+      - gdrive
+  before_script:
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - pip install awscli
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+    - if [ ! -f "./gdrive" ]; then wget -O gdrive https://github.com/gdrive-org/gdrive/releases/download/2.1.0/gdrive-linux-x64 ; fi
+    - chmod +x ./gdrive
+    - mkdir -p ~/.gdrive && echo $GOOGLE_APP_AUTH > ~/.gdrive/token.json
+  script:
+    - aws s3 sync ./docs/out s3://storage-zuffik/ --acl public-read --exclude "*" --include "paperwork.pdf"
+    - ./gdrive -c ~/.gdrive --service-account token.json list
+    - ./gdrive -c ~/.gdrive --service-account token.json update $GOOGLE_DRIVE_FILE_ID docs/out/paperwork.pdf
