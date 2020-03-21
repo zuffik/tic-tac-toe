@@ -7,6 +7,7 @@ pdf:
     include: ci/pdf.yml
   only:
     changes:
+      - ci/pdf.yml
       - docs/**/*
 
 ann:
@@ -15,6 +16,8 @@ ann:
     include: ci/ann.yml
   only:
     changes:
+      - ci/ann.yml
+      - ci/game.yml
       - ai/**/*
       - game/**/*
 game:
@@ -23,5 +26,7 @@ game:
     include: ci/game.yml
   only:
     changes:
+      - ci/ann.yml
+      - ci/game.yml
       - ai/**/*
       - game/**/*
