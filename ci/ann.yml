@@ -83,4 +83,4 @@ Stop unity:
   script:
     - aws ec2 stop-instances --region us-east-1 --instance-ids "$AWS_EC2_UNITY_INSTANCE"
   when: always
-    allow_failure: false
+  allow_failure: false
