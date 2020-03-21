@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,7 +26,10 @@ public class BuildScript
         );
         Debug.Log("Windows report:");
         Debug.Log(report);
-        Debug.Log(report.files);
+        foreach (var f in report.files)
+        {
+            Debug.Log(f.path);
+        }
         
 
         Debug.Log("*** Building WebGL ***");
@@ -37,7 +41,10 @@ public class BuildScript
         );
         Debug.Log("WebGL report:");
         Debug.Log(report);
-        Debug.Log(report.files);
+        foreach (var f in report.files)
+        {
+            Debug.Log(f.path);
+        }
 
 
     }
