@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in {3..15}; do
+for i in {3..5}; do
   if [[ "$i" -eq 3 ]]; then
     simulations=10000
   elif [[ "$i" -eq 4 ]]; then

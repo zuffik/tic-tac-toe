@@ -102,38 +102,33 @@ class Board3DOperations(IBoard[Board3D]):
         for i in range(x, x + toWin):
             for j in range(y, y + toWin):
                 for k in range(z, z + toWin):
-                    # rows
                     index = self._possibilitiesIndex(Rows, toWin, i - x, j - y, 0)
                     possibilities[index][k - z] = ord(board[i][j][k])
-                    index = self._possibilitiesIndex(Rows, toWin, i - x, 0, k - z)
+                    index = self._possibilitiesIndex(Rows, toWin, i - x, k - z, 1)
                     possibilities[index][j - y] = ord(board[i][j][k])
-                    index = self._possibilitiesIndex(Rows, toWin, 0, j - y, k - z)
+                    index = self._possibilitiesIndex(Rows, toWin, j - y, k - z, 2)
                     possibilities[index][i - x] = ord(board[i][j][k])
 
-                    # LTR diagonals
                     index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, j - y, 0)
                     possibilities[index][k - z] = ord(board[i][k][k])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, 0, k - z)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, k - z, 1)
                     possibilities[index][j - y] = ord(board[j][j][k])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, 0, j - y, k - z)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, j - y, k - z, 2)
                     possibilities[index][i - x] = ord(board[i][j][i])
-
-                    # RTL diagonals
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, j - y, 0, 1)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, j - y, 3)
                     possibilities[index][k - z] = ord(board[i][k][toWin - k - 1])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, 0, k - z, 1)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, i - x, k - z, 4)
                     possibilities[index][j - y] = ord(board[j][toWin - j - 1][k])
-                    index = self._possibilitiesIndex(BoardDiagonals, toWin, 0, j - y, k - z, 1)
+                    index = self._possibilitiesIndex(BoardDiagonals, toWin, j - y, k - z, 5)
                     possibilities[index][i - x] = ord(board[toWin - i - 1][j][i])
 
-            # space diagonals
-            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 0, 0)
+            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 0)
             possibilities[index][i - x] = ord(board[i][i][i])
-            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 0, 1)
+            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 1)
             possibilities[index][i - x] = ord(board[toWin - i - 1][i][i])
-            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 0, 2)
+            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 2)
             possibilities[index][i - x] = ord(board[i][toWin - i - 1][i])
-            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 0, 3)
+            index = self._possibilitiesIndex(SpaceDiagonals, toWin, 0, 0, 3)
             possibilities[index][i - x] = ord(board[i][i][toWin - i - 1])
 
         # print('\n'.join(['{:3}  '.format(i) + ''.join(['{:4}'.format(chr(item)) for item in possibilities[i]]) for i in range(len(possibilities))]))
@@ -141,15 +136,14 @@ class Board3DOperations(IBoard[Board3D]):
         winner = _.find(arr, lambda p: p[0] != ord('E') and _.every(p, lambda x: x == p[0]))
         return 'Draw' if winner is None else chr(winner[0])
 
-    def _possibilitiesIndex(self, indexType: IndexEnum, toWin: int, x: int, y: int, z: int, extra: int = 0) -> int:
+    def _possibilitiesIndex(self, indexType: IndexEnum, toWin: int, x: int, y: int, extra: int = 0) -> int:
+        dec = toDec(''.join([str(x), str(y)]), toWin)
         if indexType == Rows:
-            return toDec(int(''.join([str(z), str(y), str(x)])), toWin) + extra
-        if indexType == BoardDiagonals and extra <= 0:
-            return toWin ** 3 + toDec(int(''.join([str(z), str(y), str(x)])), toWin)
-        if indexType == BoardDiagonals and extra > 0:
-            return 2 * toWin ** 3 + toDec(int(''.join([str(z), str(y), str(x)])), toWin)
+            return toWin ** 2 * extra + dec
+        if indexType == BoardDiagonals:
+            return toWin ** 2 * (extra + 3) + dec
         if indexType == SpaceDiagonals:
-            return 3 * toWin ** 3 + extra
+            return toWin ** 2 * 9 + extra
 
     def isBoardEmpty(self, board: Board3D) -> bool:
         for i in range(len(board)):

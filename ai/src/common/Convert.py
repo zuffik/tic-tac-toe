@@ -1,14 +1,11 @@
-def toDec(a: int, base: int) -> int:
-    """
-    Converts an integer of base (base) to a decimal integer.
-    """
-
-    ans = 0  # output sum
-    inc = 1  # incrementing number (what you multiply each digit by)
-    while a:
-        digit = inc * (a % 10)  # last digit of a times the incrementer
-        ans += digit  # digit added to sum
-        a //= 10  # cuts off the last digit of a (// is integer division in python 3.x)
-        inc *= base  # base (2 for binary, 3 for ternary, etc)
-
-    return ans
+def toDec(number: str, base: int) -> int:
+    llen = len(number)
+    power = 1
+    num = 0
+    for i in range(llen - 1, -1, -1):
+        if int(number[i]) >= base:
+            print('Invalid Number ' + number)
+            return -1
+        num += int(number[i]) * power
+        power = power * base
+    return num

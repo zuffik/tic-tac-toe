@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public enum CellType
@@ -9,6 +10,7 @@ public enum CellType
     X,
     O,
     Empty,
+    Undefined,
     Highlight
 }
 
@@ -35,6 +37,7 @@ public class Cell : MonoBehaviour
         _i = i;
         _j = j;
         _k = k;
+        transform.Find("Coords").GetComponent<TextMeshPro>().SetText(i.ToString() + j + k);
     }
 
     public void SetCellType(CellType cellType)

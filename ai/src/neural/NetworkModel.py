@@ -161,7 +161,7 @@ class NetworkModel(ABC):
             self._reshape(self.simulateGames() if games is None else games)
 
         self._playerModel.fit(xPlayerTrain, yPlayerTrain, validation_data=(xPlayerTest, yPlayerTest), epochs=100,
-                              batch_size=100)
+                              batch_size=100, verbose=0)
         return len(xPlayerTrain) + len(xPlayerTest), len(xOpponentTrain) + len(xOpponentTest)
 
     def _predictBestMove(self, board: Board, player: Player) -> Tuple[Player, Move]:

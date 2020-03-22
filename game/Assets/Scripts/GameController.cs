@@ -1,36 +1,42 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using Cambia.BaseN;
 using TensorFlow;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
     private static readonly string INPUT_LAYER = "dense_input";
     private static readonly string OUTPUT_LAYER = "out_softmax/Softmax";
 
-    private CellType _currentPlayer = CellType.X;
     public GameObject grid;
     private Grid _grid;
 
-    private CellType _player = CellType.X;
+    public CellType player;
     private CellType _opponent = CellType.O;
     private CellType _onMove;
     private TFGraph _graph;
     private TFSession _session;
 
     public int toWin;
+    private TextMeshPro _text;
 
     // Start is called before the first frame update
     void Start()
     {
         _grid = grid.GetComponent<Grid>();
-        _onMove = _player;
-        var directory = $"Assets/Resources/Models/size-{_grid.size}-to-win-{toWin}/";
+        _onMove = player;
+        _opponent = player == CellType.X ? CellType.O : CellType.X;
+        var file = $"Models/size-{_grid.size}-to-win-{toWin}/model";
+        var res = Resources.Load<TextAsset>(file);
         _graph = new TFGraph();
-        _graph.Import(File.ReadAllBytes(directory + "model.bytes"));
+        _graph.Import(res.bytes);
         _session = new TFSession(_graph);
-        var index = GridVectorIndex(1, 2, 0);
+        _text = GameObject.Find("WinnerLoserText").GetComponent<TextMeshPro>();
+        _text.gameObject.SetActive(false);
     }
 
     public void HighlightCell(int i, int j, int k)
@@ -40,7 +46,8 @@ public class GameController : MonoBehaviour
 
     private void SwitchPlayer()
     {
-        _onMove = _onMove == _player ? _opponent : _player;
+        _onMove = _onMove == player ? _opponent : player;
+        PrintIfGameOver();
     }
 
     private int GridVectorIndex(int i, int j, int k)
@@ -84,7 +91,7 @@ public class GameController : MonoBehaviour
                     if (cell == _opponent)
                     {
                         multiplicative = 1;
-                    } else if (cell == _player)
+                    } else if (cell == player)
                     {
                         multiplicative = 2;
                     }
@@ -124,9 +131,24 @@ public class GameController : MonoBehaviour
 
     public void MovePlayerToHighlightedCell()
     {
-        if (_onMove != _player || !_grid.CanAssign()) return;
+        if (_onMove != player || !_grid.CanAssign()) return;
         _grid.Assign(_onMove);
         SwitchPlayer();
         MoveOpponent();
+    }
+
+    private void PrintIfGameOver()
+    {
+        var winner = BoardOperations.GetBoardWinner(_grid.Cells, toWin);
+        if (winner == Winner.Draw && BoardOperations.HasAnyMovesLeft(_grid.Cells)) return;
+        _text.SetText(winner == Winner.Draw ? "Draw" : winner == (player == CellType.X ? Winner.X : Winner.O) ? "You won" : "You lose");
+        _text.gameObject.SetActive(true);
+        StartCoroutine(WaitAndExit());
+    }
+
+    private IEnumerator WaitAndExit()
+    {
+        yield return new WaitForSeconds(10);
+        SceneManager.LoadScene("MenuScene");
     }
 }
