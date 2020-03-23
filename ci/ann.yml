@@ -71,9 +71,9 @@ Build unity:
       - game/Build
   script:
     - mkdir game\Assets\Resources\Models
-    - xcopy /B ai\models\* game\Assets\Resources\Models
+    - xcopy /E ai\models\* game\Assets\Resources\Models
     - mkdir C:\Ann-Models
-    - xcopy /B ai\models\* C:\Ann-Models
+    - xcopy /E ai\models\* C:\Ann-Models
     - start /b /wait "unity" "c:\Program Files\Unity\Hub\Editor\2019.3.6f1\Editor\Unity.exe" -batchmode -nographics -executeMethod BuildScript.PerformBuild -quit -projectPath game -logFile -
   allow_failure: false
 

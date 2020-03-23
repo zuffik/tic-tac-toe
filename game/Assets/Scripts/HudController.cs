@@ -27,6 +27,7 @@ public class HudController : MonoBehaviour
     private bool _leftPressedDown;
     private bool _rightPressedDown;
     private SliderItemController _toWin;
+    private CellType _gameCellType;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,18 @@ public class HudController : MonoBehaviour
         _size = GameObject.Find("BoardSize").GetComponent<SliderItemController>().value;
 
         SetStage(1);
+
+        SceneManager.sceneLoaded += (scene, mode) =>
+        {
+            if (scene.name != "MainScene") return;
+            var toWin = _toWin.value;
+            var size = _size;
+            var player = _gameCellType;
+            var gameCtrl = GameObject.Find("Game").GetComponent<GameController>();
+            gameCtrl.toWin = toWin;
+            gameCtrl.player = player;
+            GameObject.Find("Grid").GetComponent<Grid>().size = size;
+        };
     }
 
     private void SetStage(int stage)
@@ -62,6 +75,7 @@ public class HudController : MonoBehaviour
         {
             item.SetActive(stage != 1);
         }
+
         Focus(_focusedIndex);
     }
 
@@ -121,6 +135,7 @@ public class HudController : MonoBehaviour
         {
             _upPressedDown = false;
         }
+
         var left = Input.GetAxis("Horizontal") < -0.0001f;
         if (!_leftPressedDown && left)
         {
@@ -148,6 +163,11 @@ public class HudController : MonoBehaviour
             if (_focused.TryGetComponent<SliderItemController>(out var slider))
             {
                 slider.Increment();
+
+                if (slider.gameObject.name == "BoardSize")
+                {
+                    _size = slider.value;
+                }
             }
         }
 
@@ -170,21 +190,9 @@ public class HudController : MonoBehaviour
                     break;
                 case "start-game-x":
                 case "start-game-o":
-                {
-                    var toWin = _toWin.value;
-                    var size = _size;
-                    var player = btn.id == "start-game-x" ? CellType.X : CellType.O;
-                    SceneManager.sceneLoaded += (scene, mode) =>
-                    {
-                        if (scene.name != "MainScene") return;
-                        var gameCtrl = GameObject.Find("Game").GetComponent<GameController>();
-                        gameCtrl.toWin = toWin;
-                        gameCtrl.player = player;
-                        GameObject.Find("Grid").GetComponent<Grid>().size = size;
-                    };
+                    _gameCellType = btn.id == "start-game-x" ? CellType.X : CellType.O;
                     SceneManager.LoadScene("MainScene");
                     break;
-                }
             }
         }
 

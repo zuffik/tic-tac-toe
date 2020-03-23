@@ -131,21 +131,21 @@ public static class BoardOperations
                     index = PossibilitiesIndex(IndexType.BoardDiagonals, toWin, j - y, k - z, 2);
                     possibilities[index][i - x] = board[i][j][i];
                     index = PossibilitiesIndex(IndexType.BoardDiagonals, toWin, i - x, j - y, 3);
-                    possibilities[index][k - z] = board[i][k][toWin - k - 1];
+                    possibilities[index][k - z] = board[i][k][toWin - k - 1 + z];
                     index = PossibilitiesIndex(IndexType.BoardDiagonals, toWin, i - x, k - z, 4);
-                    possibilities[index][j - y] = board[j][toWin - j - 1][k];
+                    possibilities[index][j - y] = board[j][toWin - j - 1 + y][k];
                     index = PossibilitiesIndex(IndexType.BoardDiagonals, toWin, j - y, k - z, 5);
-                    possibilities[index][i - x] = board[toWin - i - 1][j][i];
+                    possibilities[index][i - x] = board[toWin - i - 1 + x][j][i];
                 }
             }
             index = PossibilitiesIndex(IndexType.SpaceDiagonals, toWin, 0, 0, 0);
             possibilities[index][i - x] = board[i][i][i];
             index = PossibilitiesIndex(IndexType.SpaceDiagonals, toWin, 0, 0, 1);
-            possibilities[index][i - x] = board[toWin - i - 1][i][i];
+            possibilities[index][i - x] = board[toWin - i - 1 + x][i][i];
             index = PossibilitiesIndex(IndexType.SpaceDiagonals, toWin, 0, 0, 2);
-            possibilities[index][i - x] = board[i][toWin - i - 1][i];
+            possibilities[index][i - x] = board[i][toWin - i - 1 + x][i];
             index = PossibilitiesIndex(IndexType.SpaceDiagonals, toWin, 0, 0, 3);
-            possibilities[index][i - x] = board[i][i][toWin - i - 1];
+            possibilities[index][i - x] = board[i][i][toWin - i - 1 + x];
         }
 
         var results = possibilities.Where(row => row[0] != CellType.Empty && row.All(r => r == row[0])).ToList();
