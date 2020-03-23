@@ -55,7 +55,7 @@ public class GameController : MonoBehaviour
         var input = i.ToString() + j + k;
         return int.Parse(BaseConverter.Convert(
             input,
-            new BaseNAlphabet(BaseNAlphabet.Base95.ToString().Substring(0, toWin)),
+            new BaseNAlphabet(BaseNAlphabet.Base95.ToString().Substring(0, _grid.size)),
             BaseNAlphabet.Base10
         ));
     }
@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
         var result = BaseConverter.Convert(
             vectorIndex.ToString(),
             BaseNAlphabet.Base10,
-            new BaseNAlphabet(BaseNAlphabet.Base95.ToString().Substring(0, toWin))
+            new BaseNAlphabet(BaseNAlphabet.Base95.ToString().Substring(0, _grid.size))
         ).PadLeft(3, '0');
         return new[]
         {
