@@ -167,6 +167,7 @@ public class HudController : MonoBehaviour
                 if (slider.gameObject.name == "BoardSize")
                 {
                     _size = slider.value;
+                    _toWin.SetMax(slider.value);
                 }
             }
         }
