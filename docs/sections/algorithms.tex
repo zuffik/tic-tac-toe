@@ -8,30 +8,91 @@ algoritmus z každej skupiny.
 
 Minimax je rozhodovacie pravidlo, podľa ktorého je možné určiť nasledujúci ťah.
 Jeho princíp spočíva v maximalizovaní úžitku pre cieľového hráča a minimalizovaní úžitku pre oponenta.
-Pôvodne bol vyvinutý pre \emph{hru s nulovým súčtom} (angl. zero-sum), čo je termín používaný v teórii hier a vyjadruje hru, kde
-rozhodnutia hráčov sa dajú ohodnotiť nenulovým číslom $v$.
-Často používaná hodnota je $v=1$.
-Ťah cieľového hráča je vyjadrený kladnou hodnotou ($+v$), ťah protihráča je vyjadrený zápornou hodnotou ($-v$).
-Hru, ktorú hrajú hráči striedavo je možné vyjadriť pomocou postupnosti pre párny počet ťahov:
+Pôvodne bol vyvinutý pre \emph{hru s nulovým súčtom} (angl. zero-sum), čo je termín používaný v teórii hier a vyjadruje
+hru, kde rozhodnutia hráčov sa dajú ohodnotiť nenulovým číslom $v$.
+Často používaná hodnota je $v=1$ alebo $v=10$.
+Ťah cieľového hráča je vyjadrený kladnou hodnotou ($+v$), ťah protihráča je vyjadrený zápornou hodnotou ($-v$) a remíza
+je vyjadrená hodnotou $0$.
+Hru, ktorú hrajú hráči striedavo je možné vyjadriť pomocou postupnosti pre remízu:
 
 \begin{equation}
     v-v+v-v+ \dots = \sum{v-v} = \sum{0} = 0
 \end{equation}
 
-(z čoho vychádza aj názov \emph{hra s nulovým súčtom}), resp. pre nepárny počet ťahov:
+(z čoho vychádza aj názov \emph{hra s nulovým súčtom}), resp. pre výhru jedného z hráčov:
 
 \begin{equation}
     \pm v+v-v+v-v+ \dots = \pm v+\sum{v-v} = \pm v+\sum{0} = \pm v
 \end{equation}
 
-Rozhodovanie vychádza práve z tohto faktu, pričom sa snaží nájsť takú postupnosť ťahov, ktorá by bola rovná $+v$, čo
-by znamenalo výhru cieľového hráča.
+Rozhodovanie vychádza práve z tohto faktu, pričom sa snaží nájsť takú postupnosť ťahov, ktorá by bola rovná $+v$
+(resp. maximálna), čo by znamenalo výhru cieľového hráča.
+Samotný rozhodovací proces sa dá vyjadriť pomocou rozhodovacieho stromu vychádzajúceho z ktoréhokoľvek stavu hry.
+Stavy hry tvoria vrcholy stromu a hrany predstavujú prechody medzi týmito stavmi.
 
-Samotný rozhodovací proces sa dá vyjadriť pomocou rozhodovacieho stromu vychádzajúceho z aktuálneho stavu hry.
+Nech $l$ je maximálna výška rozhodovacieho stromu.
+Ak nie je explicitne zadaná, potom maximálna výška stromu je počet voľných políčok vo východiskovom stave hry.
+Nech $S_{ij}$ je stav hry, kde $i$ je úroveň stromu, v ktorom sa stav hry nachádza a $j$ je poradové číslo tohto vrcholu
+v rámci úrovne $i$ určené pre jednoznačnú identifikáciu stavu hry a nech $p(S_{ij})$ je v strome rodič stavu $S_{ij}$
+potom $\forall i \forall k \forall j \colon p(S_{i+1,k}) = S_{ij} \colon S_{i+1,k}$ vznikne vyplnením postupne každého
+prázdneho políčka znakom hráča, ktorý je na ťahu na úrovni $i$.
+
+Pre lepšiu predstavu je možné si situáciu ukázať na príklade z \hyperref[figure:minimax-tree]{nasledujúceho obrázku}.
+Koreň stromu obsahuje 3 voľné políčka, jeho synovia vzniknú vyplnením postupne každého voľného políčka znakom hráča na
+úrovni 2 (tzn. \textbf{X} na pozície 1. riadok, druhý stĺpec; tretí riadok, prvý stĺpec a tretí riadok, tretí stĺpec).
+
+Takto sa naplní celý strom a jeho listy sa ohodnotia hotnotami $v$ pre víťazný stav hry, $-v$ pre prehru a $0$ pre
+remízu (na \hyperref[figure:minimax-tree]{obrázku} vyznačené čiernou farbou).
+Nech
+\begin{equation}
+    V(S_{ij}) =
+    \begin{cases}
+        \min{V(S_{i+1,j}) \forall j} & \text{ak bol na ťahu protihráč}
+        \max{V(S_{i+1,j}) \forall j} & \text{ak bol na ťahu preferovaný hráč}
+    \end{cases}
+\end{equation}
+potom $\forall S_{ij}$ je priradená hodnota $V(S_{ij})$ pre $i = 1 \dots l-1$ a $\forall j$.
+Najlepší ťah je potom určený spôsobom
+
+\begin{equation}
+    S_{Best} = \max{V(S_{2j}) \forall j \colon p(S_{2j}) = S_{11}} = \max{V(S_{2j}) \forall j}
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/minmax-tree.png}
+    \caption{Rozhodovací strom algoritmu Minimax}
+\end{figure}\label{figure:minimax-tree}
+
+Algoritmus minimax patrí medzi \emph{exaktné algoritmy}, čo znamená, že pri hľadaní nájde najlepšie (optimálne)
+riešenie, no prehľadáva všetky možné riešenia (celý vyhľadávací priestor).
+Vo všeobecnosti pre neprázdne hracie pole o veľkosti $r$ v $d$-rozmernom hracom priestore s $o$ obsadenými políčkami je
+možné veľkosť celého vyhľadávacieho priestoru vypočítať ako
+\begin{equation}
+    C(r, d, o) = (r^d - o) * (r^d - o - 1) * (r^d - o - 2) \dots 1 = \prod_{i = 1}^{r^d - o}{r^d - o - i + 1}
+\end{equation}
+Pre prázdne hracie pole (teda, kde $o = 0$) platí
+\begin{equation}
+    C(r, d, 0) = (r^d) * (r^d - 1) * (r^d - 2) \dots 1 = \prod_{i = 1}^{r^d}{r^d - i + 1}
+\end{equation}
+
+Ak algoritmus vychádza z prázdneho poľa o veľkosti $3 \times 3$ ($r = 3$, $d = 2$) je veľkosť vyhľadávacieho priestoru
+$\prod_{i = 1}^{9}{10 - i} =$ \textbf{362 880}.
+Na preskúmanie takéhoto počtu je možné použiť aj komerčnú výpočtovú techniku pričom výsledok bude známy v čase menšom
+ako jedna minúta, no pri veľkosti $4 \times 4$ (teda $r = 4$, $d = 2$) je $C(4, 2, 0) \approx 2*10^{13}$ a čas
+prehľadania priestoru sa (za predpokladu, že preskúmanie 1 možnosti trvá 1 milisekundu) zvýši na
+\emph{$\approx 663$ rokov}.
+Pre trojrozmernú plochu s rozmerom $3$ ($r = 3$, $d = 3$) je $C(3, 3, 0) \approx 1.08 * 10^{28}$, čo s rovnakým časovým
+predpokladom znamená, že takýto výpočet by sa skončil po $\approx 3*10^{17}$ rokoch (pre predstavu: vek vesmíru sa
+odhaduje na $\approx 14 mld. \approx 14 * 10^9$ rokov).
 
 \subsection{Umelá neurónová sieť}\label{subsec:algo-ann}
 
-Najdôležitejšou časťou práce je vytvoriť neurónovú sieť, ktorá by mala spĺňať tieto vlastnosti:
+Z vyššie uvedeného vyplýva, že exaktné riešenie pre väčšie rozmery plochy nie je možné použiť, teda je nutné použiť
+algoritmy, ktoré nenájdu najlepšie riešenie v rámci celého vyhľadávacieho priestoru (optimálne), no vedia nájsť
+najlepšie riešenie v rámci okolia východiskového riešenia (suboptimálne).
+Takéto algoritmy sa nazývajú \emph{heuristické} a jednou z týchto heuristík je \emph{umelá neurónová sieť}.
+
 \begin{itemize}
     \item na vstupe má byť aktuálny stav hry
     \item na výstupe má byť informácia o tom, ktoré pole je pre aktuálneho hráča najlepšie pre ďalší krok
