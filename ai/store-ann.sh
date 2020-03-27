@@ -5,8 +5,10 @@ for i in {3..8}; do
     simulations=20000
   elif [[ "$i" -eq 4 ]]; then
     simulations=10000
+  elif [[ "$i" -lt 7 ]]; then
+    simulations=4000
   else
-    simulations=5000
+    simulations=1000
   fi
   for j in $(seq 3 $i); do
     date
