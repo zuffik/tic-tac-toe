@@ -6,61 +6,61 @@ algoritmus z každej skupiny.
 
 \subsection{MiniMax}\label{subsec:algo-minmax}
 
+
 Minimax je rozhodovacie pravidlo, podľa ktorého je možné určiť nasledujúci ťah.
 Jeho princíp spočíva v maximalizovaní úžitku pre cieľového hráča a minimalizovaní úžitku pre oponenta.
-Pôvodne bol vyvinutý pre \emph{hru s nulovým súčtom} (angl. zero-sum), čo je termín používaný v teórii hier a vyjadruje
-hru, kde rozhodnutia hráčov sa dajú ohodnotiť nenulovým číslom $v$.
+Pôvodne bol vyvinutý pre \emph{hru s nulovým súčtom} (angl. zero-sum), čo je termín používaný v teórii hier. V
+yjadruje hru, kde rozhodnutia hráčov sa dajú ohodnotiť nenulovým číslom $v$, pričom súčet za sebou idúcich hier má
+súčet približne 0.
 Často používaná hodnota je $v=1$ alebo $v=10$.
 Ťah cieľového hráča je vyjadrený kladnou hodnotou ($+v$), ťah protihráča je vyjadrený zápornou hodnotou ($-v$) a remíza
 je vyjadrená hodnotou $0$.
-Hru, ktorú hrajú hráči striedavo je možné vyjadriť pomocou postupnosti pre remízu:
-
+Hru, ktorú hrajú hráči striedavo, je možné vyjadriť pomocou postupnosti pre remízu:
 \begin{equation}
     v-v+v-v+ \dots = \sum{v-v} = \sum{0} = 0
 \end{equation}
-
 (z čoho vychádza aj názov \emph{hra s nulovým súčtom}), resp. pre výhru jedného z hráčov:
-
 \begin{equation}
     \pm v+v-v+v-v+ \dots = \pm v+\sum{v-v} = \pm v+\sum{0} = \pm v
 \end{equation}
-
-Rozhodovanie vychádza práve z tohto faktu, pričom sa snaží nájsť takú postupnosť ťahov, ktorá by bola rovná $+v$
-(resp. maximálna), čo by znamenalo výhru cieľového hráča.
+Rozhodovanie vychádza práve z tohto faktu, pričom algoritmus sa snaží nájsť takú postupnosť ťahov, ktorá by bola rovná
+$+v$ (resp. maximálna), čo by znamenalo výhru cieľového hráča.
 Samotný rozhodovací proces sa dá vyjadriť pomocou rozhodovacieho stromu vychádzajúceho z ktoréhokoľvek stavu hry.
 Stavy hry tvoria vrcholy stromu a hrany predstavujú prechody medzi týmito stavmi.
+Stav hry sa dá vyjadriť pomocou $d$-rozmernej tabuľky, kde hodnoty predstavujú \textbf{X}, \textbf{O} alebo prázdne
+políčko.
 
 Nech $l$ je maximálna výška rozhodovacieho stromu.
 Ak nie je explicitne zadaná, potom maximálna výška stromu je počet voľných políčok vo východiskovom stave hry.
 Nech $S_{ij}$ je stav hry, kde $i$ je úroveň stromu, v ktorom sa stav hry nachádza a $j$ je poradové číslo tohto vrcholu
 v rámci úrovne $i$ určené pre jednoznačnú identifikáciu stavu hry a nech $p(S_{ij})$ je v strome rodič stavu $S_{ij}$
-potom $\forall i \forall k \forall j \colon p(S_{i+1,k}) = S_{ij} \colon S_{i+1,k}$ vznikne vyplnením postupne každého
+potom $\forall i, k, j \colon p(S_{i+1,k}) = S_{ij} \colon S_{i+1,k}$ vznikne vyplnením postupne každého
 prázdneho políčka znakom hráča, ktorý je na ťahu na úrovni $i$.
 
 Pre lepšiu predstavu je možné si situáciu ukázať na príklade z \hyperref[figure:minimax-tree]{nasledujúceho obrázku}.
 Koreň stromu obsahuje 3 voľné políčka, jeho synovia vzniknú vyplnením postupne každého voľného políčka znakom hráča na
 úrovni 2 (tzn. \textbf{X} na pozície 1. riadok, druhý stĺpec; tretí riadok, prvý stĺpec a tretí riadok, tretí stĺpec).
-
 Takto sa naplní celý strom a jeho listy sa ohodnotia hotnotami $v$ pre víťazný stav hry, $-v$ pre prehru a $0$ pre
 remízu (na \hyperref[figure:minimax-tree]{obrázku} vyznačené čiernou farbou).
+
 Nech
 \begin{equation}
     V(S_{ij}) =
     \begin{cases}
-        \min{V(S_{i+1,j}) \forall j} & \text{ak bol na ťahu protihráč} \\
-        \max{V(S_{i+1,j}) \forall j} & \text{ak bol na ťahu preferovaný hráč}
+        \min{\{V(S_{i+1,j}) \forall j\}} & \text{ak v ťahu} i \text{je na ťahu protihráč} \\
+        \max{\{V(S_{i+1,j}) \forall j\}} & \text{ak v ťahu} i \text{je na ťahu cieľový hráč}
     \end{cases}
 \end{equation}
 potom $\forall S_{ij}$ je priradená hodnota $V(S_{ij})$ pre $i = 1 \dots l-1$ a $\forall j$.
 Najlepší ťah je potom určený spôsobom
 
 \begin{equation}
-    S_{Best} = \max{V(S_{2j}) \forall j \colon p(S_{2j}) = S_{11}} = \max{V(S_{2j}) \forall j}
+    S_{Best} = \max{\{V(S_{2j}) \forall j \colon p(S_{2j}) = S_{11}\}} = \max{\{V(S_{2j}) \forall j\}}
 \end{equation}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{images/minmax-tree.png}
+    \includegraphics[width=0.8\textwidth]{images/minmax-tree.png}
     \caption{Rozhodovací strom algoritmu Minimax}
 \end{figure}\label{figure:minimax-tree}
 
