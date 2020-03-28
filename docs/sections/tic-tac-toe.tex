@@ -1,0 +1,69 @@
+\section{Piškvorky}\label{sec:tic-tac-toe}
+
+Piškvorky sú hra známa pravdepodobne väčšine obyvateľov na tejto Zemi.
+Je to hra, ktorá sa hrá s dvoma hráčmi prevažne na štvorcovej ploche.
+Títo hráči majú pridelený svoj znak (buď \textbf{X} alebo \textbf{O}) sa pri hraní striedajú a vypĺňajú prázdne políčka
+hracej plochy.
+Víťazom sa stáva ten, ktorý má rovnaký počet znakov v riadku, stĺpci alebo diagonálne.
+Predpokladaný vznik tejto hry je v roku 1300 pred naším letopočtom v starovekom Egypte.
+Vtedy sa hrala vždy na ploche veľkosti $3 \times 3$ a ako hracie plochy slúžili strešné krytiny.
+Na rozdiel od komplikovanejších hier sa kvôli jednoduchosti jej varianty od pôvodnej hry odlišujú len veľmi málo,
+väčšinou sa jedná len o zmenu veľkosti poľa alebo množiny znakov, ktoré má hráč k dispozícii.
+Jedným z variantov je napr. \emph{SOS}, kde majú hráči pre svoj ťah k dispozícii písmena \emph{S} a \emph{O} a snažia
+sa vytvoriť v riadku, stĺpci alebo diagonálne slovo "SOS".
+Kvôli svojej jednoduchosti sú piškvorky často hrané deťmi, ktoré ale rýchlo nájdu systém a rôzne opakujúce sa vzory
+pri hraní.
+
+Táto hra sa zároveň využíva aj v odvetví umelej inteligencie pri skúmaní vyhľadávacích stromov.
+Pre piškvorky bolo vyvinutých mnoho exaktných aj heuristických algoritmov, z ktorých dva sú spomenuté v tejto práci.
+V súčasnosti je piškvorkám venovaná len malá pozornosť, keďže algoritmy pre piškvorky sú už preskúmané do hĺbky.
+Menej pozornosti sa venuje ale trojrozmerným piškvorkám.
+S pridaním jedného rozmeru sa, samozrejme, väčšina z týchto algoritmov výrazne komplikuje a niektoré je nutné úplne
+prerobiť.
+
+
+
+\subsection{Označenie}\label{subsec:label}
+
+Pre použitie je nutné zaviesť nasledujúce označenia:
+\begin{itemize}
+    \item $d$ - rozmer hry ($d \in \{2,3\}$)
+    \item $r$ - rozmer hracieho poľa ($r \geq 3$)
+    \item $n$ - počet všetkých buniek hracieho poľa (teda $r$ x $r$ na ploche alebo $r$ x $r$ x $r$ v priestore)
+    \item $w$ - počet za sebou idúcich znakov potrebných pre výhru ($3 \leq w \leq r$)
+    \item $b_{ij}$ resp. $b_{ijk}$ - $d$-rozmerná matica vyjadrujúca hodnotu políčka v $i$-tom riadku a $j$-tom
+    stĺpci (resp. $k$-tu hodnotu v $i$-tom riadku a $j$-tom stĺpci)
+\end{itemize}
+
+\subsection{Pravidlá}\label{subsec:rules}
+
+\begin{enumerate}
+    \item Každý hráč má pridelený znak \textbf{X} alebo \textbf{O}
+    \item Začína hráč s označením \textbf{X}
+    \item Hráči sa pri hre striedajú (\textbf{X}, \textbf{O}, \textbf{X}, \textbf{O}, \ldots)
+    \item Vyhráva hráč, ktorý:
+    \begin{enumerate}
+        \item má v ktoromkoľvek riadku aspoň $w$ za sebou idúcich rovnakých znakov
+        \item má v ktoromkoľvek stĺpci aspoň $w$ za sebou idúcich rovnakých znakov
+        \item má diagonálne v ktoromkoľvek smere aspoň $w$ za sebou idúcich rovnakých znakov
+    \end{enumerate}
+    \item Pre jednoduchosť je možné uvažovať rozmery (pokiaľ nie je uvedené inak):
+    \begin{enumerate}
+        \item $3 \times 3$ pre plochu s počtom znakov potrebných pre výhru 3 ($d = 2$, $r = 3$, $w = 3$)
+        \item $3 \times 3 \times 3$ pre priestor s počtom znakov potrebných pre výhru 3 ($d = 3$, $r = 3$, $w = 3$)
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Úloha}\label{subsec:task}
+
+Cieľom práce je ponúknuť hráčovi najlepší možný ťah, ktorý môže pri hraní aktuálneho kola vykonať.
+Ak je daný rozmer 3x3 tak hru je možné ukončiť nasledovnými spôsobmi:\cite{number_of_wins}
+\begin{itemize}
+    \item remíza: \emph{46 080 spôsobov}
+    \item výhra prvého hráča (\textbf{X}): \emph{131 184 spôsobov}
+    \item výhra druhého hráča: (\textbf{O}): \emph{77 904 spôsobov}
+\end{itemize}
+
+Z toho vyplýva, že priestor, v ktorom sa prehľadáva riešenie je konečný (ohraničený).
+S pridaním jedného rozmeru len v ploche (4x4) nebolo možné prerátať tieto počty (ani po 1h nebol výsledok známy).
+
