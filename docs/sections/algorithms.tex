@@ -53,16 +53,16 @@ Nech
 \end{equation}
 potom $\forall S_{ij}$ je priradená hodnota $V(S_{ij})$ pre $i = 1 \dots l-1$ a $\forall j$.
 Najlepší ťah je potom určený spôsobom
-
 \begin{equation}
     S_{Best} = \max{\{V(S_{2j}) \forall j \colon p(S_{2j}) = S_{11}\}} = \max{\{V(S_{2j}) \forall j\}}
 \end{equation}
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/minmax-tree.png}
     \caption{Rozhodovací strom algoritmu Minimax}
 \end{figure}\label{figure:minimax-tree}
+
+% todo algorithm
 
 Algoritmus minimax patrí medzi \emph{exaktné algoritmy}, čo znamená, že pri hľadaní nájde najlepšie (optimálne)
 riešenie, no prehľadáva všetky možné riešenia (celý vyhľadávací priestor).
@@ -117,20 +117,20 @@ V rámci umelých neurónových sietí aktivačná funkcia vyjadruje to isté: j
 ak na výstupe z tejto funkcie je 1.
 Aktivačná funkcia závisí od vstupov predchádzajúcich neurónov.
 Nech $N_{ij}$ pre $i = 1 \dots m-1$, $j = 1 \dots n_i$ je $j$-ty neurón v $i$-tej vrstve.
-Na vstup do tohto neurónu sa z predchádzajúcej vrstvy prenesú informácie vo vektore $\vec{x_{ij}}$.
-$\forall h \in \vec{x_{ij}} \colon h \in \{0, 1\}$.
+Na vstup do tohto neurónu sa z predchádzajúcej vrstvy prenesú informácie vo vektore $\pmb{x_{ij}}$.
+$\forall h \in \pmb{x_{ij}} \colon h \in \{0, 1\}$.
 Pre všetky synaptické spojenia existujú tzv. \emph{váhy}, ktoré zosilňujú (resp. zoslabujú) účinok signálu z
 predchádzajúcich neurónov.
 Nech $w_{ijk}$ pre $i=1 \dots m$, $k=1 \dots n_{i-1}$, $j=1 \dots n_i$ je váha pre synaptické spojenie vedúce z
 neurónu $k$ vo vrstve $i-1$ k neurónu $j$ vo vrstve $i$ resp.
-nech vektor $\vec{w_{ij}}$ je vektor váh definovaných pre neurón $N_{ij}$ a nech
+nech vektor $\pmb{w_{ij}}$ je vektor váh definovaných pre neurón $N_{ij}$ a nech
 \begin{equation}
-    z = \sum_{k=1}^{|\vec{w_{ij}}|=|\vec{x_{ij}}|}{w_{ijk} * x_{ijk}}-\theta
+    z = \sum_{k=1}^{|\pmb{w_{ij}}|=|\pmb{x_{ij}}|}{w_{ijk} * x_{ijk}}-\theta
 \end{equation}
 kde $\theta$ je tiež označovaná ako prahová hodnota (angl. threshold).
 \hyperref[figure:activation-functions]{Aktivačná funkcia} sa označuje ako $\phi(z)$.
 Medzi bežne používané aktivačné funkcie patrí napríklad:
-
+\linebreak
 \textbf{Sigmoid}
 \begin{equation}
     \phi(z) = \frac{1}{1+e^{-z}}
@@ -141,27 +141,112 @@ Medzi bežne používané aktivačné funkcie patrí napríklad:
 \end{equation}
 \textbf{ReLu}
 \begin{equation}
-    \phi(z) = \max(0, x)
+    \phi(z) = \max\{0, x\}
 \end{equation}
 
 Priebehy týchto funkcií sú zobrazené na grafe.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/activation-functions.png}
-    \caption{Všeobecná dopredná umelá neurónová sieť}
+    \caption{Priebehy aktivačných funkcií}
 \end{figure}\label{figure:activation-functions}
 
 Pri vytváraní umelej neurónovej siete je potrebné dbať na jej správnu štruktúru a nastavenie váh.
 Váhy sa dajú nastaviť tzv. učením siete.
-Učenie prebieha v 2 fázach:
+Učenie prebieha v 2 fázach: trénovanie a testovanie siete.
+V prvej fáze sa sieť naplní \emph{existujúcimi} vstupmi a výstupmi, aby vedela odhadnúť vzťah medzi nimi.
+Existuje mnoho tréningových metód, no v tejto práci sú popísané 2:
 \begin{itemize}
-    \item trénovanie siete
-    \item testovanie siete
+    \item algoritmus založený na delta prístupe
+    \item algoritmus založený na spätnom šírení
 \end{itemize}
-V prvej fáze sa sieť naplní existujúcimi vstupmi a výstupmi, aby vedela odhadnúť vzťah medzi nimi.
-Existuje mnoho tréningových metód pre neurónové siete a jeden z nich je \emph{založený na delta prístupe}:
+Pri oboch prístupoch je nutné definovať tzv. trénovaciu ($T_r$) a testovaciu množinu ($T_t$).
+Trénovacia množina slúži na prvotné nastavenie parametrov (váh).
+Využíva sa vo fáze trénovania.
+Natrénovaná sieť sa v druhej fáze otestuje pomocou testovacej množiny.
 
+Pri \textbf{algoritme založenom na delta prístupe} (ďalej len "delta algoritmus") sa pracuje len s dvojvrstvovou
+umelou neurónovou sieťou (resp. s vrstvou, ktorá ma len jednu sadu synaptických prepojení).
+Princíp spočíva v postupnom vyhodnocovaní rozdielu medzi výstupom z umelej neurónovej siete pri určitom vstupe
+(reálny výstup) a správnym výstupom (očakávaný výstup).
+Parametre ANN sú upravované v závislosti od tohto rozdielu.
+Nech $\gamma \in (0, \infty)$ je učiaci parameter, $\epsilon$ je maximálny akceptovateľný rozdiel v hodnotách reálneho
+a očakávaného výstupu a $s$ je počet za sebou idúcich rozdielov výstupov (rozdiel nemusí byť vyhodnocovaný len
+prostredníctvom absolútnej hodnoty, často sa využíva aj druhá mocnina rozdielu), ktoré sa nachádzali v rámci $\epsilon$.
+Ďalej nech $|T_r|$ je veľkosť trénovacej množiny (teda počet vzoriek), $\mathbf{X_i}$ pre $i=1 \dots |T_r|$ je vzorka
+z trénovacej množiny, ktorej je pridelený očakávaný výstup $y_i$ pre $i=1 \dots |T_r|$ a nech $y(\mathbf{X_i})$ je reálny
+výstup siete ako odpoveď na vstup $\mathbf{X_i}$.
+Algoritmus prebieha nasledovne:
+\begin{enumerate}
+    \item Inicializácia počiatočných váh $\pmb{w_1}$, prahovej hodnoty $\theta$ a parametrov $\gamma$, $\epsilon$ a $s$.
+    \item pre $i = 1 \dots |T_r|$:
+    \begin{enumerate}
+        \item ak $(y_i-y(\mathbf{X_i}))^2>\epsilon$ \\
+                $\pmb{w_{1j}}=\pmb{w_{1j}} + \gamma * (y_i-y(\mathbf{X_i})) * X_{ij}$ \\
+                $\theta=\theta + \gamma * (y_i-y(\mathbf{X_i}))$
+        \item ak prebehlo $s$ za sebou idúcich rozdielov výstupov, ktoré sa nachádzali v rámci $\epsilon$, tak koniec
+    \end{enumerate}
+\end{enumerate}
+Zmena váh o $y_i-y(\mathbf{X_i})$ je celkom intuitívna, no je možné si ukázať, že to funguje aj matematicky.
+Nech $\pmb{\omega_0}$ je východiskový bod pre váhy a nech $f(\pmb{x})$ je funkcia vyjadrujúca mieru chyby v sieti,
+ktorú je potreba minimalizovať.
+K bodu $\pmb{\omega_1}$ je možné sa z východiskového bodu posunúť v jednotkovom smere $\pmb{d}$ ($|\pmb{d}|=1$) o krok
+dĺžky $\alpha$, tzn.
+\begin{equation}
+    \pmb{\omega_1} = \pmb{\omega_0} + \alpha\pmb{d}
+\end{equation}
+Tu sa naskytá otázka ako zvoliť veľkosť kroku $\alpha$, tak aby $f(\pmb{\omega_1}) < f(\pmb{\omega_0})$.
+\textbf{Derivácia} funkcie vyjadruje zmenu akejkoľvek funkcie $f(x)$ v pomere s čo najmenšou zmenou parametrov tejto
+funkcie, teda
+\begin{equation}
+    \lim_{\alpha\to0}\frac{|f(x + \alpha) - f(x)|}{\alpha}
+\end{equation}
+kde $\alpha$ vyjadruje zmenu parametrov.
+Keďže $f(\omega_1)=f(\omega_0+\alpha\pmb{d})$ je možné tento princíp použiť na výpočet kroku $\alpha$.
+\begin{equation}
+    \frac{d}{d\alpha}f(\pmb{\omega_0}+\alpha\pmb{d}) = \
+    \sum_{\forall i}{\frac{d f(\omega_{0_i} + \alpha{d_i})}{d \omega_{0_i} + \alpha{d_i}}}*\frac{d}{d\alpha}\omega_0+\alpha\pmb{d} = \
+    \sum_{\forall i}{\frac{d f(\omega_{0_i} + \alpha{d_i})}{d \omega_{0_i} + \alpha{d_i}}}*\pmb{d} = \
+    \pmb{f'}(\pmb{\omega_0}+\alpha\pmb{d})*\pmb{d}
+\end{equation}
+a keďže $\alpha\to0$, potom výraz je možné upraviť na
+\begin{equation}
+    \pmb{f'}(\pmb{\omega_0})*\pmb{d}
+\end{equation}
+a je to zároveň \emph{gradient} funkcie $\pmb{f}$ v bode $\pmb{\omega_0}$.
+Pre skalárny súčet dvoch vektorov $\pmb{a}$ a $\pmb{b}$ platí $\pmb{a} * \pmb{b} = |\pmb{a}| * |\pmb{b}| * \cos(\beta)$, kde $\beta$
+je uhol, ktorý tieto vektory zvierajú.
+Keďže $\pmb{f'}(\pmb{\omega_0})$ a $\pmb{d}$ sú vektory a $|\pmb{d}|=1$ platí
+\begin{equation}
+    |\pmb{f'}(\pmb{\omega_0})| * \cos(\beta)
+\end{equation}
+Pretože $|\pmb{f'}(\pmb{\omega_0})|$ je konštanta, je potrebné vhodne zvoliť $\cos(\beta)$ tak, aby celý výraz bol čo
+najmenší.
+\begin{equation}
+    H(\cos(\beta)) = <-1,1> \implies \cos(\beta) = -1 \iff \beta = -180\degree = -\pi
+\end{equation}
+Z toho vyplýva, že smer najlepšieho poklesu je opačný ku gradientu funkcie (teda $-\pmb{f'}(\pmb{\omega_0})$).
+V prípade delta algoritmu je minimalizovaná funkcia rozdielu reálneho a očakávaného výstupu
+\begin{equation}
+    f(\pmb{\omega})=(y_i-y(\mathbf{X_i}))^2=(y_i-\phi(\sum_{\forall j}{\omega_j X_{ij}-\theta}))^2
+\end{equation}
+\begin{equation}
+    \frac{\partial}{\partial \omega_k}f(\pmb{\omega})=2*(y_i-\phi(\sum_{\forall j}{\omega_j X_{ij}-\theta}))*(-\phi'(\sum_{\forall j}{\omega_j X_{ij}-\theta}))*X_{ik}
+\end{equation}
+\begin{equation}
+    \frac{\partial}{\partial \omega_k}f(\pmb{\omega})=-(y_i-y(\mathbf{X_i}))*X_{ik}*(2(-\phi'(\sum_{\forall j}{\omega_j X_{ij}-\theta})))
+\end{equation}
+Posledný činiteľ je kladný (tzn. nezmení znamienko výrazu - derivácia kladnej funkcie) a teda smer najväčšieho poklesu
+je
+\begin{equation}
+    \pmb{d}=(y_i-y(\mathbf{X_i}))*X_{ik}
+\end{equation}
+Z vyššie uvedeného vyplývajú isté vlastnosti: keďže $\phi$ je aktivačná funkcia, tak pre správne fungovanie delta
+algoritmu je nutné aby bola \emph{derivovateľná}.
 
+\textbf{Algoritmus založený na spätnom šírení} (angl. a ďalej len "backpropagation algoritmus") je zovšeobecnenie delta
+algoritmu pre viacvrstvové siete.
+Funguje na rovnakom princípe, ktorý sa postupne opakuje smerom od výstupnej vrstvy k vstupnej.
 
 Navrhnutie štruktúry umelej neurónovej siete je jeden z najťažších problémov pri vytváraní riešenia problému.
 Neexistuje jednoznačná a univerzálna cesta vytvorenia, ktorá by platila pre všetky problémy.
@@ -188,8 +273,8 @@ Za vstup do neurónovej siete je považovaný vektor hodnôt $x_1$ až $x_{3r^d}
     x_i=
     \begin{cases}
         1 & \text{ak }s_i\text{ je prázdne a } i \in \langle 1, r^d \rangle \\
-        1 & \text{ak }s_{i-r^d}\text{ je }\textbf{X}\text{ a } i \in \langle r^d+1, 2r^d \rangle \\
-        1 & \text{ak }s_{i-2r^d}\text{ je }\textbf{O}\text{ a } i \in \langle 2r^d+1, 3r^d \rangle \\
+        1 & \text{ak }s_{i-r^d}\text{ je cieľový hráč a } i \in \langle r^d+1, 2r^d \rangle \\
+        1 & \text{ak }s_{i-2r^d}\text{ je oponent a } i \in \langle 2r^d+1, 3r^d \rangle \\
         0 & \text{inak}
     \end{cases}
     \quad
