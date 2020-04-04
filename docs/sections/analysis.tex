@@ -4,8 +4,76 @@ Od počiatku vzniku mechanických strojov, ktoré pomáhajú ľuďom pri svojej 
 "umelá inteligencia".
 Medzi odbornou verejnosťou tento pojem stále nie je jednotný, no väčšina z nich má rovnakú myšlienku:
 inteligencia vykonávaná strojmi (narozdiel od prirodzenej inteligencie, ktorú vykonávajú ľudia, či zvieratá).
-
+Ak stroj (aj mechanický) dokáže niečo vykonať bez explicitného príkazu, je považovaný za inteligentný.
 
 \subsection{Metódy}\label{subsec:ai-methods}
 
-sadf
+Umelá inteligencia (angl. artificial intelligence) je široká vedná disciplína, ktorá zahŕňa
+\begin{itemize}
+    \item strojové učenie
+    \item textovú analýza
+    \item analýzu reči
+    \item prevod textu na reč
+    \item expertné systémy
+    \item plánovanie
+    \item optimalizáciu
+    \item robotiku
+    \item analýzu obrazu
+    \item a mnoho ďalšieho
+\end{itemize}
+Metódy niektorých skupín sa môžu prelínať (napr. na analýzu obrazu a na analýzu zvuku sa môžu použiť umelé neurónové
+siete).
+Dôsledkom toho je aj fakt, že niektoré metódy sa používajú viac a iné menej.
+Nižšie sú popísané metódy, ktoré sú v rámcu umelej inteligencie využívané najlepšie.
+
+\subsubsection{Heuristické metódy}
+
+Heuristiky sú často používanou metódou vo vyhľadávacích algoritmoch.
+Na rozdiel od exaktných algoritmov, ktoré prehľadávajú celý vyhľadávací priestor, heuristiky prehľadávajú len okolie
+východiskového riešenia.
+Ak napríklad je cieľom heuristiky nájsť minimum nejakej funkcie (nemusí byť zadaná analyticky) v $n$-rozmernom priestore,
+dokáže táto metóda nájsť len lokálne minimum závislé na tom, kde sa nachádza východzie riešenie.
+Príklad je uvedený pre funkciu
+\begin{equation}
+    f(x,y)=\exp^(\cos(x)+\sin(y))\frac{x+y}{30}+\frac{5}{2}
+\end{equation}
+kde $x\in<-12,12>$, $y\in<-12,12>$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/heuristic.png}
+    \caption{Heuristika a jej riešenia v závislosti od východzieho riešenia}
+\end{figure}\label{figure:heuristic-method}
+Pri nastavení východiskového bodu \textbf{A} alebo \textbf{B} nájde heuristika rovnaké lokálne minimum (čo sa môže javiť
+ako globálne), no pre východzí bod \textbf{C} nájde algoritmus globálne minimum, čo ale nie je možné overiť bez
+prehľadania celého priestoru riešení.
+Z toho je možné usúdiť, že riešenie heuristiky nie je vždy optimálne a nikdy jeho optimálnosť nie je zaručená, ale na
+druhú stranu sú heuristiky extrémne rýchle.
+Heuristické metódy patria medzi najzákladnejšie techniky v rámci umelej inteligencie.
+
+Ako ukážkový príklad praktického využitia heuristických metód je možné uviesť hľadanie najkratšej (alebo najrýchlejšej)
+cesty medzi dvoma mestami v cestnej sieti Slovenska pre navigačné systémy alebo pohyb neovládaných postáv v hrách
+(angl. non-player character, skr. NPC - akákoľvek postava v hre, ktorú neovláda človek).
+Pre oba tieto príklady je možné použiť napríklad \emph{A* algoritmus}.
+
+\subsubsection{Metóda podporných vektorov}
+
+Anglicky support vector machine (skr. SVM) je metóda strojového učenia s učiteľom (reinforcement learning).
+Cieľom tejto metódy je nájsť takú \emph{nadrovinu} v $n$-rozmernom vyhľadávacom priestore, ktorá vstupné dáta rozdelí
+do dvoch podpriestorov.
+Metóda je určená pre klasifikáciu a regresnú analýzu.
+Ak je metóda konštruovaná ako optimalizačná úloha jej účelová funkcia vyzerá podobne ako nasledovná:
+\begin{equation}
+    \max \sum_{\forall i}{\sqrt{\sum_{\forall j}{(\vec{v}_j - x_{ij})^2}}}
+\end{equation}
+Kde $\vec{v}$ je hľadaný vektor a $\vec{v}_j$ sú jeho zložky a kde $x_i$ je vzorka zo vstupných dát a $x_{ij}$ sú jeho
+zložky.
+Keďže výraz $\sqrt{\sum_{\forall j}{(\vec{v}_j - x_{ij})^2}}$ vyjadruje najmenšiu vzdialenosť medzi vektorom a
+vzorkou, dá sa povedať, že metóda hľadá takú nadrovinu, ktorá vyhľadávací priestor rozdelí čo najlepšie.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/svm.png}
+    \caption{Support vector machine}
+\end{figure}\label{figure:svm}
+
+Typickým príkladom použitia metódy podporných vektorov je rozdelenie e-mailovej komunikácie do dvoch skupín: relevantnú
+a nevyžiadanú poštu, no podporné vektory sa dajú použiť aj na spracovanie obrazu, či textu.

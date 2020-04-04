@@ -1,11 +1,10 @@
 \section{Algoritmy}\label{sec:algorithms}
 
 Počas vývoja výpočtovej techniky sa vyvíjali aj algoritmy pre kombinatorické hry, pričom piškvorky sú jednou z nich.
-Tieto algoritmy je možné rozdeliť do 2 skupín: \emph{exaktné} a \emph{heuristické}; v tejto práci je popísaný jeden
+Tieto algoritmy je možné rozdeliť do 2 skupín: \emph{exaktné} a \emph{heuristické}; v tejto kapitole je popísaný jeden
 algoritmus z každej skupiny.
 
 \subsection{MiniMax}\label{subsec:algo-minmax}
-
 
 Minimax je rozhodovacie pravidlo, podľa ktorého je možné určiť nasledujúci ťah.
 Jeho princíp spočíva v maximalizovaní úžitku pre cieľového hráča a minimalizovaní úžitku pre oponenta.
@@ -56,13 +55,38 @@ Najlepší ťah je potom určený spôsobom
 \begin{equation}
     S_{Best} = \max{\{V(S_{2j}) \forall j \colon p(S_{2j}) = S_{11}\}} = \max{\{V(S_{2j}) \forall j\}}
 \end{equation}
+Vyhľadávanie prebieha potom nasledovne:
+\begin{tiny}
+    \begin{lstlisting}[language=Python]
+def minimax(hraciaPlocha, int maximalnaHlbka, bool maximalizacia):
+    if maximalnaHlbka = 0 or %*hraciaPlocha nemá žiaden dostupný možný ťah*):
+        return hodnota hracej plochy
+    if maximalizacia:
+        najlepsiaHodnota = -$\infty$
+        for %*všetky dostupné ťahy v hracej ploche*):
+            novaHraciaPlocha = %*vykonaj ťah v hraciaPlocha*)
+            aktualnaHodnota, aktualnyTah = minimax(novaHraciaPlocha, maximalnaHlbka - 1, false))
+            if aktualnaHodnota > najlepsiaHodnota:
+                najlepsiaHodnota := aktualnaHodnota
+                najlepsiTah = aktualnyTah
+        return najlepsiaHodnota, najlepsiTah
+    else:
+        najlepsiaHodnota = $\infty$
+        for %*všetky dostupné ťahy v hracej ploche*):
+            novaHraciaPlocha = %*vykonaj ťah v hraciaPlocha*)
+            aktualnaHodnota, aktualnyTah = minimax(novaHraciaPlocha, maximalnaHlbka - 1, true))
+            if aktualnaHodnota < najlepsiaHodnota:
+                najlepsiaHodnota := aktualnaHodnota
+                najlepsiTah = aktualnyTah
+        return najlepsiaHodnota, najlepsiTah
+\end{lstlisting}
+\end{tiny}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/minmax-tree.png}
     \caption{Rozhodovací strom algoritmu Minimax}
 \end{figure}\label{figure:minimax-tree}
-
-% todo algorithm
 
 Algoritmus minimax patrí medzi \emph{exaktné algoritmy}, čo znamená, že pri hľadaní nájde najlepšie (optimálne)
 riešenie, no prehľadáva všetky možné riešenia (celý vyhľadávací priestor).
@@ -85,6 +109,14 @@ prehľadania priestoru sa (za predpokladu, že preskúmanie 1 možnosti trvá 1 
 Pre trojrozmernú plochu s rozmerom $3$ ($r = 3$, $d = 3$) je $C(3, 3, 0) \approx 1.08 * 10^{28}$, čo s rovnakým časovým
 predpokladom znamená, že takýto výpočet by sa skončil po $\approx 3*10^{17}$ rokoch (pre predstavu: vek vesmíru sa
 odhaduje na $\approx 14$ mld. $\approx 14 * 10^9$ rokov).
+
+\subsubsection{Implementácia}
+Pretože samotný pseudokód algoritmu minimax je jednoduchý, aj jeho implementácia je triviálna:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-minimax.jpg}
+    \caption{Implementácia algoritmu minimax}
+\end{figure}\label{figure:minimax-impl}
 
 \subsection{Umelá neurónová sieť}\label{subsec:algo-ann}
 
@@ -303,4 +335,4 @@ Neurónová sieť vyzerá nasledovne:
     \includegraphics[width=0.5\textwidth]{images/ann.jpg}
     \caption{Návrh neurónovej siete}
 \end{figure}
-
+Implementácia tejto neurónovej siete je bližšie popísaná v \autoref{subsec:dev-tools-for-ai}.

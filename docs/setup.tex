@@ -15,7 +15,7 @@
 \geometry{a4paper, portrait, left=3.5cm, right=2cm, top=2.5cm, bottom=2.5cm}
 \linespread{1.25}
 \title{Záverečná práca}
-\author{Žuffa}
+\author{Kristián Žuffa}
 \date{ }
 
 % Renew
@@ -49,4 +49,30 @@
 \advance\leftmargin\labelsep
 \itemsep\nomitemsep
 \let\makelabel\nomlabel}}
+\lstset{
+    escapeinside={\%*}{*)},
+    breaklines=true,
+    breakatwhitespace=true,
+    extendedchars=false,
+    inputencoding=utf8
+}
+\def\HyLang@slovak{%
+  \def\equationautorefname{Equation}%
+  \def\footnoteautorefname{footnote}%
+  \def\itemautorefname{item}%
+  \def\figureautorefname{Figure}%
+  \def\tableautorefname{Table}%
+  \def\partautorefname{Part}%
+  \def\appendixautorefname{Appendix}%
+  \def\chapterautorefname{chapter}%
+  \def\sectionautorefname{section}%
+  \def\subsectionautorefname{podkapitole}%
+  \def\subsubsectionautorefname{subsubsection}%
+  \def\paragraphautorefname{paragraph}%
+  \def\subparagraphautorefname{subparagraph}%
+  \def\FancyVerbLineautorefname{line}%
+  \def\theoremautorefname{Theorem}%
+  \def\pageautorefname{page}%
+}
+\g@addto@macro\extrasslovak\HyLang@slovak
 \makeatother
