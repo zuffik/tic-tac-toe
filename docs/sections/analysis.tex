@@ -35,7 +35,7 @@ Ak napríklad je cieľom heuristiky nájsť minimum nejakej funkcie (nemusí by�
 dokáže táto metóda nájsť len lokálne minimum závislé na tom, kde sa nachádza východzie riešenie.
 Príklad je uvedený pre funkciu
 \begin{equation}
-    f(x,y)=\exp^(\cos(x)+\sin(y))\frac{x+y}{30}+\frac{5}{2}
+    f(x,y)=e^{\cos(x)+\sin(y)}\frac{x+y}{30}+\frac{5}{2}
 \end{equation}
 kde $x\in<-12,12>$, $y\in<-12,12>$.
 \begin{figure}[H]
@@ -77,3 +77,9 @@ vzorkou, dá sa povedať, že metóda hľadá takú nadrovinu, ktorá vyhľadáv
 
 Typickým príkladom použitia metódy podporných vektorov je rozdelenie e-mailovej komunikácie do dvoch skupín: relevantnú
 a nevyžiadanú poštu, no podporné vektory sa dajú použiť aj na spracovanie obrazu, či textu.
+
+\subsubsection{Iné metódy}
+
+Pre umelú inteligenciu existuje veľké množstvo algoritmov a ich alternatív, z ktorých sú ešte často používané
+\emph{umelé neurónové siete}, ktoré sú bližšie popísané v \autoref{subsec:algo-ann} a ako rozhodovacie pravidlo v
+teórii hier je často využívaný algoritmus \emph{minimax} (viac v \autoref{subsec:algo-minmax}).
