@@ -41,19 +41,70 @@ Zvyšné súbory sú generované vývojovým prostredím.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{images/unity.png}
+    \includegraphics[width=0.8\textwidth]{images/unity.png}
     \caption{Prostredie unity}
 \end{figure}\label{figure:unity}
 
 \subsubsection{Prostredie Cave}
+Cave prostredie je také, ktoré zobrazuje obraz na štyroch plochách súčasne.
+Ak pozorovateľ stojí priamo, tak jedno plátno je pred ním, ďalšie sú vpravo a vľavo kolmé na plátno pred ním a posledné
+je plátno pri nohách pozorovateľa.
+Projektory sú umiestnené nad celým týmto systémom a navyše sa celý obraz zobrazuje upravený pre 3D okuliare.
+Systém je zobrazený na obrázku nižšie.
 Unity pracuje najmä s prostredím \textbf{KAVE} (skr. Kinect Cave) a teda už z názvu vyplýva, že celý systém ovládania
-je založený na Microsoft Xbox Kinect.
+je založený na Microsoft Xbox Kinect a preto aj ovládanie prebieha pomocou ovládača k zariadeniu Xbox.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/kave.png}
+    \caption{Prostredie Cave}
+\end{figure}
+
+V súvislosti s karanténou spojenou so šíriacim sa ochorením Covid-19 nebolo možné dokončiť aplikáciu v prostredí Cave,
+no je plne funkčná ako desktopová aplikácia s možnosťou behu na akejkoľvek platforme (Windows, MacOS, resp. OSX aj
+Linux).
 
 \subsection{Vývojové prostriedky pre umelú inteligenciu}\label{subsec:dev-tools-for-ai}
-python apod
+
+Oba algoritmy umelej inteligencie (minimax a umelá neurónová sieť) boli implementované v jazyku Python verzie 3.7.
+
+\subsubsection{Minimax}
+
+Pretože samotný pseudokód algoritmu minimax je jednoduchý, aj jeho implementácia je triviálna:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-minimax.jpg}
+    \caption{Implementácia algoritmu minimax}
+\end{figure}\label{figure:minimax-impl}
+
+\subsubsection{Umelá neurónová sieť}
+
+Pre implementáciu algoritmov umelej inteligencie, existuje knižnica \emph{Tensorflow}\cite{tensorflow} od spoločnosti
+Google.
+Táto knižnica okrem umelých neurónových sietí ponúka aj možnosti pre implementáciu pre mnohé iné algoritmy týkajúce sa
+strojového učenia.
+Pre potreby umelých neurónových sietí bola vyvinutá knižnica \emph{Keras}\cite{keras}, ktorú vyvíja viac vývojárov
+(no za hlavného autora sa považuje Google).
+Keras umožňuje definovať štruktúru neurónovej siete, Tensorflow túto sieť natrénuje.
+Okrem implementácie tried a štruktúr programu sú dôležité práve dve časti a to štruktúra umelej neurónovej siete a
+trénovanie umelej neurónovej siete.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-ann-model.jpg}
+    \caption{Implementácia štruktúry umelej neurónovej siete}
+\end{figure}\label{figure:ann-model-impl}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-ann-train.jpg}
+    \caption{Implementácia trénovania umelej neurónovej siete}
+\end{figure}\label{figure:ann-train-impl}
+
 \subsection{Prepojenie umelej inteligencie s prostredím}\label{subsec:connection}
+
+\subsection{CI/CD}\label{subsec:ci}
+
 
 \subsection{Príručky}\label{subsec:helpers}
 \subsubsection{Programátorská príručka}
 \subsubsection{Užívateľská príručka}
-\clearpage
