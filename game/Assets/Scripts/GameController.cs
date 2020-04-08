@@ -30,11 +30,13 @@ public class GameController : MonoBehaviour
         _grid = grid.GetComponent<Grid>();
         _onMove = player;
         _opponent = player == CellType.X ? CellType.O : CellType.X;
+
         var file = $"Models/size-{_grid.size}-to-win-{toWin}/model";
         var res = Resources.Load<TextAsset>(file);
         _graph = new TFGraph();
         _graph.Import(res.bytes);
         _session = new TFSession(_graph);
+
         _text = GameObject.Find("WinnerLoserText").GetComponent<TextMeshPro>();
         _text.gameObject.SetActive(false);
     }
@@ -111,6 +113,7 @@ public class GameController : MonoBehaviour
         runner.AddInput(_graph[INPUT_LAYER][0], new[] {hash});
         runner.Fetch(_graph[OUTPUT_LAYER][0]);
         var result = runner.Run()[0].GetValue() as float[,];
+
         var outputSize = (int) Math.Pow(_grid.size, 3);
         var max = 0f;
         var maxIndex = -1;

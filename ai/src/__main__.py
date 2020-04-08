@@ -122,6 +122,7 @@ def main(argv):
             model.save_weights(outDir + '/weights')
             frozen_graph = freeze_session(sess, output_names=[model.output.op.name])
             tf.io.write_graph(frozen_graph, "model", outDir + "/model.bytes", as_text=False)
+
             # freeze_graph.freeze_graph(input_graph=outDir + '/model.pb',
             #                           input_binary=True,
             #                           input_checkpoint=tf.train.latest_checkpoint(outDir),

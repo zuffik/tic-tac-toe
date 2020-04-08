@@ -7,7 +7,13 @@ ovládača od hernej konzoly Xbox a zobrazená je v prostredí \emph{Cave}.
 
 \subsection{Unity}\label{subsec:unity}
 Samotná ovládacia časť (hra) je vytvorená v prostredí Unity verzie 2019.2.17f1.
-Pozostáva z niekoľkých modulov:
+Unity je framework (alebo engine) pre vytváranie 2D alebo 3D hier/simulácii/modelov a v súčasnosti je považovaný za
+jeden z najlepších a najpoužívanejších nástrojov pre vývoj 2D a 3D aplikácii.
+V jadre Unity sa nachádza mnoho už vyvinutých modulov (ako je napr. gravitácia pre 3D objekty, kamera pre zobrazovanie
+z pohľadu hráča, \dots).
+Ďalšie súčasti sa dajú vyvinúť s použitím aplikácie Unity Editor, kde sa dajú buď zložiť z existujúcich súčastí
+alebo doprogramovať v jazyku C#, s ktorým Unity pracuje.
+Projekt pozostáva z niekoľkých modulov:
 
 \textbf{Scény} sú v rámci unity kontajnery pre herné objekty (napr. 3D model) v rámci jedného logického celku.
 Scéna je v klasických hrách ekvivalentom levelu alebo prostredia, v ktorom sa hráč nachádza.
@@ -88,11 +94,50 @@ Pre potreby umelých neurónových sietí bola vyvinutá knižnica \emph{Keras}\
 Keras umožňuje definovať štruktúru neurónovej siete, Tensorflow túto sieť natrénuje.
 Okrem implementácie tried a štruktúr programu sú dôležité práve dve časti a to štruktúra umelej neurónovej siete a
 trénovanie umelej neurónovej siete.
+
+Model bol vytvorený na základe návrhu v \autoref{subsec:algo-ann} a jeho parametre boli nastavené na základe
+štruktúr použitých v programe.
+Jedná sa teda o $3r^d$ vstupov (inputs), kde $d=3$ pretože daná sieť je implementovaná v rámci 3D priestoru a $r$ je
+rovné veľkosti poľa \emph{board}.
+Pole board je síce trojrozmerné, no keďže veľkosť je rovnaká v každom rozmere (kocka), stačí použiť veľkosť hlavnej
+štruktúry.
+Jediná skrytá vrstva má veľkosť $r^d$ a výstup, aj keď je v \autoref{subsec:algo-ann} uvedené, že na výstupe je len
+jedno číslo (index s najväčšou pravdepodobnosťou výhry), knižnica Tensorflow vyžaduje aby týchto výstupov bolo $r^d$.
+Dôvodom tohto prístupu je fakt, že z technického hľadiska sa jedná o \emph{klasifikáciu} (zaradenie vstupu k jednému z
+výstupov).
+Knižnica z $r^d$ možností pohybu hráča rozhodne o tom, ktoré políčko má pre hráča najvyššiu pravdepodobnosť výhry
+pomocou tzv. \emph{one-hot array}.
+Je to vektor (pole) $s_i$, ktory má $r^d$ prvkov, $\forall i : i\neq k s_i=0$ a $s_k=1$, kde $k$ označuje index
+políčka s najpravdepodobnejším víťazstvom.
+Napr. pre $r=3$, $d=3$ a $k=4$ pole vyzerá nasledovne:
+\begin{equation}
+    s = <0, 0, 0, 1, 0, 0, 0, 0, 0>
+\end{equation}
+
+Model je vytvorený ako sekvenčný, čo znamená, že sieť je dopredná (signál sa šíri iba smerom od vstupnej vrstvy k
+výstupnej).
+Všetky vrstvy v sieti sú označené ako \emph{dense}, čo vyjadruje, že všetky neuróny $i$-tej vrstvy sú prepojené z sú
+prepojené so všetkými neurónmi vrstvy $i+1$.
+Všetky neuróny vstupnej a skrytej vrstvy sú aktivované pomocou funkcie \emph{ReLu} (\emph{activation=relu}), posledná
+vrstva obsahuje neuróny aktivované pomocou funkcie \emph{SoftMax} (\emph{activation=softmax}).
+Posledná vrstva vyžaduje túto aktivačnú funkciu, pretože výstupom z nej je klasifikácia.
+Model je kompilovaný s účelovou funkciou \emph{kategorická krížová entropia} (loss=categorical_crossentropy).
+Pri riešení minimalizačnej úlohy v rámci umelej neurónovej siete je využitý \emph{RMSProp optimizer} založený na
+stochastickej gradientovej metóde (\emph{optimizer=rmsprop}).
+Ukazovateľ optimality je presnosť v zaradení do jednotlivých kategórií (\emph{metrics=[acc]} - možnosť vyplniť viac
+ukazovateľov).
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/impl-ann-model.jpg}
     \caption{Implementácia štruktúry umelej neurónovej siete}
 \end{figure}\label{figure:ann-model-impl}
+
+Pre potreby trénovania je nutné pripraviť vzorku dát pre umelú neurónovú sieť.
+Tieto dáta sa získavajú simulovaním náhodných hier a sú rozdelené na dáta pre hráča a dáta pre oponenta.
+Dáta pre oponenta sa využívajú len pri experimentoch.
+Obe tieto skupiny sú rozdelené na vstupnú časť a výstupnú časť, pričom sú rozdelené ešte na trénovaciu a testovaciu časť
+v pomere 4:1 (4 trénovacie vzorky na 1 testovaciu).
 
 \begin{figure}[H]
     \centering
@@ -102,8 +147,45 @@ trénovanie umelej neurónovej siete.
 
 \subsection{Prepojenie umelej inteligencie s prostredím}\label{subsec:connection}
 
-\subsection{CI/CD}\label{subsec:ci}
+Aby sa mohli natrénované modely využiť pre praktické použitie (v hre) je možné tieto modely uložiť na disk.
+Ukladanie prebieha jednoducho zavolaním metódy \emph{save} a \emph{save_weights} nad natrénovaným modelom a definovaním
+cesty pre uložené súbory.
+Následne je potrebné uložiť ešte aj celú reláciu trénovania (pomocou \emph{freeze_session}) a nakoniec zapísať celú
+štruktúru ako graf s použitím \emph{write_graph}.
+Tento graf sa do súboru uloží ako binárny súbor.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-ann-save.png}
+    \caption{Implementácia ukladania ANN na disk}
+\end{figure}\label{figure:ann-save-impl}
+Pre použitie tejto uloženej štruktúry je možné využiť knižnicu \emph{TensorflowSharp}, ktorá je vyvinutá pre C# a ktorá
+poskytuje viac-menej tie isté možnosti ako Tensorflow pre python.
+V aplikácii je použitá pre načítanie modelov z disku a ich použitie v samotnej hre.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-ann-load.png}
+    \caption{Implementácia načítania ANN z disku}
+\end{figure}\label{figure:ann-load-impl}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-ann-usage.png}
+    \caption{Implementácia použitia ANN v aplikácii}
+\end{figure}\label{figure:ann-usage-impl}
 
+\subsection{Cloud computing}\label{subsec:ci}
+
+Za účelom automatizácie a zrýchlenia zostavenia bol nastavený aj continuous deployment (súvislé nahrávanie) na
+\emph{gitlab-CI}.
+Toto nastavenie umožňuje spustiť trénovanie umelej neurónovej siete a zostavenie aplikácie priamo na serveroch,
+Konkrétne sa jedná o servery od spoločnosti \emph{Amazon} v rámci divízie \emph{Amazon web services}.
+Na trénovanie ANN sa použila inštancia Linuxového serveru optimalizovaného pre lepší výkon operačnej pamäte.
+Pre zostavenie unity aplikácie (s využitím natrénovanej umelej neurónovej siete) bola použitá inštancia Windows
+serveru s predinštalovanou aplikáciou Unity.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/impl-cd.png}
+    \caption{Zobrazenie zotavenia aplikácie v rámci continuous deployment}
+\end{figure}\label{figure:cd}
 
 \subsection{Príručky}\label{subsec:helpers}
 \subsubsection{Programátorská príručka}
