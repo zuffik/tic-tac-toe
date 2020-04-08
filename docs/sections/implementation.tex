@@ -121,7 +121,7 @@ prepojené so všetkými neurónmi vrstvy $i+1$.
 Všetky neuróny vstupnej a skrytej vrstvy sú aktivované pomocou funkcie \emph{ReLu} (\emph{activation=relu}), posledná
 vrstva obsahuje neuróny aktivované pomocou funkcie \emph{SoftMax} (\emph{activation=softmax}).
 Posledná vrstva vyžaduje túto aktivačnú funkciu, pretože výstupom z nej je klasifikácia.
-Model je kompilovaný s účelovou funkciou \emph{kategorická krížová entropia} (loss=categorical_crossentropy).
+Model je kompilovaný s účelovou funkciou \emph{kategorická krížová entropia} (loss=categorical\_crossentropy).
 Pri riešení minimalizačnej úlohy v rámci umelej neurónovej siete je využitý \emph{RMSProp optimizer} založený na
 stochastickej gradientovej metóde (\emph{optimizer=rmsprop}).
 Ukazovateľ optimality je presnosť v zaradení do jednotlivých kategórií (\emph{metrics=[acc]} - možnosť vyplniť viac
@@ -148,10 +148,10 @@ v pomere 4:1 (4 trénovacie vzorky na 1 testovaciu).
 \subsection{Prepojenie umelej inteligencie s prostredím}\label{subsec:connection}
 
 Aby sa mohli natrénované modely využiť pre praktické použitie (v hre) je možné tieto modely uložiť na disk.
-Ukladanie prebieha jednoducho zavolaním metódy \emph{save} a \emph{save_weights} nad natrénovaným modelom a definovaním
+Ukladanie prebieha jednoducho zavolaním metódy \emph{save} a \emph{save\_weights} nad natrénovaným modelom a definovaním
 cesty pre uložené súbory.
-Následne je potrebné uložiť ešte aj celú reláciu trénovania (pomocou \emph{freeze_session}) a nakoniec zapísať celú
-štruktúru ako graf s použitím \emph{write_graph}.
+Následne je potrebné uložiť ešte aj celú reláciu trénovania (pomocou \emph{freeze\_session}) a nakoniec zapísať celú
+štruktúru ako graf s použitím \emph{write\_graph}.
 Tento graf sa do súboru uloží ako binárny súbor.
 \begin{figure}[H]
     \centering
