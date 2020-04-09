@@ -188,5 +188,47 @@ serveru s predinštalovanou aplikáciou Unity.
 \end{figure}\label{figure:cd}
 
 \subsection{Príručky}\label{subsec:helpers}
-\subsubsection{Programátorská príručka}
-\subsubsection{Užívateľská príručka}
+\subsubsection{Umelá inteligencia}
+Ako bolo vyššie spomenuté, časť aplikácie, ktorá je zameraná na umelú inteligenciu, je implementovaná v jazyku python.
+Interakcia s touto časťou je vykonávaná prostredníctvom rozhrania príkazového riadku (skr. CLI, angl. command line
+interface), pričom pre použitie je potrebné mať nainštalovaný interpreter jazyka python.
+Znamená to, že program nie je skompilovaný do jedného binárneho balíku (bundle) a je nutné pracovať priamo so zdrojovým
+kódom.
+Python verzie 3.7.4 a pip 19.0.3 (čo je nástroj pre správu závislostí projektu) boli použité pre vývoj aplikácie.
+Pred začatím používania je nutné nainštalovať všetky závislosti zo súboru \emph{requirements.txt}.
+Tento súbor obsahuje informácie o balíčkoch a ich konkrétnych verziách použitých v projekte.
+Pre odstránenie potenciálneho konfliktu už nainštalovanej verzie je odporúčané vytvoriť si tzv. virtuálne prostredie
+(angl. virtual environment).
+Jedná sa o vytvorenie priečinku, v ktorom sú obsiahnuté všetky informácie (interpreter, balíčky) týkajúce sa daných
+požiadaviek projektu (najmä závislosti).
+Takýmto spôsobom sa vytvorí izolované prostredie pre projekt, ktoré je nezávislé od globálneho.
+Použitie aplikácie je napr.: \shellcmd{python ./src/\_\_main\_\_.py game}.
+
+Predpis použitia je \shellcmd{python ./src/\_\_main\_\_.py [task] [parameters]} a aplikácia prijíma nasledovné
+argumenty:
+\begin{itemize}
+    \item \shellcmd{task}: (slovensky \enquote{úloha}) vyjadruje analogicky úlohu, ktorá sa má vykonať.
+    Možný je výber z nasledujúcich:
+    \begin{itemize}
+        \item \shellcmd{ann}: spustenie simulácie s trénovaním umelej neurónovej siete
+        \item \shellcmd{minmax}: spustenie simulácie s využitím algoritmu minimax
+        \item \shellcmd{analyze}: spustenie experimentov s rôznymi plochami
+        \item \shellcmd{game}: spustenie experimentov s rôznymi modelmi
+        \item \shellcmd{playground}: z názvu vyplýva, že je na programátorovi, čo sa spustí v rámci tohto príkazu, pričom sú
+        dostupné všetky potrebné náležitosti, ktoré majú dostupné aj iné úlohy
+        \item \shellcmd{store-ann}: natrénovanie a uloženie neurónovej siete
+    \end{itemize}
+    \item \shellcmd{--size=[number]}: rozmer hracej plochy (resp. hracieho priestoru); ekvivalent $r$
+    \item \shellcmd{--to-win=[number]}: počet rovnakých, za sebou idúcich znakov potrebných pre výhru; ekvivalent $w$
+    \item \shellcmd{--dimension=[number]}: dimenzia (2 alebo 3); ekvivalent $d$
+    \item \shellcmd{--player=[X,O]}: preferovaný (cieľový) hráč
+    \item \shellcmd{--simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny)
+    \item \shellcmd{--validations=[number]}: počet validácii (slúži pre získanie reálnych štatistík)
+    \item \shellcmd{--max-depth=[number]}: maximálna veľkosť vyhľadávacieho stromu pri algoritme \emph{minimax};
+    ekvivalent $l$
+    \item \shellcmd{--ann-model=[adaptive,large]}: zvolený model \emph{umelej neurónovej siete}
+    \begin{itemize}
+        \item \shellcmd{adaptive} je model popísaný v \autoref{subsec:algo-ann}
+        \item \shellcmd{large} je model použitý pri experimentoch, popísaný v \autoref{subsec:experiments-board}
+    \end{itemize}
+\end{itemize}
