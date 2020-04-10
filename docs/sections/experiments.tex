@@ -1,31 +1,6 @@
 \subsection{Experimenty}\label{subsec:experiments}
 S popísanými algoritmami boli vykonávané experimenty pre overenie správnosti navrhnutých štruktúr a nájdenie možných
 vzorcov vo výsledkoch.
-Pre potreby natrénovania umelých neurónových sietí boli použité simulácie náhodných hier v počte 4000 až 10--000.
-Simulácie pozostávali z náhodného výberu políčok pre každého hráča.
-Náhodný výber bol navyše zlepšený predpokladom, že hráči sa počas hry (najmä na plochách väčších rozmerov) snažia
-väčšinou znemožniť protihráčovi jeho výhru výberom políčok, ktoré sú blízko jeho predchádzajúcemu ťahu
-(resp. predchádzajúcim ťahom).
-Keďže piškvorky sú hra, ktorá sa hrá na pravouhlej ploche (resp. pravouhlom priestore) bolo možné pri výpočte
-pravdepodobnosti výberu prvku použiť Manhattanskú vzdialenosť.
-Nech pre $d=3$ $c_i(b)$, $c_j(b)$, $c_k(b)$ sú súradnice ($i$ a $j$) políčka, ktoré je najbližšie k políčku $b_{ijk}$ a
-nech
-
-\begin{equation}
-    e(b_{ijk}) =
-    \begin{cases}
-        1 & \text{ak políčko }ijk\text{ je prázdne} \\
-        0 & \text{inak}
-    \end{cases}
-\end{equation}
-
-potom pravdepodobnosť výberu políčka $ijk$ je
-
-\begin{equation}
-    p(b_{ijk}) = \frac{|c_i(b) - i| + |c_j(b) - j| + |c_k(b) - k|}{\sum_{m=1}^r\sum_{n=1}^r\sum_{o=1}^r e(b_{mno})}
-\end{equation}
-
-Pre $d=2$ (teda pre hru na ploche) platia rovnaké pravidlá, pričom $k=1$ (resp. $o=1$) vo všetkých prípadoch.
 Kľúčovou informáciou je počet výhier hráča \textbf{X} (resp. podiel výhier vzhľadom na počet hier) v prípade
 neurónových sietí; čas a výhra v prípade algoritmu MinMax.
 

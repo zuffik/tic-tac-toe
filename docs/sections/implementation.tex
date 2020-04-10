@@ -51,6 +51,13 @@ Zvyšné súbory sú generované vývojovým prostredím.
     \caption{Prostredie unity}
 \end{figure}\label{figure:unity}
 
+V unity sú vstupy mapované do tzv. osí, čo dovoľuje použitie viacerých zariadení pričom pre všetky zariadenia existuje
+len jeden kód.
+Napr. pre použitie joystick-u a tlačidiel pre šípky vpravo alebo vľavo sa použije os s názvom \enquote{Horizontal},
+ktorej hodnota je -1 v prípade, že užívateľ posunie joystick vľavo, resp. stlačí ľavú šípku a hodnota je 1 v prípade,
+že užívateľ posunie joystick vpravo, resp. stlačí pravú šípku.
+Pomocou týchto osí je možná napr. navigácia v hlavnom menu alebo otáčanie hracieho priestoru.
+
 \subsubsection{Prostredie Cave}
 Cave prostredie je také, ktoré zobrazuje obraz na štyroch plochách súčasne.
 Ak pozorovateľ stojí priamo, tak jedno plátno je pred ním, ďalšie sú vpravo a vľavo kolmé na plátno pred ním a posledné
@@ -175,7 +182,7 @@ V aplikácii je použitá pre načítanie modelov z disku a ich použitie v samo
 \subsection{Cloud computing}\label{subsec:ci}
 
 Za účelom automatizácie a zrýchlenia zostavenia bol nastavený aj continuous deployment (súvislé nahrávanie) na
-\emph{gitlab-CI}.
+\emph{GitLab-CI}.
 Toto nastavenie umožňuje spustiť trénovanie umelej neurónovej siete a zostavenie aplikácie priamo na serveroch,
 Konkrétne sa jedná o servery od spoločnosti \emph{Amazon} v rámci divízie \emph{Amazon web services}.
 Na trénovanie ANN sa použila inštancia Linuxového serveru optimalizovaného pre lepší výkon operačnej pamäte.
@@ -218,17 +225,63 @@ argumenty:
         dostupné všetky potrebné náležitosti, ktoré majú dostupné aj iné úlohy
         \item \shellcmd{store-ann}: natrénovanie a uloženie neurónovej siete
     \end{itemize}
-    \item \shellcmd{--size=[number]}: rozmer hracej plochy (resp. hracieho priestoru); ekvivalent $r$
-    \item \shellcmd{--to-win=[number]}: počet rovnakých, za sebou idúcich znakov potrebných pre výhru; ekvivalent $w$
-    \item \shellcmd{--dimension=[number]}: dimenzia (2 alebo 3); ekvivalent $d$
-    \item \shellcmd{--player=[X,O]}: preferovaný (cieľový) hráč
-    \item \shellcmd{--simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny)
-    \item \shellcmd{--validations=[number]}: počet validácii (slúži pre získanie reálnych štatistík)
-    \item \shellcmd{--max-depth=[number]}: maximálna veľkosť vyhľadávacieho stromu pri algoritme \emph{minimax};
+    \item \shellcmd{\-\-size=[number]}: rozmer hracej plochy (resp. hracieho priestoru); ekvivalent $r$
+    \item \shellcmd{\-\-to-win=[number]}: počet rovnakých, za sebou idúcich znakov potrebných pre výhru; ekvivalent $w$
+    \item \shellcmd{\-\-dimension=[number]}: dimenzia (2 alebo 3); ekvivalent $d$
+    \item \shellcmd{\-\-player=[X,O]}: preferovaný (cieľový) hráč
+    \item \shellcmd{\-\-simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny)
+    \item \shellcmd{\-\-validations=[number]}: počet validácii (slúži pre získanie reálnych štatistík)
+    \item \shellcmd{\-\-max-depth=[number]}: maximálna veľkosť vyhľadávacieho stromu pri algoritme \emph{minimax};
     ekvivalent $l$
-    \item \shellcmd{--ann-model=[adaptive,large]}: zvolený model \emph{umelej neurónovej siete}
+    \item \shellcmd{\-\-ann-model=[adaptive,large]}: zvolený model \emph{umelej neurónovej siete}
     \begin{itemize}
         \item \shellcmd{adaptive} je model popísaný v \autoref{subsec:algo-ann}
         \item \shellcmd{large} je model použitý pri experimentoch, popísaný v \autoref{subsec:experiments-board}
     \end{itemize}
 \end{itemize}
+
+\subsubsection{Hra}
+
+\paragraph{Programátorská príručka}
+Unity verzie 2019.2.17f1 bolo použité pri vývoji užívateľskej časti aplikácie.
+V rámci projektov unity je odporúčané držať sa verzie, v ktorej je projekt vyvíjaný, pretože pri zložitejších
+štruktúrach môže dôjsť ku konfliktom.
+Pre otvorenie projektu vo vývojovom prostredí je nutné mať nainštalovanú túto verziu unity a aplikáciu
+\enquote{unity editor}.
+V tomto programe je možné upravovať vizuálnu stránku aplikácie, vytvárať moduly a meniť väzby medzi nimi.
+Pre úpravu kódu v rámci jazyka C\# je možné použiť akékoľvek vývojové prostredie (skr. IDE, angl. integrated development
+environment), ktoré podporuje tento jazyk.
+Medzi najpoužívanejšie patria \emph{Microsoft Visual Studio} alebo \emph{JetBrains Rider}, v ktorom bola aplikácia
+vyvíjaná.
+Aplikáciu je možné skompilovať dvoma spôsobmi:
+\begin{enumerate}
+    \item odporúčaným spôsobom v danom IDE
+    \item pomocou príkazového riadku.
+    Ako príklad je možné uviesť kompilovanie v OS Windows:
+    \shellcmd{"c:\\Program Files\\Unity\\Hub\\Editor\\2019.2.17f1\\Editor\\Unity.exe" \-batchmode \-nographics \-executeMethod BuildScript.PerformBuild \-quit \-projectPath game \-logFile \-}
+    Tento konkrétny zápis je použitý aj pri zostavení aplikácie v GitLab-CI .
+\end{enumerate}
+
+\paragraph{Používateľská príručka}
+Zostavený program je pripravený pre použitie aj na klasickom desktopovom počítači aj v prostredí Cave.
+Pri zapnutí programu sa zobrazí hlavné menu, kde sú dve možnosti: začať hru a ukončiť program (oba s anglickými
+názvami).
+Navigácia v menu je vykonávaná pomocou vertikálnej osi.
+Zvolením možnosti ukončiť program sa aplikácia vypne, po zvolení možnosti začať hru je zobrazené ďalšie menu, kde si
+používateľ volí parametre hry.
+Konkrétne ide o veľkosť hracieho priestoru (3-8), počet za sebou idúcich znakov potrebných pre výhru a znak hráča, s
+ktorým chce užívateľ hrať.
+Parametre sa volia využitím horizontálnej osi.
+Po vyplnení všetkých potrebných parametrov sa hra spustí.
+Pomocou oboch osí je možné otáčať hrací priestor, pričom najbližšie políčko, na ktoré sa \enquote{pozerá kamera} je
+vyznačené zelenou guľou.
+V hre sa navyše využívajú navyše ešte 3 osi pre akčné tlačidlá:
+\begin{enumerate}
+    \item priblíženie v rámci hracieho priestoru
+    \item oddialenie v rámci hracieho priestoru
+    \item priradenie vlastného znaku na označené políčko
+\end{enumerate}
+Po priradení znaku sa automaticky vyplní aj jedno políčko protihráča, ktoré vyberie algoritmus umelej inteligencie.
+V prípade, že jeden z hráčov vyhrá alebo nastane remíza s tým, že všetky políčka sú už obsadené, vypíše sa na obrazovku
+informácia o stave hry a po 7 sekundách je uskutočnený návrat do hlavného menu.
+
