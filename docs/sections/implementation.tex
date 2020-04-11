@@ -134,17 +134,17 @@ stochastickej gradientovej metóde (\emph{optimizer=rmsprop}).
 Ukazovateľ optimality je presnosť v zaradení do jednotlivých kategórií (\emph{metrics=[acc]} - možnosť vyplniť viac
 ukazovateľov).
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/impl-ann-model.jpg}
-    \caption{Implementácia štruktúry umelej neurónovej siete}
-\end{figure}\label{figure:ann-model-impl}
-
 Pre potreby trénovania je nutné pripraviť vzorku dát pre umelú neurónovú sieť.
 Tieto dáta sa získavajú simulovaním náhodných hier a sú rozdelené na dáta pre hráča a dáta pre oponenta.
 Dáta pre oponenta sa využívajú len pri experimentoch.
 Obe tieto skupiny sú rozdelené na vstupnú časť a výstupnú časť, pričom sú rozdelené ešte na trénovaciu a testovaciu časť
 v pomere 4:1 (4 trénovacie vzorky na 1 testovaciu).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/impl-ann-model.jpg}
+    \caption{Implementácia štruktúry umelej neurónovej siete}
+\end{figure}\label{figure:ann-model-impl}
 
 \begin{figure}[H]
     \centering
@@ -226,15 +226,15 @@ argumenty:
         dostupné všetky potrebné náležitosti, ktoré majú dostupné aj iné úlohy
         \item \shellcmd{store-ann}: natrénovanie a uloženie neurónovej siete
     \end{itemize}
-    \item \shellcmd{\-\-size=[number]}: rozmer hracej plochy (resp. hracieho priestoru); ekvivalent $r$
-    \item \shellcmd{\-\-to-win=[number]}: počet rovnakých, za sebou idúcich znakov potrebných pre výhru; ekvivalent $w$
-    \item \shellcmd{\-\-dimension=[number]}: dimenzia (2 alebo 3); ekvivalent $d$
-    \item \shellcmd{\-\-player=[X,O]}: preferovaný (cieľový) hráč
-    \item \shellcmd{\-\-simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny)
-    \item \shellcmd{\-\-validations=[number]}: počet validácii (slúži pre získanie reálnych štatistík)
-    \item \shellcmd{\-\-max-depth=[number]}: maximálna veľkosť vyhľadávacieho stromu pri algoritme \emph{minimax};
+    \item \shellcmd{\texttt{-{}-}size=[number]}: rozmer hracej plochy (resp. hracieho priestoru); ekvivalent $r$
+    \item \shellcmd{\texttt{-{}-}to-win=[number]}: počet rovnakých, za sebou idúcich znakov potrebných pre výhru; ekvivalent $w$
+    \item \shellcmd{\texttt{-{}-}dimension=[number]}: dimenzia (2 alebo 3); ekvivalent $d$
+    \item \shellcmd{\texttt{-{}-}player=[X,O]}: preferovaný (cieľový) hráč
+    \item \shellcmd{\texttt{-{}-}simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny)
+    \item \shellcmd{\texttt{-{}-}validations=[number]}: počet validácii (slúži pre získanie reálnych štatistík)
+    \item \shellcmd{\texttt{-{}-}max-depth=[number]}: maximálna veľkosť vyhľadávacieho stromu pri algoritme \emph{minimax};
     ekvivalent $l$
-    \item \shellcmd{\-\-ann-model=[adaptive,large]}: zvolený model \emph{umelej neurónovej siete}
+    \item \shellcmd{\texttt{-{}-}ann-model=[adaptive,large]}: zvolený model \emph{umelej neurónovej siete}
     \begin{itemize}
         \item \shellcmd{adaptive} je model popísaný v \autoref{subsec:algo-ann}
         \item \shellcmd{large} je model použitý pri experimentoch, popísaný v \autoref{subsec:experiments-board}

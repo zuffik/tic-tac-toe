@@ -1,7 +1,7 @@
 \section{Umelá inteligencia}\label{sec:ai}
 
 Od počiatku vzniku mechanických strojov, ktoré pomáhajú ľuďom pri svojej práci sa pri nich nepriamo niesol aj pojem
-"umelá inteligencia".
+\enquote{umelá inteligencia}.
 Medzi odbornou verejnosťou tento pojem stále nie je jednotný, no väčšina z nich má rovnakú myšlienku:
 inteligencia vykonávaná strojmi (narozdiel od prirodzenej inteligencie, ktorú vykonávajú ľudia, či zvieratá).
 Ak stroj (aj mechanický) dokáže niečo vykonať bez explicitného príkazu, je považovaný za inteligentný.
@@ -24,6 +24,27 @@ Umelá inteligencia (angl. artificial intelligence) je široká vedná disciplí
 Metódy niektorých skupín sa môžu prelínať (napr. na analýzu obrazu a na analýzu zvuku sa môžu použiť umelé neurónové
 siete).
 Dôsledkom toho je aj fakt, že niektoré metódy sa používajú viac a iné menej.
+Využiteľnosť metód závisí teda najmä od problému, ktorý riešia.
+
+Ak problémom je plánovanie trasy pre kuriérov, použije sa matematická optimalizácia.
+Ukážkou môže byť ako americká spoločnosť UPS v amerických mestách, kde je systém ulíc riešený kolmým spôsobom, čo
+najviac obmedzila zatáčanie kuriérov \emph{vľavo}.\cite{ups_optimization}
+Dôvodom je najmä to, že keď kuriér odbočuje vľavo, musí dať prednosť protiidúcim vozidlám, pričom auto stojí na
+križovatke naštartované.
+Dôsledkom sú nasledovné vylepšenia:
+\begin{enumerate}
+    \item ušetrených takmer 40 miliónov litrov paliva ročne
+    \item o 100 tisíc ton $CO_2$ menej
+\end{enumerate}
+Rovnaké vylepšenia by prinieslo odstavenie 21 tisíc áut.
+
+Na druhú stranu, keď sa rieši problém rozpoznávania hlasových príkazov je nutné problém rozdeliť na 2 podproblémy:
+\begin{enumerate}
+    \item \emph{spracovanie zvuku}, napr. s využitím skrytých markovových modelov\cite{hmm}
+    \item \emph{spracovanie textu}\cite{text_analysis}
+\end{enumerate}
+
+Je teda zjavné, že algoritmus, ktorý rozpoznáva význam textu nebude stačiť pre plánovanie trás kuriérov.
 Nižšie sú popísané metódy, ktoré sú v rámcu umelej inteligencie využívané najlepšie.
 
 \subsubsection{Heuristické metódy}
