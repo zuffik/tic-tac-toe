@@ -155,6 +155,10 @@ kde $\theta$ je tiež označovaná ako prahová hodnota (angl. threshold).
 \hyperref[figure:activation-functions]{Aktivačná funkcia} sa označuje ako $\phi(z)$.
 Medzi bežne používané aktivačné funkcie patrí napríklad:
 \linebreak
+\textbf{SoftMax} (táto aktivačná funkcia sa využíva pri kategorizácii)
+\begin{equation}
+    \phi(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{|z|}{e^{z_j}}}
+\end{equation}
 \textbf{Sigmoid}
 \begin{equation}
     \phi(z) = \frac{1}{1+e^{-z}}
@@ -168,7 +172,7 @@ Medzi bežne používané aktivačné funkcie patrí napríklad:
     \phi(z) = \max\{0, x\}
 \end{equation}
 
-Priebehy týchto funkcií sú zobrazené na grafe.
+Priebehy niektorých týchto funkcií sú zobrazené na grafe.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/activation-functions.png}
@@ -206,12 +210,13 @@ Algoritmus prebieha nasledovne:
     \item pre $i = 1 \dots |T_r|$:
     \begin{enumerate}
         \item ak $(y_i-y(\mathbf{X_i}))^2>\epsilon$ \\
-                $\pmb{w_{1j}}=\pmb{w_{1j}} + \gamma * (y_i-y(\mathbf{X_i})) * X_{ij}$ \\
-                $\theta=\theta + \gamma * (y_i-y(\mathbf{X_i}))$
+                $\Delta{w_j} = \gamma * (y_i-y(\mathbf{X_i}))_j$ \\
+                $\pmb{w_{1j}}=\pmb{w_{1j}} + \Delta{w_j} * X_{ij}$ \\
+                $\theta=\theta + \Delta{w_j}$
         \item ak prebehlo $s$ za sebou idúcich rozdielov výstupov, ktoré sa nachádzali v rámci $\epsilon$, tak koniec
     \end{enumerate}
 \end{enumerate}
-Zmena váh o $y_i-y(\mathbf{X_i})$ je celkom intuitívna, no je možné si ukázať, že to funguje aj matematicky.
+Zmena váh o vektor $y_i-y(\mathbf{X_i})$ je celkom intuitívna, no je možné si ukázať, že to funguje aj matematicky.
 Nech $\pmb{\omega_0}$ je východiskový bod pre váhy a nech $f(\pmb{x})$ je funkcia vyjadrujúca mieru chyby v sieti,
 ktorú je potreba minimalizovať.
 K bodu $\pmb{\omega_1}$ je možné sa z východiskového bodu posunúť v jednotkovom smere $\pmb{d}$ ($|\pmb{d}|=1$) o krok
@@ -271,6 +276,67 @@ algoritmu je nutné aby bola \emph{derivovateľná}.
 \textbf{Algoritmus založený na spätnom šírení} (angl. a ďalej len "backpropagation algoritmus") je zovšeobecnenie delta
 algoritmu pre viacvrstvové siete.
 Funguje na rovnakom princípe, ktorý sa postupne opakuje smerom od výstupnej vrstvy k vstupnej.
+
+Vyššie popísaná metóda optimalizácie sa nazýva aj gradientová metóda najväčšieho poklesu.
+Pri tejto metóde existuje niekoľko vylepšení, resp. alternatív, ktoré sa týkajú najmä parametrov, ktoré sa môžu meniť
+aj dynamicky, väčšinou sú tieto metódy koncepčne veľmi podobné.
+Riešenie potom rýchlejšie konverguje k optimálnym hodnotám.
+Nižšie sú popísané najpoužívanejšie alternatívy.
+\paragraph{RMSProp}
+Z anglického \enquote{\textbf{R}oot \textbf{m}ean \textbf{s}quare \textbf{prop}agation}.
+Algoritmus vychádza z gradientovej metódy, no upravuje hodnotu, ktorá sa pripočítava k váham, aby sa zabránilo oscilácii
+metódy okolo optimálnej hodnoty.
+RMSProp upravuje zmenu váh nasledovne:
+\begin{equation}
+    v_j=pv_j+(1-p)(y_i-y(\mathbf{X_i}))_j^2
+\end{equation}
+\begin{equation}
+    \Delta{w_j}=-\frac{\eta}{\sqrt{v_j+\epsilon}}(y_i-y(\mathbf{X_i}))_j
+\end{equation}
+Kde $\eta$ je počiatočný učiaci parameter.
+$p \in <0,1>$ zvyčajne $p=0.9$, $\epsilon$ je použitý len na to, aby sa predišlo deleniu nulou a zvyčajne
+$\epsilon = 10^{-10} = 1e-10$ a $v_j$ je priemer umocnených gradientov.
+Hodnota $\Delta{w_j}$ je potom pripočítaná k váham.
+\paragraph{Adam}
+Odvodené z anglického \enquote{\textbf{Ada}ptive \textbf{m}oment optimization}.
+Algoritmus vychádza z gradientovej metódy, no upravuje hodnotu, ktorá sa pripočítava k váham, aby sa zabránilo oscilácii
+metódy okolo optimálnej hodnoty.
+Adam upravuje zmenu váh nasledovne:
+\begin{equation}
+    v_j=\beta_1{v_j}-(1-\beta_1)(y_i-y(\mathbf{X_i}))_j
+\end{equation}
+\begin{equation}
+    s_j=\beta_2{s_j}-(1-\beta_2)(y_i-y(\mathbf{X_i}))_j^2
+\end{equation}
+\begin{equation}
+    \Delta{w_j}=-\eta\frac{v_j}{\sqrt{s_j+\epsilon}}(y_i-y(\mathbf{X_i}))_j
+\end{equation}
+Kde $\eta$ je počiatočný učiaci parameter.
+$p \in <0,1>$ zvyčajne $p=0.9$, $\epsilon$ je použitý len na to, aby sa predišlo deleniu nulou a zvyčajne
+$\epsilon = 10^{-10} = 1e-10$, $v_j$ je priemer gradientov a $s_j$ je priemer umocnených gradientov.
+Hodnota $\Delta{w_j}$ je potom pripočítaná k váham.
+
+Pri návrhu je možné určiť aj účelovú funkciu optimalizácie tréningu a teda spôsob, akým tréningový proces vyhodnocuje
+správnosť, resp. nesprávnosť výstupu pri danom vstupe.
+Nech $E(w, y, \hat{y})$ je chyba výsledku pri parametri $w$ a výstupe $\hat{y}$ s očakávaným výstupom $y$
+a $F(E(w, y, \hat{y}))$ je účelová funkcia optimalizačného procesu.
+\paragraph{Priemerná štvorcová chyba}
+Anglicky \emph{mean squared error} (skr. MSE).
+\begin{equation}
+    F(E(w, y, \hat{y}))=E(w, y, \hat{y})^2
+\end{equation}
+\paragraph{Priemerná absolútna chyba}
+Anglicky \emph{mean absolute error}.
+\begin{equation}
+    F(E(w, y, \hat{y}))=|E(w, y, \hat{y})|
+\end{equation}
+\paragraph{Kategorická krížová entropia}
+Anglicky \emph{categorical crossentropy}.
+Táto účelová funkcia vyžaduje, aby vstupy boli kategorizované, čoho dôsledkom je aj to, že táto účelová funkcia sa
+využíva pri kategorizácii vstupov.
+\begin{equation}
+    E(w, y, \hat{y})=y*\log(\hat{y})
+\end{equation}
 
 Navrhnutie štruktúry umelej neurónovej siete je jeden z najťažších problémov pri vytváraní riešenia problému.
 Neexistuje jednoznačná a univerzálna cesta vytvorenia, ktorá by platila pre všetky problémy.

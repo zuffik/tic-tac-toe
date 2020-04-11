@@ -94,7 +94,7 @@ Tabuľka je vertikálne rozdelená na 2 časti:
             & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
             \cline{2-10}
             & \multirow{3}{*}{14}
-            & \textbf{X}: 66.7\% & \textbf{X}: 60\% & \textbf{X}: 80\% & \textbf{X}: 68.9\%                             & \textbf{X}: 96\% & \textbf{X}: 96\% & \textbf{X}: 96\% & \textbf{X}: 4\% \\
+            & \textbf{X}: 66.7\% & \textbf{X}: 60\% & \textbf{X}: 80\% & \textbf{X}: 68.9\%                             & \textbf{X}: 96\% & \textbf{X}: 96\% & \textbf{X}: 96\% & \textbf{X}: 96\% \\
             & & \textbf{O}: 33.3\% & \textbf{O}: 40\% & \textbf{O}: 20\% & \textbf{O}: 31.1\%                           & \textbf{O}: 4\% & \textbf{O}: 4\% & \textbf{O}: 4\% & \textbf{O}: 4\% \\
             & & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\%               & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% & \textbf{Remíza}: 0\% \\
             \cline{2-10}
@@ -205,4 +205,21 @@ nasledovné:
 
 \subsubsection{Vyhodnotenie experimentov}
 
+\paragraph{Experimenty s rôznymi plochami}
 
+Pri algoritme minimax je zjavné, že je to exaktný algoritmus, pretože časy jednotlivých hier hlavne pri vyšších
+rozmeroch boli extrémne veľké (pričom hĺbka stromu pri $i>2$ bola nastavená na $l=2$) a rástli exponenciálne.
+Aj keď vo variante s náhodným ťahom oponenta sú časy značne nižšie, sú stále veľmi vysoké pre reálne použitie.
+
+Výsledky metódy umelých neurónových sietí bol v prípade variantu, kde proti sebe hrala tá istá neurónová sieť
+boli približne rovnaké so vstupnými údajmi a teda so simuláciami náhodných hier.
+Z týchto výsledkov je možné usúdiť, že sieť je natrénovaná veľmi dobre a dokonca pri variante s náhodnými ťahmi oponenta
+v drvivej väčšine prípadov bola úspešná.
+Znamená to, že táto umelá neurónová sieť by mala byť úspešná vo väčšine prípadov pri hre so sofistikovanejším oponentom.
+
+\paragraph{Experimenty s rôznymi modelmi}
+
+Napriek tomu, že neurónová sieť bola úspešná pri hre s inou umelou neurónovou sieťou, nevyrovná sa to exaktnému
+algoritmu minimax, pri ktorom úplne pohorela.
+Ak ale je cieľom efektivita, nie je možné použiť algoritmus minimax vzhľadom na čas, ktorý algoritmus potrebuje pre
+vykonanie výpočtov.

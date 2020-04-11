@@ -165,6 +165,7 @@ Tento graf sa do súboru uloží ako binárny súbor.
     \includegraphics[width=0.8\textwidth]{images/impl-ann-save.png}
     \caption{Implementácia ukladania ANN na disk}
 \end{figure}\label{figure:ann-save-impl}
+Modely sa ukladajú do samostatných priečinkov pomenovaných nasledovne: \enquote{size-$r$-to-win-$w$}.
 Pre použitie tejto uloženej štruktúry je možné využiť knižnicu \emph{TensorflowSharp}, ktorá je vyvinutá pre C\# a ktorá
 poskytuje viac-menej tie isté možnosti ako Tensorflow pre python.
 V aplikácii je použitá pre načítanie modelov z disku a ich použitie v samotnej hre.
@@ -181,8 +182,8 @@ V aplikácii je použitá pre načítanie modelov z disku a ich použitie v samo
 
 \subsection{Cloud computing}\label{subsec:ci}
 
-Za účelom automatizácie a zrýchlenia zostavenia bol nastavený aj continuous deployment (súvislé nahrávanie) na
-\emph{GitLab-CI}.
+Za účelom automatizácie a zrýchlenia zostavenia bol nastavený aj continuous deployment (súvislé nahrávanie, ďalej len
+"CD") na \emph{GitLab-CI}.
 Toto nastavenie umožňuje spustiť trénovanie umelej neurónovej siete a zostavenie aplikácie priamo na serveroch,
 Konkrétne sa jedná o servery od spoločnosti \emph{Amazon} v rámci divízie \emph{Amazon web services}.
 Na trénovanie ANN sa použila inštancia Linuxového serveru optimalizovaného pre lepší výkon operačnej pamäte.
@@ -258,7 +259,7 @@ Aplikáciu je možné skompilovať dvoma spôsobmi:
     \item odporúčaným spôsobom v danom IDE
     \item pomocou príkazového riadku.
     Ako príklad je možné uviesť kompilovanie v OS Windows:
-    \shellcmd{"c:\\Program Files\\Unity\\Hub\\Editor\\2019.2.17f1\\Editor\\Unity.exe" \-batchmode \-nographics \-executeMethod BuildScript.PerformBuild \-quit \-projectPath game \-logFile \-}
+    \shellcmd{"c:{\textbackslash}Program Files{\textbackslash}Unity{\textbackslash}Hub{\textbackslash}Editor{\textbackslash}2019.2.17f1{\textbackslash}Editor{\textbackslash}Unity.exe"\\ \-batchmode \-nographics \-executeMethod BuildScript.PerformBuild \-quit \-projectPath game \-logFile \-}
     Tento konkrétny zápis je použitý aj pri zostavení aplikácie v GitLab-CI .
 \end{enumerate}
 
