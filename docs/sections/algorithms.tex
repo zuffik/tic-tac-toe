@@ -6,7 +6,8 @@ algoritmus z každej skupiny.
 
 \subsection{MiniMax}\label{subsec:algo-minmax}
 
-Minimax je rozhodovacie pravidlo, podľa ktorého je možné určiť nasledujúci ťah.
+Minimax je rozhodovacie pravidlo založený na vyhľadávacom algoritme v strome, podľa ktorého je možné určiť nasledujúci
+ťah.\cite{algo_minimax}
 Jeho princíp spočíva v maximalizovaní úžitku pre cieľového hráča a minimalizovaní úžitku pre oponenta.
 Pôvodne bol vyvinutý pre \emph{hru s nulovým súčtom} (angl. zero-sum), čo je termín používaný v teórii hier.
 Vyjadruje hru, kde rozhodnutia hráčov sa dajú ohodnotiť nenulovým číslom $v$, pričom súčet za sebou idúcich hier má
@@ -55,7 +56,7 @@ Najlepší ťah je potom určený spôsobom
 \begin{equation}
     S_{Best} = \max{\{V(S_{2j}) \forall j \colon p(S_{2j}) = S_{11}\}} = \max{\{V(S_{2j}) \forall j\}}
 \end{equation}
-Vyhľadávanie prebieha potom nasledovne:
+Vyhľadávanie prebieha potom nasledovne:\cite{algo_minimax_pseudocode}
 \begin{tiny}
     \begin{lstlisting}[language=Python]
 def minimax(hraciaPlocha, int maximalnaHlbka, bool maximalizacia):
@@ -114,16 +115,16 @@ odhaduje na $\approx 14$ mld. $\approx 14 * 10^9$ rokov).
 
 Z vyššie uvedeného vyplýva, že exaktné riešenie pre väčšie rozmery plochy nie je možné použiť, teda je nutné použiť
 algoritmy, ktoré nenájdu najlepšie riešenie v rámci celého vyhľadávacieho priestoru (optimálne), no vedia nájsť
-najlepšie riešenie v rámci okolia východiskového riešenia (suboptimálne).
-Takéto algoritmy sa nazývajú \emph{heuristické} a jednou z týchto heuristických metód je \emph{umelá neurónová sieť}
-angl. artificial neural network (často označovaná ako ANN).
+najlepšie riešenie v rámci obmedzeného vyhľadávacieho priestoru (suboptimálne).
+Jednou z týchto heuristických metód je \emph{umelá neurónová sieť} angl. artificial neural network
+(často označovaná ako ANN).
 
 Matematické základy pre tento algoritmus boli vytvorené už v polovici 20. storočia a sú založené na modeli
-biologických neurónových sietí, z čoho vychádza aj názov a terminológia.
+biologických neurónových sietí, z čoho vychádza aj názov a terminológia.\cite{algo_ann_history}
 Sieť pozostáva z \textbf{vrstiev}, ktoré sú tvorené \textbf{neurónmi}.
-Medzi jednotlivými neurónmi sú prepojenia nazývané tiež \textbf{synapsy}.
-Umelú neurónovú sieť je možné reprezentovať \hyperref[figure:general-ann]{grafom}, kde vrcholy reprezentujú neuróny
-a hrany synaptické spojenia.
+Medzi jednotlivými neurónmi sú prepojenia nazývané tiež \textbf{synapsy}.\cite{algo_ann_terminology}
+Umelú neurónovú sieť je možné reprezentovať ohodnoteným \hyperref[figure:general-ann]{grafom}, kde vrcholy reprezentujú
+neuróny a hrany synaptické spojenia.
 Graf môže vyzerať nasledovne:
 \begin{figure}[H]
     \centering
@@ -155,19 +156,19 @@ kde $\theta$ je tiež označovaná ako prahová hodnota (angl. threshold).
 \hyperref[figure:activation-functions]{Aktivačná funkcia} sa označuje ako $\phi(z)$.
 Medzi bežne používané aktivačné funkcie patrí napríklad:
 \linebreak
-\textbf{SoftMax} (táto aktivačná funkcia sa využíva pri kategorizácii)
+\textbf{SoftMax} (táto aktivačná funkcia sa využíva pri kategorizácii)\cite{algo_ann_activation_softmax}
 \begin{equation}
     \phi(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{|z|}{e^{z_j}}}
 \end{equation}
-\textbf{Sigmoid}
+\textbf{Sigmoid}\cite{algo_ann_activation_sigmoid}
 \begin{equation}
     \phi(z) = \frac{1}{1+e^{-z}}
 \end{equation}
-\textbf{Hyperbolická funkcia}
+\textbf{Hyperbolická funkcia}\cite{algo_ann_activation_hyperbolic}
 \begin{equation}
     \phi(z) = tanh(z)
 \end{equation}
-\textbf{ReLu}
+\textbf{ReLu}\cite{algo_ann_activation_relu}
 \begin{equation}
     \phi(z) = \max\{0, x\}
 \end{equation}
@@ -185,8 +186,8 @@ Učenie prebieha v 2 fázach: trénovanie a testovanie siete.
 V prvej fáze sa sieť naplní \emph{existujúcimi} vstupmi a výstupmi, aby vedela odhadnúť vzťah medzi nimi.
 Existuje mnoho tréningových metód, no v tejto práci sú popísané 2:
 \begin{itemize}
-    \item algoritmus založený na delta prístupe
-    \item algoritmus založený na spätnom šírení
+    \item algoritmus založený na delta prístupe\cite{algo_ann_delta_rule}
+    \item algoritmus založený na spätnom šírení\cite{algo_ann_backpropagation}
 \end{itemize}
 Pri oboch prístupoch je nutné definovať tzv. trénovaciu ($T_r$) a testovaciu množinu ($T_t$).
 Trénovacia množina slúži na prvotné nastavenie parametrov (váh).
@@ -204,7 +205,7 @@ prostredníctvom absolútnej hodnoty, často sa využíva aj druhá mocnina rozd
 Ďalej nech $|T_r|$ je veľkosť trénovacej množiny (teda počet vzoriek), $\mathbf{X_i}$ pre $i=1 \dots |T_r|$ je vzorka
 z trénovacej množiny, ktorej je pridelený očakávaný výstup $y_i$ pre $i=1 \dots |T_r|$ a nech $y(\mathbf{X_i})$ je reálny
 výstup siete ako odpoveď na vstup $\mathbf{X_i}$.
-Algoritmus prebieha nasledovne:
+Algoritmus prebieha nasledovne:\cite{algo_ann_delta_rule}
 \begin{enumerate}
     \item Inicializácia počiatočných váh $\pmb{w_1}$, prahovej hodnoty $\theta$ a parametrov $\gamma$, $\epsilon$ a $s$.
     \item pre $i = 1 \dots |T_r|$:
@@ -282,7 +283,7 @@ Pri tejto metóde existuje niekoľko vylepšení, resp. alternatív, ktoré sa t
 aj dynamicky, väčšinou sú tieto metódy koncepčne veľmi podobné.
 Riešenie potom rýchlejšie konverguje k optimálnym hodnotám.
 Nižšie sú popísané najpoužívanejšie alternatívy.
-\paragraph{RMSProp}
+\paragraph{RMSProp}\cite{algo_ann_optimizer_rmsprop}
 Z anglického \enquote{\textbf{R}oot \textbf{m}ean \textbf{s}quare \textbf{prop}agation}.
 Algoritmus vychádza z gradientovej metódy, no upravuje hodnotu, ktorá sa pripočítava k váham, aby sa zabránilo oscilácii
 metódy okolo optimálnej hodnoty.
@@ -297,7 +298,7 @@ Kde $\eta$ je počiatočný učiaci parameter.
 $p \in <0,1>$ zvyčajne $p=0.9$, $\epsilon$ je použitý len na to, aby sa predišlo deleniu nulou a zvyčajne
 $\epsilon = 10^{-10} = 1e-10$ a $v_j$ je priemer umocnených gradientov.
 Hodnota $\Delta{w_j}$ je potom pripočítaná k váham.
-\paragraph{Adam}
+\paragraph{Adam}\cite{algo_ann_optimizer_adam}
 Odvodené z anglického \enquote{\textbf{Ada}ptive \textbf{m}oment optimization}.
 Algoritmus vychádza z gradientovej metódy, no upravuje hodnotu, ktorá sa pripočítava k váham, aby sa zabránilo oscilácii
 metódy okolo optimálnej hodnoty.
@@ -320,17 +321,17 @@ Pri návrhu je možné určiť aj účelovú funkciu optimalizácie tréningu a 
 správnosť, resp. nesprávnosť výstupu pri danom vstupe.
 Nech $E(w, y, \hat{y})$ je chyba výsledku pri parametri $w$ a výstupe $\hat{y}$ s očakávaným výstupom $y$
 a $F(E(w, y, \hat{y}))$ je účelová funkcia optimalizačného procesu.
-\paragraph{Priemerná štvorcová chyba}
+\paragraph{Priemerná štvorcová chyba}\cite{algo_ann_mse}
 Anglicky \emph{mean squared error} (skr. MSE).
 \begin{equation}
     F(E(w, y, \hat{y}))=E(w, y, \hat{y})^2
 \end{equation}
-\paragraph{Priemerná absolútna chyba}
+\paragraph{Priemerná absolútna chyba}\cite{algo_ann_mae}
 Anglicky \emph{mean absolute error}.
 \begin{equation}
     F(E(w, y, \hat{y}))=|E(w, y, \hat{y})|
 \end{equation}
-\paragraph{Kategorická krížová entropia}
+\paragraph{Kategorická krížová entropia}\cite{algo_ann_categorical_crossentropy}
 Anglicky \emph{categorical crossentropy}.
 Táto účelová funkcia vyžaduje, aby vstupy boli kategorizované, čoho dôsledkom je aj to, že táto účelová funkcia sa
 využíva pri kategorizácii vstupov.

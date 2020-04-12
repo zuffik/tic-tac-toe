@@ -17,7 +17,6 @@ PDF build:
     - rm paperwork.lof || true
     - rm paperwork.blg || true
     - rm paperwork.out || true
-    - rm paperwork.nlo || true
     - rm paperwork.pdf || true
     - rm paperwork.log || true
     - rm paperwork.toc || true
