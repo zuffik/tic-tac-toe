@@ -1,4 +1,47 @@
-\section{Požiadavky pre implementáciu}\label{sec:requirements}
+\section{Analýza požiadaviek}\label{sec:requirements}
 
-TODO: Požiadavky pre cave (grafický engine), požiadavky pre AI (výpočtová sila),
-to by malo byť posledné čo treba
+\subsection{Požiadavky pre časť s umelou inteligenciou}\label{subsec:requirements-ai}
+
+V tejto časti je nutné, aby vývojové prostriedky, teda programovací jazyk poprípade inštalovateľné súčasti jazyka, boli
+schopné zvládnuť nasledovné požiadavky:
+\begin{enumerate}
+    \item vedieť jednoducho vytvoriť štruktúru umelej neurónovej siete a algoritmu minimax
+    \item mali by byť optimalizované pre použitie s matematickými konštrukciami
+    \item vedieť jednoducho prepojiť vytvorené algoritmy s herným prostredím (napr. cez súborový systém, sockety, \ldots)
+\end{enumerate}
+Veľkou výhodou je, ak má jazyk možnosti ako zabrániť duplicite kódu (napr. využitím polymorfie) a ak jazyk je v
+súčasnosti udržiavaný komunitou programátorov.
+Tieto požiadavky najlepšie spĺňajú\cite{best_ai_languages} aj tieto jazyky:
+
+\paragraph{Python} je veľmi obľúbený jazyk medzi programátormi kvôli jeho jednoduchosti, netradičným programátorským
+konštrukciám, ktoré skracujú a sprehľadňujú zdrojový kód aplikácií.
+Poskytuje aj balíčky, ktoré pomáhajú s matematickými operáciami (napr. práca s maticami, funkciami, \dots).
+Týchto balíčkov je veľké množstvo a je len na autorovi, ktorý si vyberie.
+Pri výbere tohto jazyka zavážili aj skúsentosti autora tejto práce v jazyku python.
+
+\paragraph{R}
+Jazyk R je efektívny najmä pre kvôli práci so súbormi, poskytuje možnosti jednoduchej analýzy.
+Tento programovací jazyk má ale zložitejšiu syntax, ktorá napriek skvelému spracovaniu pre umelú inteligenciu,
+nespĺňala výhodu.
+
+\paragraph{Lisp}
+Tento jazyk (alebo rodina jazykov) je jeden z najstarších programovacích jazykov.
+Vznikol v roku 1958 pod rukou John McCarthy-ho, ktorý sa zároveň považuje za otca umelej
+inteligencie.\cite{father_of_ai}
+Jazyk lisp v súčasnosti nie je udržiavaný komunitou natoľko, aby bol dostatočný pre túto prácu.
+
+\subsection{Požiadavky pre grafickú časť}\label{subsec:requirements-game}
+
+Súčasťou práce je aj grafická časť (hra), ktorú používateľ ovláda v prostredí Cave.
+Je teda nutné, aby bol zvolený grafický editor (resp. grafický engine), ktorý celú túto časť obsiahne a dokáže
+\begin{enumerate}
+    \item kooperovať s časťou s umelou inteligenciou čo najjednoduchším spôsobom
+    \item vytvárať scény pre prostredie Cave čo najjednoduchším spôsobom
+    \item poskytovať voľne dostupný variant používania aplikácie
+\end{enumerate}
+Keďže grafické enginy používajú najmä herné štúdiá a individualisti tvoriaci hry s veľmi variabilným obsahom,
+ukazovateľom pre výber editora môže byť okrem vypísaných aj jeho popularita.
+Práve na základe popularity\cite{best_3d_game_engines} boli porovnávané 3 najpoužívanejšie grafické enginy.
+
+TODO
+godot,unity,unreal
