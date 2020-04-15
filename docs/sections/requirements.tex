@@ -43,5 +43,41 @@ Keďže grafické enginy používajú najmä herné štúdiá a individualisti t
 ukazovateľom pre výber editora môže byť okrem vypísaných aj jeho popularita.
 Práve na základe popularity\cite{best_3d_game_engines} boli porovnávané 3 najpoužívanejšie grafické enginy.
 
-TODO
-godot,unity,unreal
+\paragraph{Godot}\cite{game_engine_godot}
+Herný engine, ktorý kladie dôraz na dve veci: jednoduchosť a škálovateľnosť.
+Oproti ostatným herným enginom ponúka širokú podporu rôznych programovacích jazykov ako python, C\# alebo C++.
+Ponúka grafický editor, ktorý zaberá na disku veľmi málo miesta, no funguje na mnohých komerčných operačných systémoch
+ako MacOS, Windows a Linux.
+Všetky tieto výhody by z tohto engine spravili najlepšieho kandidáta pre túto prácu, bohužiaľ tento prostriedok je na
+trhu relatívne krátko a má teda malú podporu pre prostredie Cave.
+
+\paragraph{Unity}\cite{game_engine_unity}
+je jeden z najstarších a zároveň najpoužívanejších herných enginov.
+Ponúka podporu pre programovacie jazyky založené na jazyku C (teda C\# a C++).
+Tento engine má, vďaka jeho dlhej prítomnosti na trhu, veľkú komunitu používateľov a tým pádom aj veľkú podporu tejto
+komunity;
+Unity má založené fórum s miliónmi komentárov a dobre vytvorenú dokumentáciu.
+Silne a natívne podporuje umelú inteligenciu\cite{game_engine_unity_ml_agents} a používatelia vytvorili aj podporu pre
+Cave prostredie\cite{game_engine_unity_kave}.
+Pre tento engine bol vytvorený aj tzv. asset store, kde používatelia zdieľajú alebo predávajú svoje výtvory (ako napr.
+modely pre hru, pozadia, textúry,\dots.
+Tento herný engine je najlepší kandidát aj z dôvodu znalostí a skúseností s týmto enginom.
+
+\paragraph{Unreal Engine}\cite{game_engine_unreal_engine}
+Spolu s Unity je tento herný engine jedným z najstarších priekopníkov v hernom priemysle.
+Dôraz kladie najmä na kvalitu, čo je vidno aj na hrách postavených na v tomto prostriedku.
+Dôsledkom tohto faktu je aj to, že Unreal Engine je optimalizovaný na jeden operačný systém (Windows) a je to veľká
+nevýhoda pre iné operačné systémy.
+Pracuje v jazyku Visual C++ a podporuje aj prepojenie s umelou inteligenciou no už menšiu podporu má pre Cave
+prostredie.
+
+\subsection{Ostatné požiadavky}\label{subsec:requirements-other}
+
+K ostatným požiadavkam patrí najmä výpočtová sila pri trénovaní umelej neurónovéj siete a prístup k zostavenému
+prostrediu Cave.
+Toto prostredie je dostupné na Žilinskej univerzite vo vedeckom parku.
+\\
+\\
+Na základe spomínaných výhod, nevýhod a skúseností bol zvolený programovací jazyk \emph{Python} s herným enginom
+\emph{Unity}.
+
