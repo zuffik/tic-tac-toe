@@ -418,6 +418,135 @@ potom pravdepodobnosť výberu políčka $ijk$ je
 \end{equation}
 Pre $d=2$ (teda pre hru na ploche) platia rovnaké pravidlá, pričom $k=1$ (resp. $o=1$) vo všetkých prípadoch.
 
-\subsubsection{Zisťovanie víťaza}
+\subsection{Zisťovanie víťaza}\label{subsec:checking-winner}
 
-TODO: Popis algoritmu, obrázky, zložitosť algoritmu
+Už kontrola víťaza pre plochu (2D priestor) s pevne danými rozmermi a pevne danou hodnotou počtu znakov potrebných pre
+výhru (často zhodnou s rozmerom) je relatívne komplexná úloha.
+Ak sú použité sofistikovanejšie prostriedky než fixný prístup k prvkom poľa prostredníctvom číselných indexov, tak pre
+rozmer $r \times r$, kde $r = w$ má tento problém nasledovné riešenie:
+\begin{lstlisting}[
+  mathescape,
+  columns=fullflexible,
+  basicstyle=\fontfamily{lmvtt}\selectfont,
+]
+pre $i=1\dots{r}$:
+    ak $b_{i0}$ je prázdne
+    inak:
+        $z = b_{i0}$
+        pre $j=1\dots{r}$:
+            ak $b_{ij} \neq z$:
+                prejdi na ďalší riadok
+        víťaz je $z$
+pre $j=1\dots{r}$:
+    ak $b_{0j}$
+    inak:
+        $z = b_{0j}$
+        pre $i=1\dots{r}$:
+            ak $b_{ij} \neq z$:
+                prejdi na ďalší stĺpec
+        víťaz je $z$
+ak $b_{00}$ nie je prázdny znak
+    $z = b_{00}$
+    pre $i=1\dots{r}$:
+        ak $b_{ii} \neq z$, koniec cyklu
+    víťaz je $z$
+ak $b_{0,r-i}$ nie je prázdny znak
+    $z = b_{0,r-i}$
+    pre $i=1\dots{r}$:
+        ak $b_{i,r-i} \neq z$, koniec cyklu
+    víťaz je $z$
+ak žiadny z predošlých cyklov nevyhodnotí víťaza a
+neexistuje žiaden možný ťah pre hráča, nastala remíza
+\end{lstlisting}
+Prvá a druhá časť skúmajú potenciálnych víťazov v riadku a stĺpci, druhá časť skúma výsledky diagonálne.
+Keďže $r = w$ stačí preskúmať hlavnú a vedľajšiu diagonálu, pretože tie sú jediné, ktoré môžu obsahovať $w$ znakov.
+Zložitosť tohto algoritmu je exponenciálna:
+\begin{equation}
+    \mathcal{O}(r.r + r.r + 2r + 2r) \sim \mathcal{O}(2r^2 + 4r) \sim \mathcal{O}(r^2)
+\end{equation}
+
+Nech $R$ je množina potenciálnych víťazných množín $M$ ($|M|=r$).
+Algoritmus je možné prepísať nasledovne:
+\begin{lstlisting}[
+  mathescape,
+  columns=fullflexible,
+  basicstyle=\fontfamily{lmvtt}\selectfont,
+]
+$R=\{\}$
+$M_h=\{\}$
+$M_v=\{\}$
+pre $i=1\dots{r}$:
+    $M_r=\{b_{ij}|j=1 \dots r\}$
+    pridanie $M_r$ do $R$
+    $M_s=\{b_{ji}|j=1 \dots r\}$
+    pridanie $M_s$ do $R$
+    pridanie $b_{ii}$ do $M_h$
+    pridanie $b_{i,r-i}$ do $M_v$
+
+pridanie $M_h$ do $R$
+pridanie $M_v$ do $R$
+
+pre $k=1\dots{|R|}$:
+    $z$ = $k$-ty prvok z $R$
+    pre $i=1\dots{r}$:
+        ak $z_0 = z_i$, potom $z_0$ je víťaz
+ak predošlý cyklus nevyhodnotí víťaza a
+neexistuje žiaden možný ťah pre hráča, nastala remíza
+\end{lstlisting}
+Algoritmus najskôr vytvorí množinu $R$ z každého stĺpca a riadku ($M_r$ a $M_s$) a postupne plní množiny hlavnej a
+vedľajšej diagonály ($M_h$ a $M_s$).
+Za predpokladu, že $R$ je reprezentovaná štruktúrou, kde zložitosť vloženia je $\mathcal{O}(1)$ a
+$|R| = r + r + 2 = 2r + 2$, potom celková zložitosť je znova exponenciálna, no algoritmus je omnoho kratší
+\begin{equation}
+    \mathcal{O}(r.2r + r.|R|) \sim \mathcal{O}(r.2r + r.(2r + 2)) \sim \mathcal{O}(2r^2 + 2r^2 + 2r) \sim \mathcal{O}(4r^2 + 2r) \sim \mathcal{O}(r^2)
+\end{equation}
+
+Takýto algoritmus je celkom jednoduchý a má prijateľnú (exponenciálnu) zložitosť vzhľadom na rozmer hracej plochy.
+V prípade, že $r \neq w$, je nutné algoritmus rozšíriť.
+Jeden zo spôsobov je taký, že vždy sa kontroluje iba plocha o veľkosti $w \itmes w$ (vyššie popísaným algoritmom) s
+tým, že kontrolovaná plocha $W$ začína na počiatočných súradniciach $[x,y]=[1,1]$ a postupne sa súradnice zvyšujú o 1
+tak, aby boli skontrolované všetky kombinácie počiatočných súradníc.
+Počiatočné súradnice $x$ a $y$ nadobúdajú hodnoty z $C = \{1, 2, \dots, r - w\}$.
+Algoritmus je možné upraviť nasledovne:
+\begin{lstlisting}[
+  mathescape,
+  columns=fullflexible,
+  basicstyle=\fontfamily{lmvtt}\selectfont,
+]
+Nech $skontroluj(x, y)$:
+    $R=\{\}$
+    $M_h=\{\}$
+    $M_v=\{\}$
+    pre $i=x\dots{x + w}$:
+        $M_r=\{b_{ij}|j=y \dots y + w\}$
+        pridanie $M_r$ do $R$
+        $M_s=\{b_{ji}|j=y \dots y + w\}$
+        pridanie $M_s$ do $R$
+        pridanie $b_{ii}$ do $M_h$
+        pridanie $b_{i,r-i}$ do $M_v$
+
+    pridanie $M_h$ do $R$
+    pridanie $M_v$ do $R$
+
+    pre $k=1\dots{|R|}$:
+        $z$ = $k$-ty prvok z $R$
+        pre $i=1\dots{w}$:
+            ak $z_0 = z_i$, potom $z_0$ je víťaz
+    ak predošlý cyklus nevyhodnotí víťaza tak:
+        ak $[x + 1, y]$ nebolo skontrolované $skontroluj(x + 1, y)$
+        ak $[x, y + 1]$ nebolo skontrolované $skontroluj(x, y + 1)$
+        ak $[x + 1, y + 1]$ nebolo skontrolované $skontroluj(x + 1, y + 1)$
+
+$skontroluj(0, 0)$
+\end{lstlisting}
+Keďže procedúra $skontroluj$ je volaná vnútri jej definície, je jasné, že táto procedúra je \emph{rekurzívna}.
+Nech $c = |C| = r - w$, potom počet volaní $skontroluj$ je $c$ a ak zložitosť procedúry $skontroluj(x, y)$ je
+$\mathcal{O}(4r^2 + 2r)$, potom celková zložitosť je
+\begin{equation}
+    \mathcal{O}((4r^2 + 2r).c^2) \sim \mathcal{O}(4r^2c^2 + 2rc^2) \sim \mathcal{O}(r^2c^2)
+\end{equation}
+
+Analogicky je definovaný algoritmus pre tretí rozmer s pridanou kontrolou znakov v priestorových diagonálach, no
+z dôvodu pridania jedného rozmeru (resp. $r$ plôch za sebou) je nutné tento princíp použiť na všetky 3 rozmery.
+Zložitosť kontroly plochy $w \times w \times w$ tým pádom narastie až na $\mathcal{O}(r^3)$ a celková zložitosť až na
+$\mathcal{O}(r^3c^3)$.
