@@ -2,7 +2,7 @@
 S popísanými algoritmami boli vykonávané experimenty pre overenie správnosti navrhnutých štruktúr a nájdenie možných
 vzorcov vo výsledkoch.
 Kľúčovou informáciou je počet výhier hráča \textbf{X} (resp. podiel výhier vzhľadom na počet hier) v prípade
-neurónových sietí; čas a výhra v prípade algoritmu MinMax.
+umelých neurónových sietí; čas a výhra v prípade algoritmu MinMax.
 
 \subsection{Experimenty s rôznymi plochami}\label{subsec:experiments-board}
 
@@ -165,19 +165,24 @@ Tabuľka je vertikálne rozdelená na 2 časti:
 \clearpage
 
 \subsection{Experimenty s rôznymi modelmi}\label{subsec:experiments-versus}
-Pri tomto experimente boli využívané porovnania použitých algoritmov (umelá neurónová sieť a minmax) na ploche s
-veľkosťou 10x10, pričom dôraz sa kládol na vyššie popísanú umelú neurónovú sieť, ktorá bola porovnávaná s algoritmom
-MinMax a s umelou neurónovou sieťou odladenou pre rozmer 3x3.\cite{first_ann} Sieť je dopredná a vrstvy siete sú
-nasledovné:
+Tieto typy experimentov boli vykonávané na ploche s veľkosťou $10 \times 10$ s počtom znakov potrebných pre výhru 3
+(resp. $r = 10$, $w = 3$ a $d = 2$), pričom použité boli 3 algoritmy:
 \begin{itemize}
-    \item na vstupe je 200 neurónov a za vstup pokladá vektor $v$ (v prípade experimentu je $|v|=100$)
-    \item \enquote{dropout} vrstva, ktorá s pravdepodobnosťou 0.2 nepoužije vstup do nasledujúcej vrstvy (\enquote{zahodí ho})
-    \item vrstva s počtom neurónov 125
-    \item vrstva s počtom neurónov 75
-    \item \enquote{dropout} vrstva, ktorá s pravdepodobnosťou 0.1 nepoužije vstup do nasledujúcej vrstvy
-    \item vrstva s počtom neurónov 25
-    \item na výstupe je \enquote{one-hot} array vyjadrujúce, ktorý z hráčov vyhral (\textbf{X}, \textbf{O}) alebo či nastala remíza
+    \item Umelá neurónová sieť popísaná v \autoref{subsec:algo-ann}.
+    Táto sieť slúžila ako hlavný algoritmus pre cieľového hráča a bola porovnávaná s nasledujúcimi dvoma algoritmami
+    \item Algoritmus minimax
+    \item Nasledujúca neurónová sieť:\cite{first_ann}
+    \begin{itemize}
+        \item na vstupe je 200 neurónov a za vstup pokladá vektor $v$ (v prípade experimentu je $|v|=100$)
+        \item \enquote{dropout} vrstva, ktorá s pravdepodobnosťou 0.2 nepoužije vstup do nasledujúcej vrstvy (\enquote{zahodí ho})
+        \item vrstva s počtom neurónov 125
+        \item vrstva s počtom neurónov 75
+        \item \enquote{dropout} vrstva, ktorá s pravdepodobnosťou 0.1 nepoužije vstup do nasledujúcej vrstvy
+        \item vrstva s počtom neurónov 25
+        \item na výstupe je \enquote{one-hot} array vyjadrujúce, ktorý z hráčov vyhral (\textbf{X}, \textbf{O}) alebo či nastala remíza
+    \end{itemize}
 \end{itemize}
+
 \clearpage
 \begin{table}[H]
     \centering
@@ -203,23 +208,23 @@ nasledovné:
     \caption{Výsledky experimentov s rôznymi modelmi}\label{table:experiments-versus}
 \end{table}
 
-\subsection{Vyhodnotenie experimentov}
+\subsection{Vyhodnotenie experimentov}\label{subsec:experiment-results}
 
 \paragraph{Experimenty s rôznymi plochami}
 
 Pri algoritme minimax je zjavné, že je to exaktný algoritmus, pretože časy jednotlivých hier hlavne pri vyšších
-rozmeroch boli extrémne veľké (pričom hĺbka stromu pri $i>2$ bola nastavená na $l=2$) a rástli exponenciálne.
+rozmeroch boli extrémne veľké (pričom maximálna hĺbka stromu pri $i>2$ bola nastavená na $l=2$) a rástli exponenciálne.
 Aj keď vo variante s náhodným ťahom oponenta sú časy značne nižšie, sú stále veľmi vysoké pre reálne použitie.
 
-Výsledky metódy umelých neurónových sietí bol v prípade variantu, kde proti sebe hrala tá istá neurónová sieť
-boli približne rovnaké so vstupnými údajmi a teda so simuláciami náhodných hier.
+Výsledky metódy umelých neurónových sietí boli v prípade variantu, kde proti sebe hrala tá istá neurónová sieť
+približne rovnaké so vstupnými údajmi a teda so simuláciami náhodných hier.
 Z týchto výsledkov je možné usúdiť, že sieť je natrénovaná veľmi dobre a dokonca pri variante s náhodnými ťahmi oponenta
-v drvivej väčšine prípadov bola úspešná.
+bola v drvivej väčšine prípadov úspešná.
 Znamená to, že táto umelá neurónová sieť by mala byť úspešná vo väčšine prípadov pri hre so sofistikovanejším oponentom.
 
 \paragraph{Experimenty s rôznymi modelmi}
 
-Napriek tomu, že neurónová sieť bola úspešná pri hre s inou umelou neurónovou sieťou, nevyrovná sa to exaktnému
+Napriek tomu, že umelá neurónová sieť bola úspešná pri hre s inou umelou neurónovou sieťou, nevyrovná sa to exaktnému
 algoritmu minimax, pri ktorom úplne pohorela.
 Ak ale je cieľom efektivita, nie je možné použiť algoritmus minimax vzhľadom na čas, ktorý algoritmus potrebuje pre
 vykonanie výpočtov.

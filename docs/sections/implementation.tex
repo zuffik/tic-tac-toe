@@ -19,30 +19,34 @@ Projekt pozostáva z niekoľkých modulov:
 Scéna je v klasických hrách ekvivalentom levelu alebo prostredia, v ktorom sa hráč nachádza.
 V hre sa nachádzajú dve scény: scéna pre hlavné menu a scéna pre hraciu plochu.
 
-Ďalšou dôležitou časťou sú \textbf{vopred pripravené súbory} (angl. a ďalej len \emph{prefabs}), čo sú v podstate herné
-objekty, ktoré sú zložené z už existujúcich herných objektov pre účely znovupoužitia.
-Vytvorené sú prefabs pre tlačidlo v menu, posuvník v menu (pre výber napr. veľkosti hracieho priestoru), oddeľovač
-buniek v hracom priestore, bunku v hracom priestore a znaky \textbf{X} a \textbf{O} vytvorené pre 3D priestor.
+Ďalšou dôležitou časťou sú \textbf{vopred pripravené súbory} (angl. a ďalej len \emph{prefabs}; vytvorené z anglického
+\emph{prefabricated}), čo sú v podstate herné objekty, ktoré sú zložené z už existujúcich herných objektov pre účely
+znovupoužitia.
+V projekte sú vytvorené prefabs pre tlačidlo v menu, posuvník v menu (pre výber napr. veľkosti hracieho priestoru),
+oddeľovač buniek v hracom priestore, bunku v hracom priestore a znaky \textbf{X} a \textbf{O} vymodelované pre 3D
+priestor.
 
 \textbf{Skripty} sú funkčnou časťou celej aplikácie.
+Dajú sa priradiť k herným objektom a obsahujú funkcionalitu alebo atribúty daného objektu.
 Unity má veľké množstvo skriptov už vopred pripravených, no pre konkrétne využitie je vo väčšine prípadov nutné si
 vytvoriť vlastné skripty.
 V hre je ich použitých 10:
 \begin{enumerate}
-    \item \emph{BoardOperations} obsahuje operácie pre hraciu plochu ako napr. nájdenie víťazného hráča
+    \item \emph{BoardOperations} obsahuje operácie pre hraciu plochu ako napr. nájdenie víťazného hráča (popísaný
+    v \autoref{subsec:checking-winner})
     \item \emph{ButtonController} ovláda všeobecne tlačidlá v hlavnom menu
     \item \emph{Cell} skript priradený pre jednu bunku v hracej ploche
-    \item \emph{Focusable} akýkoľvek prvok v hlavnom menu, na ktorý sa dá "pozrieť"
-    \item \emph{GameController} ovláda celý proces v rámci hry
+    \item \emph{Focusable} akýkoľvek prvok v hlavnom menu, na ktorý sa dá "pozrieť" (zamerať kamerou)
+    \item \emph{GameController} ovláda celý proces v rámci jednej hry
     \item \emph{Grid} je kontajner pre herný priestor
     \item \emph{HudController} ovláda prvky v menu
     \item \emph{PlayerController} obsahuje funkcie pre pohyb hracieho priestoru v zornom poli hráča
-    \item \emph{SliderItemController} - posuvník v menu
+    \item \emph{SliderItemController} posuvník v menu
     \item \emph{BuildScript} spúšťa zostavenie spustiteľného súboru pre platformu Windows
 \end{enumerate}
 
-V ostatných súboroch sa nachádzajú stiahnuté \textbf{3D súbory} a \textbf{knižnice}, \textbf{materiály} pre 3D objekty
-a \textbf{font} pre písmo v menu.
+Ďalej sú v projekte priečinky, kde sa nachádzajú stiahnuté \textbf{3D súbory} a \textbf{knižnice}, \textbf{materiály}
+pre 3D objekty a \textbf{font} pre písmo v menu.
 Zvyšné súbory sú generované vývojovým prostredím.
 
 \begin{figure}[H]
@@ -51,21 +55,22 @@ Zvyšné súbory sú generované vývojovým prostredím.
     \caption{Prostredie unity}
 \end{figure}\label{figure:unity}
 
-V unity sú vstupy mapované do tzv. osí, čo dovoľuje použitie viacerých zariadení pričom pre všetky zariadenia existuje
-len jeden kód.
-Napr. pre použitie joystick-u a tlačidiel pre šípky vpravo alebo vľavo sa použije os s názvom \enquote{Horizontal},
+V unity sú vstupy mapované do tzv. osí, čo dovoľuje použitie aplikácie na viacerých zariadeniach,
+pričom pre všetky zariadenia existuje len jeden kód.
+Napríklad pre použitie joystick-u a tlačidiel pre šípky vpravo alebo vľavo sa použije os s názvom \enquote{Horizontal},
 ktorej hodnota je -1 v prípade, že užívateľ posunie joystick vľavo, resp. stlačí ľavú šípku a hodnota je 1 v prípade,
 že užívateľ posunie joystick vpravo, resp. stlačí pravú šípku.
 Pomocou týchto osí je možná napr. navigácia v hlavnom menu alebo otáčanie hracieho priestoru.
 
 \subsubsection{Prostredie Cave}
-Cave prostredie je také, ktoré zobrazuje obraz na štyroch plochách súčasne.
+Cave (z angl. \textbf{C}ave \textbf{a}utomatic \textbf{v}irtual \textbf{e}nvironment) prostredie je také, ktoré
+zobrazuje obraz na štyroch plochách súčasne.\cite{cave}
 Ak pozorovateľ stojí priamo, tak jedno plátno je pred ním, ďalšie sú vpravo a vľavo kolmé na plátno pred ním a posledné
 je plátno pri nohách pozorovateľa.
 Projektory sú umiestnené nad celým týmto systémom a navyše sa celý obraz zobrazuje upravený pre 3D okuliare.
 Systém je zobrazený na obrázku nižšie.
 Unity pracuje najmä s prostredím \textbf{KAVE} (skr. Kinect Cave) a teda už z názvu vyplýva, že celý systém ovládania
-je založený na Microsoft Xbox Kinect a preto aj ovládanie prebieha pomocou ovládača k zariadeniu Xbox.
+je založený na zariadení Microsoft Xbox Kinect a preto aj ovládanie prebieha pomocou ovládača k zariadeniu Xbox.
 
 \begin{figure}[H]
     \centering
@@ -97,24 +102,24 @@ Google.
 Táto knižnica okrem umelých neurónových sietí ponúka aj možnosti pre implementáciu pre mnohé iné algoritmy týkajúce sa
 strojového učenia.
 Pre potreby umelých neurónových sietí bola vyvinutá knižnica \emph{Keras}\cite{keras}, ktorú vyvíja viac vývojárov
-(no za hlavného autora sa považuje Google).
+(no za hlavného autora je považovaný Google).
 Keras umožňuje definovať štruktúru neurónovej siete, Tensorflow túto sieť natrénuje.
 Okrem implementácie tried a štruktúr programu sú dôležité práve dve časti a to štruktúra umelej neurónovej siete a
 trénovanie umelej neurónovej siete.
 
 Model bol vytvorený na základe návrhu v \autoref{subsec:algo-ann} a jeho parametre boli nastavené na základe
-štruktúr použitých v programe.
+parametrov vstupujúcich do programu.
 Jedná sa teda o $3r^d$ vstupov (inputs), kde $d=3$ pretože daná sieť je implementovaná v rámci 3D priestoru a $r$ je
 rovné veľkosti poľa \emph{board}.
 Pole board je síce trojrozmerné, no keďže veľkosť je rovnaká v každom rozmere (kocka), stačí použiť veľkosť hlavnej
 štruktúry.
-Jediná skrytá vrstva má veľkosť $r^d$ a výstup, aj keď je v \autoref{subsec:algo-ann} uvedené, že na výstupe je len
-jedno číslo (index s najväčšou pravdepodobnosťou výhry), knižnica Tensorflow vyžaduje aby týchto výstupov bolo $r^d$.
+Jediná skrytá vrstva má veľkosť $r^d$ a aj keď je v \autoref{subsec:algo-ann} uvedené, že na výstupe je len
+jeden neurón (index s najväčšou pravdepodobnosťou výhry), knižnica Tensorflow vyžaduje aby týchto výstupov bolo $r^d$.
 Dôvodom tohto prístupu je fakt, že z technického hľadiska sa jedná o \emph{klasifikáciu} (zaradenie vstupu k jednému z
 výstupov).
 Knižnica z $r^d$ možností pohybu hráča rozhodne o tom, ktoré políčko má pre hráča najvyššiu pravdepodobnosť výhry
 pomocou tzv. \emph{one-hot array}.
-Je to vektor (pole) $s_i$, ktory má $r^d$ prvkov, $\forall i : i\neq k s_i=0$ a $s_k=1$, kde $k$ označuje index
+Je to vektor (pole) $s_i$, ktorý má $r^d$ prvkov, $\forall i : i\neq k : s_i=0$ a $s_k=1$, kde $k$ označuje index
 políčka s najpravdepodobnejším víťazstvom.
 Napr. pre $r=3$, $d=3$ a $k=4$ pole vyzerá nasledovne:
 \begin{equation}
@@ -123,12 +128,12 @@ Napr. pre $r=3$, $d=3$ a $k=4$ pole vyzerá nasledovne:
 
 Model je vytvorený ako sekvenčný, čo znamená, že sieť je dopredná (signál sa šíri iba smerom od vstupnej vrstvy k
 výstupnej).
-Všetky vrstvy v sieti sú označené ako \emph{dense}, čo vyjadruje, že všetky neuróny $i$-tej vrstvy sú prepojené z sú
-prepojené so všetkými neurónmi vrstvy $i+1$.
+Všetky vrstvy v sieti sú označené ako \emph{dense}, čo vyjadruje, že všetky neuróny $i$-tej vrstvy sú prepojené so
+všetkými neurónmi vrstvy $i+1$.
 Všetky neuróny vstupnej a skrytej vrstvy sú aktivované pomocou funkcie \emph{ReLu} (\emph{activation=relu}), posledná
 vrstva obsahuje neuróny aktivované pomocou funkcie \emph{SoftMax} (\emph{activation=softmax}).
 Posledná vrstva vyžaduje túto aktivačnú funkciu, pretože výstupom z nej je klasifikácia.
-Model je kompilovaný s účelovou funkciou \emph{kategorická krížová entropia} (loss=categorical\_crossentropy).
+Model je kompilovaný s účelovou funkciou \emph{kategorická krížová entropia} (\emph{loss=categorical\_crossentropy}).
 Pri riešení minimalizačnej úlohy v rámci umelej neurónovej siete je využitý \emph{RMSProp optimizer} založený na
 stochastickej gradientovej metóde (\emph{optimizer=rmsprop}).
 Ukazovateľ optimality je presnosť v zaradení do jednotlivých kategórií (\emph{metrics=[acc]} - možnosť vyplniť viac
@@ -138,7 +143,8 @@ Pre potreby trénovania je nutné pripraviť vzorku dát pre umelú neurónovú 
 Tieto dáta sa získavajú simulovaním náhodných hier a sú rozdelené na dáta pre hráča a dáta pre oponenta.
 Dáta pre oponenta sa využívajú len pri experimentoch.
 Obe tieto skupiny sú rozdelené na vstupnú časť a výstupnú časť, pričom sú rozdelené ešte na trénovaciu a testovaciu časť
-v pomere 4:1 (4 trénovacie vzorky na 1 testovaciu).
+v pomere 4:1 (4 trénovacie vzorky na 1 testovaciu), resp. trénovacia časť tvorí 80\% všetkých vzoriek a testovacia časť
+20\%.
 
 \begin{figure}[H]
     \centering
@@ -202,14 +208,15 @@ Interakcia s touto časťou je vykonávaná prostredníctvom rozhrania príkazov
 interface), pričom pre použitie je potrebné mať nainštalovaný interpreter jazyka python.
 Znamená to, že program nie je skompilovaný do jedného binárneho balíku (bundle) a je nutné pracovať priamo so zdrojovým
 kódom.
-Python verzie 3.7.4 a pip 19.0.3 (čo je nástroj pre správu závislostí projektu) boli použité pre vývoj aplikácie.
+Pri vývoji aplikácie boli použité Python verzie 3.7.4 a pip 19.0.3 (čo je nástroj pre správu závislostí projektu).
 Pred začatím používania je nutné nainštalovať všetky závislosti zo súboru \emph{requirements.txt}.
 Tento súbor obsahuje informácie o balíčkoch a ich konkrétnych verziách použitých v projekte.
 Pre odstránenie potenciálneho konfliktu už nainštalovanej verzie je odporúčané vytvoriť si tzv. virtuálne prostredie
 (angl. virtual environment).
 Jedná sa o vytvorenie priečinku, v ktorom sú obsiahnuté všetky informácie (interpreter, balíčky) týkajúce sa daných
 požiadaviek projektu (najmä závislosti).
-Takýmto spôsobom sa vytvorí izolované prostredie pre projekt, ktoré je nezávislé od globálneho.
+Takýmto spôsobom sa vytvorí izolované prostredie pre projekt, ktoré je nezávislé od potenciálne vytvoreného globálneho
+prostredia.
 Použitie aplikácie je napr.: \shellcmd{python ./src/\_\_main\_\_.py game}.
 
 Predpis použitia je \shellcmd{python ./src/\_\_main\_\_.py [task] [parameters]} a aplikácia prijíma nasledovné
@@ -223,14 +230,15 @@ argumenty:
         \item \shellcmd{analyze}: spustenie experimentov s rôznymi plochami
         \item \shellcmd{game}: spustenie experimentov s rôznymi modelmi
         \item \shellcmd{playground}: z názvu vyplýva, že je na programátorovi, čo sa spustí v rámci tohto príkazu, pričom sú
-        dostupné všetky potrebné náležitosti, ktoré majú dostupné aj iné úlohy
+        dostupné všetky potrebné náležitosti, ktoré majú dostupné aj iné úlohy (napr. model ANN, model minimax-u, atď.)
         \item \shellcmd{store-ann}: natrénovanie a uloženie neurónovej siete
     \end{itemize}
     \item \shellcmd{\texttt{-{}-}size=[number]}: rozmer hracej plochy (resp. hracieho priestoru); ekvivalent $r$
     \item \shellcmd{\texttt{-{}-}to-win=[number]}: počet rovnakých, za sebou idúcich znakov potrebných pre výhru; ekvivalent $w$
     \item \shellcmd{\texttt{-{}-}dimension=[number]}: dimenzia (2 alebo 3); ekvivalent $d$
     \item \shellcmd{\texttt{-{}-}player=[X,O]}: preferovaný (cieľový) hráč
-    \item \shellcmd{\texttt{-{}-}simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny)
+    \item \shellcmd{\texttt{-{}-}simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny +
+    veľkosť testovacej množiny)
     \item \shellcmd{\texttt{-{}-}validations=[number]}: počet validácii (slúži pre získanie reálnych štatistík)
     \item \shellcmd{\texttt{-{}-}max-depth=[number]}: maximálna veľkosť vyhľadávacieho stromu pri algoritme \emph{minimax};
     ekvivalent $l$
@@ -244,9 +252,8 @@ argumenty:
 \subsubsection{Hra}
 
 \paragraph{Programátorská príručka}
-Unity verzie 2019.2.17f1 bolo použité pri vývoji užívateľskej časti aplikácie.
-V rámci projektov unity je odporúčané držať sa verzie, v ktorej je projekt vyvíjaný, pretože pri zložitejších
-štruktúrach môže dôjsť ku konfliktom.
+V rámci projektov unity je odporúčané držať sa verzie, v ktorej je projekt vyvíjaný (2019.2.17f1), pretože pri
+zložitejších štruktúrach môže dôjsť ku konfliktom.
 Pre otvorenie projektu vo vývojovom prostredí je nutné mať nainštalovanú túto verziu unity a aplikáciu
 \enquote{unity editor}.
 V tomto programe je možné upravovať vizuálnu stránku aplikácie, vytvárať moduly a meniť väzby medzi nimi.
@@ -264,7 +271,7 @@ Aplikáciu je možné skompilovať dvoma spôsobmi:
 \end{enumerate}
 
 \paragraph{Používateľská príručka}
-Zostavený program je pripravený pre použitie aj na klasickom desktopovom počítači aj v prostredí Cave.
+Zostavený program je pripravený pre použitie aj na klasickom desktopovom počítači a sčasti aj v prostredí Cave.
 Pri zapnutí programu sa zobrazí hlavné menu, kde sú dve možnosti: začať hru a ukončiť program (oba s anglickými
 názvami).
 Navigácia v menu je vykonávaná pomocou vertikálnej osi.
@@ -272,6 +279,8 @@ Zvolením možnosti ukončiť program sa aplikácia vypne, po zvolení možnosti
 používateľ volí parametre hry.
 Konkrétne ide o veľkosť hracieho priestoru (3-8), počet za sebou idúcich znakov potrebných pre výhru a znak hráča, s
 ktorým chce užívateľ hrať.
+Pri voľbe parametrov sa výber $w$ automaticky zhora ohraničí na základe rozmeru hracieho poľa a teda
+$w \in {3, \dots, r}$.
 Parametre sa volia využitím horizontálnej osi.
 Po vyplnení všetkých potrebných parametrov sa hra spustí.
 Pomocou oboch osí je možné otáčať hrací priestor, pričom najbližšie políčko, na ktoré sa \enquote{pozerá kamera} je

@@ -1,6 +1,6 @@
 \section{Analýza požiadaviek}\label{sec:requirements}
 
-\subsection{Požiadavky pre časť s umelou inteligenciou}\label{subsec:requirements-ai}
+\subsection{Požiadavky pre implementáciu umelej inteligencie}\label{subsec:requirements-ai}
 
 V tejto časti je nutné, aby vývojové prostriedky, teda programovací jazyk poprípade inštalovateľné súčasti jazyka, boli
 schopné zvládnuť nasledovné požiadavky:
@@ -17,30 +17,30 @@ Tieto požiadavky najlepšie spĺňajú\cite{best_ai_languages} aj tieto jazyky:
 Python je veľmi obľúbený jazyk medzi programátormi kvôli jeho jednoduchosti, netradičným programátorským
 konštrukciám, ktoré skracujú a sprehľadňujú zdrojový kód aplikácií.
 Poskytuje aj balíčky, ktoré pomáhajú s matematickými operáciami (napr. práca s maticami, funkciami, \dots).
-Týchto balíčkov je veľké množstvo a je len na autorovi, ktorý si vyberie.
+Týchto balíčkov je veľké množstvo a je len na architektovi systému, ktorý si vyberie.
 Pri výbere tohto jazyka zavážili aj skúsentosti autora tejto práce v jazyku python.
 
 \subsubsection{R}
 
-Jazyk R je efektívny najmä pre kvôli práci so súbormi, poskytuje možnosti jednoduchej analýzy.
+Programovací jazyk R je efektívny najmä kvôli práci so súbormi, poskytuje možnosti jednoduchej analýzy.
 Tento programovací jazyk má ale zložitejšiu syntax, ktorá napriek skvelému spracovaniu pre umelú inteligenciu,
 nespĺňala výhodu.
 
 \subsubsection{Lisp}
 
-Tento jazyk (alebo rodina jazykov) je jeden z najstarších programovacích jazykov.
-Vznikol v roku 1958 pod rukou John McCarthy-ho, ktorý sa zároveň považuje za otca umelej
-inteligencie.\cite{father_of_ai}
+Názov vychádza z anglického \textbf{Lis}t \textbf{p}rocessing a je to rodina jazykov vytvorených v roku 1958.
+Tento programovací jazyk (alebo rodina jazykov) je jeden z najstarších programovacích jazykov a vznikol pod rukou
+John-a McCarthy-ho, ktorý sa zároveň považuje za otca umelej inteligencie.\cite{father_of_ai}
 Jazyk lisp v súčasnosti nie je udržiavaný komunitou natoľko, aby bol dostatočný pre túto prácu.
 
-\subsection{Požiadavky pre grafickú časť}\label{subsec:requirements-game}
+\subsection{Požiadavky pre implementáciu grafickej časti}\label{subsec:requirements-game}
 
 Súčasťou práce je aj grafická časť (hra), ktorú používateľ ovláda v prostredí Cave.
-Je teda nutné, aby bol zvolený grafický editor (resp. grafický engine), ktorý celú túto časť obsiahne a dokáže
+Je teda nutné, aby bol zvolený grafický editor (resp. grafický engine), ktorý celú túto časť obsiahne a dokáže:
 \begin{enumerate}
-    \item kooperovať s časťou s umelou inteligenciou čo najjednoduchším spôsobom
+    \item kooperovať s implementáciou umelej inteligencie čo najjednoduchším spôsobom
     \item vytvárať scény pre prostredie Cave čo najjednoduchším spôsobom
-    \item poskytovať voľne dostupný variant používania aplikácie
+    \item poskytovať voľne dostupný variant (licenciu) používania aplikácie
 \end{enumerate}
 Keďže grafické enginy používajú najmä herné štúdiá a individualisti tvoriaci hry s veľmi variabilným obsahom,
 ukazovateľom pre výber editora môže byť okrem vypísaných aj jeho popularita.
@@ -55,16 +55,16 @@ Všetky tieto výhody by z tohto engine spravili najlepšieho kandidáta pre tú
 trhu relatívne krátko a má teda malú podporu pre prostredie Cave.
 
 \subsubsection{Unity}
-Unity je jeden z najstarších a zároveň najpoužívanejších herných enginov.\cite{game_engine_unity}
+Unity je jeden z najstarších a zároveň najrozšírenejších herných enginov.\cite{game_engine_unity}
 Ponúka podporu pre programovacie jazyky založené na jazyku C (teda C\# a C++).
 Tento engine má, vďaka jeho dlhej prítomnosti na trhu, veľkú komunitu používateľov a tým pádom aj veľkú podporu tejto
 komunity;
-Unity má založené fórum s miliónmi komentárov a dobre vytvorenú dokumentáciu.
+Unity má založené fórum s miliónmi komentárov a dobre vypracovanú dokumentáciu.
 Silne a natívne podporuje umelú inteligenciu\cite{game_engine_unity_ml_agents} a používatelia vytvorili aj podporu pre
 Cave prostredie\cite{game_engine_unity_kave}.
 Pre tento engine bol vytvorený aj tzv. asset store, kde používatelia zdieľajú alebo predávajú svoje výtvory (ako napr.
-modely pre hru, pozadia, textúry,\dots.
-Tento herný engine je najlepší kandidát aj z dôvodu znalostí a skúseností s týmto enginom.
+modely pre hru, pozadia, textúry,\dots).
+Tento herný engine je najlepší kandidát a to aj z dôvodu znalostí a skúseností s týmto enginom.
 
 \subsubsection{Unreal Engine}
 Spolu s Unity je tento herný engine jedným z najstarších priekopníkov v hernom

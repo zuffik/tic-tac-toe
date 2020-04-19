@@ -1,17 +1,18 @@
 \section{Návrh riešenia}\label{sec:algorithms}
-
-Počas vývoja výpočtovej techniky sa vyvíjali aj algoritmy pre kombinatorické hry, pričom piškvorky sú jednou z nich.
+Riešením je teda algoritmus, ktorý je protihráčom v hre piškvorky hranej v trojrozmernom hracom priestore v prostredí
+Cave.
+Počas vývoja výpočtovej techniky sa vyvíjali algoritmy aj pre kombinatorické hry, pričom piškvorky sú jednou z nich.
 Tieto algoritmy je možné rozdeliť do 2 skupín: \emph{exaktné} a \emph{heuristické}; v tejto kapitole je popísaný jeden
 algoritmus z každej skupiny.
 
 \subsection{MiniMax}\label{subsec:algo-minmax}
 
-Minimax je rozhodovacie pravidlo založený na vyhľadávacom algoritme v strome, podľa ktorého je možné určiť nasledujúci
+Minimax je rozhodovacie pravidlo založené na vyhľadávacom algoritme v strome, podľa ktorého je možné určiť nasledujúci
 ťah.\cite{algo_minimax}
 Jeho princíp spočíva v maximalizovaní úžitku pre cieľového hráča a minimalizovaní úžitku pre oponenta.
 Pôvodne bol vyvinutý pre \emph{hru s nulovým súčtom} (angl. zero-sum), čo je termín používaný v teórii hier.
-Vyjadruje hru, kde rozhodnutia hráčov sa dajú ohodnotiť nenulovým číslom $v$, pričom súčet za sebou idúcich hier má
-súčet približne 0.
+Vyjadruje hru, kde rozhodnutia hráčov sa dajú ohodnotiť kladným nenulovým číslom $v$, pričom súčet za sebou idúcich hier
+má súčet približne 0.
 Často používaná hodnota je $v=1$ alebo $v=10$.
 Ťah cieľového hráča je vyjadrený kladnou hodnotou ($+v$), ťah protihráča je vyjadrený zápornou hodnotou ($-v$) a remíza
 je vyjadrená hodnotou $0$.
@@ -24,11 +25,12 @@ Hru, ktorú hrajú hráči striedavo, je možné vyjadriť pomocou postupnosti p
     \pm v+v-v+v-v+ \dots = \pm v+\sum{v-v} = \pm v+\sum{0} = \pm v
 \end{equation}
 Rozhodovanie vychádza práve z tohto faktu, pričom algoritmus sa snaží nájsť takú postupnosť ťahov, ktorá by bola rovná
-$+v$ (resp. maximálna), čo by znamenalo výhru cieľového hráča.
+$\max\{-v, 0, +v\}$ (resp. maximálna), čo by znamenalo výhru cieľového hráča, v horšom prípade remízu a v tom najhoršom
+prípade prehru cieľového hráča.
 Samotný rozhodovací proces sa dá vyjadriť pomocou rozhodovacieho stromu vychádzajúceho z ktoréhokoľvek stavu hry.
-Stavy hry tvoria vrcholy stromu a hrany predstavujú prechody medzi týmito stavmi.
 Stav hry sa dá vyjadriť pomocou $d$-rozmernej tabuľky, kde hodnoty predstavujú \textbf{X}, \textbf{O} alebo prázdne
 políčko.
+Stavy hry tvoria vrcholy stromu a hrany predstavujú prechody medzi týmito stavmi.
 
 Nech $l$ je maximálna výška rozhodovacieho stromu.
 Ak nie je explicitne zadaná, potom maximálna výška stromu je počet voľných políčok vo východiskovom stave hry.
@@ -39,7 +41,7 @@ prázdneho políčka znakom hráča, ktorý je na ťahu na úrovni $i$.
 
 Pre lepšiu predstavu je možné si situáciu ukázať na príklade z \hyperref[figure:minimax-tree]{nasledujúceho obrázku}.
 Koreň stromu obsahuje 3 voľné políčka, jeho synovia vzniknú vyplnením postupne každého voľného políčka znakom hráča na
-úrovni 2 (tzn. \textbf{X} na pozície 1. riadok, druhý stĺpec; tretí riadok, prvý stĺpec a tretí riadok, tretí stĺpec).
+úrovni 2 (tzn. \textbf{X}: na pozície 1. riadok, druhý stĺpec; tretí riadok, prvý stĺpec a tretí riadok, tretí stĺpec).
 Takto sa naplní celý strom a jeho listy sa ohodnotia hotnotami $v$ pre víťazný stav hry, $-v$ pre prehru a $0$ pre
 remízu (na \hyperref[figure:minimax-tree]{obrázku} vyznačené čiernou farbou).
 
@@ -58,14 +60,18 @@ Najlepší ťah je potom určený spôsobom
 \end{equation}
 Vyhľadávanie prebieha potom nasledovne:\cite{algo_minimax_pseudocode}
 \begin{tiny}
-    \begin{lstlisting}[language=Python]
+    \begin{lstlisting}[
+      mathescape,
+      columns=fullflexible,
+      basicstyle=\fontfamily{lmvtt}\selectfont,
+    ]
 def minimax(hraciaPlocha, int maximalnaHlbka, bool maximalizacia):
-    if maximalnaHlbka = 0 or %*hraciaPlocha nemá žiaden dostupný možný ťah*):
+    if maximalnaHlbka = 0 or hraciaPlocha nemá žiaden dostupný možný ťah:
         return hodnota hracej plochy
     if maximalizacia:
         najlepsiaHodnota = -$\infty$
-        for %*všetky dostupné ťahy v hracej ploche*):
-            novaHraciaPlocha = %*vykonaj ťah v hraciaPlocha*)
+        for všetky dostupné ťahy v hracej ploche:
+            novaHraciaPlocha = vykonaj ťah v hraciaPlocha
             aktualnaHodnota, aktualnyTah = minimax(novaHraciaPlocha, maximalnaHlbka - 1, false))
             if aktualnaHodnota > najlepsiaHodnota:
                 najlepsiaHodnota := aktualnaHodnota
@@ -73,8 +79,8 @@ def minimax(hraciaPlocha, int maximalnaHlbka, bool maximalizacia):
         return najlepsiaHodnota, najlepsiTah
     else:
         najlepsiaHodnota = $\infty$
-        for %*všetky dostupné ťahy v hracej ploche*):
-            novaHraciaPlocha = %*vykonaj ťah v hraciaPlocha*)
+        for všetky dostupné ťahy v hracej ploche:
+            novaHraciaPlocha = vykonaj ťah v hraciaPlocha
             aktualnaHodnota, aktualnyTah = minimax(novaHraciaPlocha, maximalnaHlbka - 1, true))
             if aktualnaHodnota < najlepsiaHodnota:
                 najlepsiaHodnota := aktualnaHodnota
@@ -90,9 +96,9 @@ def minimax(hraciaPlocha, int maximalnaHlbka, bool maximalizacia):
 \end{figure}\label{figure:minimax-tree}
 
 Algoritmus minimax patrí medzi \emph{exaktné algoritmy}, čo znamená, že pri hľadaní nájde najlepšie (optimálne)
-riešenie, no prehľadáva všetky možné riešenia (celý vyhľadávací priestor).
+riešenie, no prehľadáva všetky možné riešenia (celý priestor riešení).
 Vo všeobecnosti pre neprázdne hracie pole o veľkosti $r$ v $d$-rozmernom hracom priestore s $o$ obsadenými políčkami je
-možné veľkosť celého vyhľadávacieho priestoru vypočítať ako
+možné veľkosť celého priestoru riešení vypočítať ako
 \begin{equation}
     C(r, d, o) = (r^d - o) * (r^d - o - 1) * (r^d - o - 2) \dots 1 = \prod_{i = 1}^{r^d - o}{(r^d - o - i + 1)}
 \end{equation}
@@ -101,7 +107,7 @@ Pre prázdne hracie pole (teda, kde $o = 0$) platí
     C(r, d, 0) = (r^d) * (r^d - 1) * (r^d - 2) \dots 1 = \prod_{i = 1}^{r^d}{(r^d - i + 1)}
 \end{equation}
 
-Ak algoritmus vychádza z prázdneho poľa o veľkosti $3 \times 3$ ($r = 3$, $d = 2$) je veľkosť vyhľadávacieho priestoru
+Ak algoritmus vychádza z prázdneho poľa o veľkosti $3 \times 3$ ($r = 3$, $d = 2$) je veľkosť priestoru riešení
 $\prod_{i = 1}^{9}{(10 - i)} =$ \textbf{362 880}.
 Na preskúmanie takéhoto počtu je možné použiť aj komerčnú výpočtovú techniku pričom výsledok bude známy v čase menšom
 ako jedna minúta, no pri veľkosti $4 \times 4$ (teda $r = 4$, $d = 2$) je $C(4, 2, 0) \approx 2*10^{13}$ a čas
@@ -114,8 +120,8 @@ odhaduje na $\approx 14$ mld. $\approx 14 * 10^9$ rokov).
 \subsection{Umelá neurónová sieť}\label{subsec:algo-ann}
 
 Z vyššie uvedeného vyplýva, že exaktné riešenie pre väčšie rozmery plochy nie je možné použiť, teda je nutné použiť
-algoritmy, ktoré nenájdu najlepšie riešenie v rámci celého vyhľadávacieho priestoru (optimálne), no vedia nájsť
-najlepšie riešenie v rámci obmedzeného vyhľadávacieho priestoru (suboptimálne).
+algoritmy, ktoré nenájdu najlepšie riešenie v rámci celého priestoru riešení (optimálne), no vedia nájsť
+najlepšie riešenie v rámci obmedzeného priestoru riešení (suboptimálne).
 Jednou z týchto heuristických metód je \emph{umelá neurónová sieť} angl. artificial neural network
 (často označovaná ako ANN).
 
@@ -132,12 +138,14 @@ Graf môže vyzerať nasledovne:
     \caption{Všeobecná dopredná umelá neurónová sieť}
 \end{figure}\label{figure:general-ann}
 Nech $m$ je počet vrstiev v umelej neurónovej sieti a $n_i$ pre $i = 0 \dots m$ je počet neurónov vo vrstve $i$.
-Existuje mnoho typov umelých neurónových sietí, no všeobecne sa ako ANN označuje dopredná umelá neurónová sieť.
-V doprednej ANN existujú synapsy (spojenia) len medzi vrstvami $i$ a $i + 1$ pre $i = 0 \dots m - 1$, tzn. spojenia
-existujú len medzi za sebou idúcimi vrstvami smerom od vstupnej ($i=0$) k výstupnej ($i=m$) vrstve.
+Existuje mnoho typov umelých neurónových sietí, no všeobecne sa ako ANN označuje dopredná umelá neurónová sieť (
+angl. feed forward neural network, skr. FFNN).
+V doprednej umelej neurónovej sieti existujú synapsy (spojenia) len medzi vrstvami $i$ a $i + 1$ pre
+$i = 0 \dots m - 1$, tzn. spojenia existujú len medzi za sebou idúcimi vrstvami smerom od vstupnej ($i=0$) k výstupnej
+($i=m$) vrstve.
 
 Každému neurónu je priradená aktivačná funkcia.
-Z biologického hľadiska vyjadruje akčný potenciál bunky a teda prenos informácie cez synaptické prepojenie.
+Z biologického hľadiska vyjadruje akčný potenciál bunky a teda potenciálny prenos informácie cez synaptické prepojenie.
 V rámci umelých neurónových sietí aktivačná funkcia vyjadruje to isté: je to binárna funkcia a neurón sa aktivuje
 ak na výstupe z tejto funkcie je 1.
 Aktivačná funkcia závisí od vstupov predchádzajúcich neurónov.
@@ -194,14 +202,16 @@ Trénovacia množina slúži na prvotné nastavenie parametrov (váh).
 Využíva sa vo fáze trénovania.
 Natrénovaná sieť sa v druhej fáze otestuje pomocou testovacej množiny.
 
-Pri \textbf{algoritme založenom na delta prístupe} (ďalej len "delta algoritmus") sa pracuje len s dvojvrstvovou
-umelou neurónovou sieťou (resp. s vrstvou, ktorá ma len jednu sadu synaptických prepojení).
+Pri \textbf{algoritme založenom na delta prístupe} (ďalej len delta algoritmus) sa pracuje len s dvojvrstvovou
+umelou neurónovou sieťou, resp. s vrstvou, ktorá ma len jednu sadu synaptických prepojení.
 Princíp spočíva v postupnom vyhodnocovaní rozdielu medzi výstupom z umelej neurónovej siete pri určitom vstupe
-(reálny výstup) a správnym výstupom (očakávaný výstup).
+(reálny výstup - angl. actual) a správnym výstupom (očakávaný výstup - angl. expected).
 Parametre ANN sú upravované v závislosti od tohto rozdielu.
+
 Nech $\gamma \in (0, \infty)$ je učiaci parameter, $\epsilon$ je maximálny akceptovateľný rozdiel v hodnotách reálneho
 a očakávaného výstupu a $s$ je počet za sebou idúcich rozdielov výstupov (rozdiel nemusí byť vyhodnocovaný len
-prostredníctvom absolútnej hodnoty, často sa využíva aj druhá mocnina rozdielu), ktoré sa nachádzali v rámci $\epsilon$.
+prostredníctvom absolútnej hodnoty, často sa využíva aj druhá mocnina rozdielu), ktoré sa nachádzali v intervale
+$<0, \epsilon>$.
 Ďalej nech $|T_r|$ je veľkosť trénovacej množiny (teda počet vzoriek), $\mathbf{X_i}$ pre $i=1 \dots |T_r|$ je vzorka
 z trénovacej množiny, ktorej je pridelený očakávaný výstup $y_i$ pre $i=1 \dots |T_r|$ a nech $y(\mathbf{X_i})$ je reálny
 výstup siete ako odpoveď na vstup $\mathbf{X_i}$.
@@ -210,14 +220,15 @@ Algoritmus prebieha nasledovne:\cite{algo_ann_delta_rule}
     \item Inicializácia počiatočných váh $\pmb{w_1}$, prahovej hodnoty $\theta$ a parametrov $\gamma$, $\epsilon$ a $s$.
     \item pre $i = 1 \dots |T_r|$:
     \begin{enumerate}
-        \item ak $(y_i-y(\mathbf{X_i}))^2>\epsilon$ \\
+        \item ak $(y_i-y(\mathbf{X_i}))^2>\epsilon$: \\
                 $\Delta{w_j} = \gamma * (y_i-y(\mathbf{X_i}))_j$ \\
                 $\pmb{w_{1j}}=\pmb{w_{1j}} + \Delta{w_j} * X_{ij}$ \\
                 $\theta=\theta + \Delta{w_j}$
         \item ak prebehlo $s$ za sebou idúcich rozdielov výstupov, ktoré sa nachádzali v rámci $\epsilon$, tak koniec
     \end{enumerate}
 \end{enumerate}
-Zmena váh o vektor $y_i-y(\mathbf{X_i})$ je celkom intuitívna, no je možné si ukázať, že to funguje aj matematicky.
+Zmena váh o vektor $\Delta (y_i-y(\mathbf{X_i}))$ vyzerá ako intuitívne riešenie, no je možné si ukázať, že to funguje
+aj matematicky.
 Nech $\pmb{\omega_0}$ je východiskový bod pre váhy a nech $f(\pmb{x})$ je funkcia vyjadrujúca mieru chyby v sieti,
 ktorú je potreba minimalizovať.
 K bodu $\pmb{\omega_1}$ je možné sa z východiskového bodu posunúť v jednotkovom smere $\pmb{d}$ ($|\pmb{d}|=1$) o krok
@@ -225,37 +236,39 @@ dĺžky $\alpha$, tzn.
 \begin{equation}
     \pmb{\omega_1} = \pmb{\omega_0} + \alpha\pmb{d}
 \end{equation}
-Tu sa naskytá otázka ako zvoliť veľkosť kroku $\alpha$, tak aby $f(\pmb{\omega_1}) < f(\pmb{\omega_0})$.
-\textbf{Derivácia} funkcie vyjadruje zmenu akejkoľvek funkcie $f(x)$ v pomere s čo najmenšou zmenou parametrov tejto
-funkcie, teda
+Tu je nutné vyriešiť problém, ako zvoliť veľkosť kroku $\alpha$, tak aby $f(\pmb{\omega_1}) < f(\pmb{\omega_0})$.
+Riešením tohto problému je \textbf{derivácia} funkcie, ktorá vyjadruje zmenu akejkoľvek funkcie $f(x)$ v pomere čo
+najmenšej zmeny parametrov tejto funkcie, teda
 \begin{equation}
     \lim_{\alpha\to0}\frac{|f(x + \alpha) - f(x)|}{\alpha}
 \end{equation}
 kde $\alpha$ vyjadruje zmenu parametrov.
 Keďže $f(\omega_1)=f(\omega_0+\alpha\pmb{d})$ je možné tento princíp použiť na výpočet kroku $\alpha$.
 \begin{equation}
-    \frac{d}{d\alpha}f(\pmb{\omega_0}+\alpha\pmb{d}) = \
-    \sum_{\forall i}{\frac{d f(\omega_{0_i} + \alpha{d_i})}{d \omega_{0_i} + \alpha{d_i}}}*\frac{d}{d\alpha}\omega_0+\alpha\pmb{d} = \
-    \sum_{\forall i}{\frac{d f(\omega_{0_i} + \alpha{d_i})}{d \omega_{0_i} + \alpha{d_i}}}*\pmb{d} = \
+    \frac{d}{d\alpha}f(\pmb{\omega_0}+\alpha\pmb{d}) = \\
+    \sum_{\forall i}{\frac{d f(\omega_{0_i} + \alpha{d_i})}{\alpha}}*\frac{d}{d\alpha}(\omega_0+\alpha\pmb{d}) = \\
+    \sum_{\forall i}{\frac{d f(\omega_{0_i} + \alpha{d_i})}{\alpha}}*\pmb{d} = \\
     \pmb{f'}(\pmb{\omega_0}+\alpha\pmb{d})*\pmb{d}
 \end{equation}
 a keďže $\alpha\to0$, potom výraz je možné upraviť na
 \begin{equation}
     \pmb{f'}(\pmb{\omega_0})*\pmb{d}
 \end{equation}
-a je to zároveň \emph{gradient} funkcie $\pmb{f}$ v bode $\pmb{\omega_0}$.
+Tento výraz ($\pmb{f'}(\pmb{\omega_0})$) sa nazýva \emph{gradient} funkcie $\pmb{f}$ v bode $\pmb{\omega_0}$.
+
 Pre skalárny súčet dvoch vektorov $\pmb{a}$ a $\pmb{b}$ platí $\pmb{a} * \pmb{b} = |\pmb{a}| * |\pmb{b}| * \cos(\beta)$, kde $\beta$
 je uhol, ktorý tieto vektory zvierajú.
 Keďže $\pmb{f'}(\pmb{\omega_0})$ a $\pmb{d}$ sú vektory a $|\pmb{d}|=1$ platí
 \begin{equation}
-    |\pmb{f'}(\pmb{\omega_0})| * \cos(\beta)
+    |\pmb{d}| * |\pmb{f'}(\pmb{\omega_0})| * \cos(\beta) = |\pmb{f'}(\pmb{\omega_0})| * \cos(\beta)
 \end{equation}
 Pretože $|\pmb{f'}(\pmb{\omega_0})|$ je konštanta, je potrebné vhodne zvoliť $\cos(\beta)$ tak, aby celý výraz bol čo
 najmenší.
 \begin{equation}
     H(\cos(\beta)) = <-1,1> \implies \cos(\beta) = -1 \iff \beta = -180\degree = -\pi
 \end{equation}
-Z toho vyplýva, že smer najlepšieho poklesu je opačný ku gradientu funkcie (teda $-\pmb{f'}(\pmb{\omega_0})$).
+Z toho vyplýva, že smer najlepšieho poklesu funkcie $f(\pmb{\omega_0})$ je opačný ku gradientu funkcie, teda
+$-\pmb{f'}(\pmb{\omega_0})$ (\emph{antigradient}).
 V prípade delta algoritmu je minimalizovaná funkcia rozdielu reálneho a očakávaného výstupu
 \begin{equation}
     f(\pmb{\omega})=(y_i-y(\mathbf{X_i}))^2=(y_i-\phi(\sum_{\forall j}{\omega_j X_{ij}-\theta}))^2
@@ -266,8 +279,8 @@ V prípade delta algoritmu je minimalizovaná funkcia rozdielu reálneho a očak
 \begin{equation}
     \frac{\partial}{\partial \omega_k}f(\pmb{\omega})=-(y_i-y(\mathbf{X_i}))*X_{ik}*(2(-\phi'(\sum_{\forall j}{\omega_j X_{ij}-\theta})))
 \end{equation}
-Posledný činiteľ je kladný (tzn. nezmení znamienko výrazu - derivácia kladnej funkcie) a teda smer najväčšieho poklesu
-je
+Posledný činiteľ je kladný (tzn. nezmení signum výrazu, pretože je to derivácia kladnej funkcie) a teda smer
+najväčšieho poklesu je možné upraviť na
 \begin{equation}
     \pmb{d}=(y_i-y(\mathbf{X_i}))*X_{ik}
 \end{equation}
@@ -316,8 +329,9 @@ Kde $\eta$ je počiatočný učiaci parameter.
 $p \in <0,1>$ zvyčajne $p=0.9$, $\epsilon$ je použitý len na to, aby sa predišlo deleniu nulou a zvyčajne
 $\epsilon = 10^{-10} = 1e-10$, $v_j$ je priemer gradientov a $s_j$ je priemer umocnených gradientov.
 Hodnota $\Delta{w_j}$ je potom pripočítaná k váham.
+Tu je možné si všimnúť podobnosť medzi jednotlivými vylepšeniami.
 
-Pri návrhu je možné určiť aj účelovú funkciu optimalizácie tréningu a teda spôsob, akým tréningový proces vyhodnocuje
+Pri návrhu sa dá určiť aj účelovú funkciu optimalizácie tréningu a teda spôsob, akým tréningový proces vyhodnocuje
 správnosť, resp. nesprávnosť výstupu pri danom vstupe.
 Nech $E(w, y, \hat{y})$ je chyba výsledku pri parametri $w$ a výstupe $\hat{y}$ s očakávaným výstupom $y$
 a $F(E(w, y, \hat{y}))$ je účelová funkcia optimalizačného procesu.
@@ -334,31 +348,31 @@ Anglicky \emph{mean absolute error}.
 \paragraph{Kategorická krížová entropia}\cite{algo_ann_categorical_crossentropy}
 Anglicky \emph{categorical crossentropy}.
 Táto účelová funkcia vyžaduje, aby vstupy boli kategorizované, čoho dôsledkom je aj to, že táto účelová funkcia sa
-využíva pri kategorizácii vstupov.
+využíva pri kategorizácii týchto vstupov do výstupov.
 \begin{equation}
     E(w, y, \hat{y})=y*\log(\hat{y})
 \end{equation}
 
 Navrhnutie štruktúry umelej neurónovej siete je jeden z najťažších problémov pri vytváraní riešenia problému.
-Neexistuje jednoznačná a univerzálna cesta vytvorenia, ktorá by platila pre všetky problémy.
+Neexistuje jednoznačná a univerzálna cesta vytvorenia, ktorá by platila rovnako pre všetky problémy.
 Pre jednoduché problémy je možné použiť matematické metódy pre vytvorenie umelej neurónovej siete, no pre tie väčšie
 sa ANN vytvárajú skôr využitím intuície architekta siete.
 
 \subsubsection{Umelá neurónová sieť pre hru}
 
-Keďže váhy je možné upraviť pomocou trénovania ostáva ešte určiť štruktúru umelej neurónovej siete.
-ANN by mala spĺňať tieto vlastnosti:
+Ako bolo vyššie popísané, pri umelých neurónových sieťach je nutné navrhnúť jej štruktúru, ktorá by mala okrem iného
+spĺňať nasledovné vlastnosti:
 \begin{itemize}
     \item na vstupe má byť aktuálny stav hry
     \item na výstupe má byť informácia o tom, ktoré pole je pre aktuálneho hráča najlepšie pre ďalší krok
 \end{itemize}
 
-Stav hry je reprezentovaný vektorom $s_i$ pre $i=1 \dots r^d$, kde každých $r$ prvkov reprezentuje riadok hracej plochy,
-resp. hracieho priestoru.
-Napríklad pre rozmer $3 \times 3$ má vektor $s$ dĺžku 9 ($r^d=3^2$), prvky 1--3 reprezentujú prvý riadok, prvky
-4--6 reprezentujú druhý riadok a prvky 7--9 reprezentujú posledný riadok.
-Neurónová sieť pozostáva z 3 vrstiev (vstupná, skrytá, výstupná).
-Nech $x_i$ pre $i=1 \dots 3r^d$ je neurón vo vstupnej vrstve.
+Nech stav hry je reprezentovaný vektorom $s_i$ pre $i=1 \dots r^d$, kde každých $r$ prvkov reprezentuje riadok hracej
+plochy, resp. hracieho priestoru.
+Napríklad pre rozmer $3 \times 3$ má vektor $s$ dĺžku 9 ($r^d=3^2$), prvky 1 \textemdash 3 reprezentujú prvý riadok,
+prvky 4 \textemdash 6 reprezentujú druhý riadok a prvky 7 \textemdash 9 reprezentujú posledný riadok.
+Nech neurónová sieť pozostáva z 3 vrstiev (vstupná, skrytá, výstupná) a $x_i$ pre $i=1 \dots 3r^d$ je neurón vo vstupnej
+vrstve.
 Za vstup do neurónovej siete je považovaný vektor hodnôt $x_1$ až $x_{3r^d}$, kde
 \begin{equation}
     x_i=
@@ -371,6 +385,7 @@ Za vstup do neurónovej siete je považovaný vektor hodnôt $x_1$ až $x_{3r^d}
     \quad
     \text{pre }i=1 \dots 3r^d
 \end{equation}
+Z toho vyplýva, že $x_i \in \{0, 1\}$ a teda $\pmb{x}$ je binárny vektor.
 Nech $y_j$ pre $j=1 \dots r^d$ je neurón v skrytej vrstve.
 Táto vrstva zabezpečuje reprezentáciu stavu hry, na základe ktorej sa nastavujú váhy pre jednotlivé hodnoty políčok
 hracej plochy.
@@ -387,7 +402,7 @@ Zo skrytej vrstvy do výstupnej vrstvy sa prenesú hodnoty
 \begin{equation}
     \sum_{j=1}^{r^d} v_{j}y_{j}
 \end{equation}
-Neurónová sieť vyzerá nasledovne:
+Neurónová sieť reprezentovaná grafom vyzerá nasledovne:
 
 \begin{figure}[H]
     \centering
@@ -399,12 +414,12 @@ Implementácia tejto neurónovej siete je bližšie popísaná v \autoref{subsec
 Pre potreby natrénovania umelých neurónových sietí boli použité simulácie náhodných hier.
 Simulácie pozostávali z náhodného výberu políčok pre každého hráča.
 Náhodný výber bol navyše zlepšený predpokladom, že hráči sa počas hry (najmä na plochách väčších rozmerov) snažia
-väčšinou znemožniť protihráčovi jeho výhru výberom políčok, ktoré sú blízko jeho predchádzajúcemu ťahu
+prevažne znemožniť protihráčovi jeho výhru výberom takých políčok, ktoré sú blízko jeho predchádzajúcemu ťahu
 (resp. predchádzajúcim ťahom).
 Keďže piškvorky sú hra, ktorá sa hrá na pravouhlej ploche (resp. pravouhlom priestore) bolo možné pri výpočte
 pravdepodobnosti výberu prvku použiť Manhattanskú vzdialenosť.
-Nech pre $d=3$ $c_i(b)$, $c_j(b)$, $c_k(b)$ sú súradnice ($i$ a $j$) políčka, ktoré je najbližšie k políčku $b_{ijk}$ a
-nech
+Nech pre $d=3$ $c_i(b)$, $c_j(b)$, $c_k(b)$ sú súradnice ($i$, $j$ a $k$) políčka, ktoré je najbližšie k políčku
+$b_{ijk}$ a nech
 \begin{equation}
     e(b_{ijk}) =
     \begin{cases}
@@ -422,8 +437,8 @@ Pre $d=2$ (teda pre hru na ploche) platia rovnaké pravidlá, pričom $k=1$ (res
 
 Už kontrola víťaza pre plochu (2D priestor) s pevne danými rozmermi a pevne danou hodnotou počtu znakov potrebných pre
 výhru (často zhodnou s rozmerom) je relatívne komplexná úloha.
-Ak sú použité sofistikovanejšie prostriedky než fixný prístup k prvkom poľa prostredníctvom číselných indexov, tak pre
-rozmer $r \times r$, kde $r = w$ má tento problém nasledovné riešenie:
+Ak sú použité sofistikovanejšie prostriedky než fixný prístup k prvkom vektora prostredníctvom číselných indexov, tak
+pre rozmer $r \times r$, kde $r = w$ má tento problém nasledovné riešenie:
 \begin{lstlisting}[
   mathescape,
   columns=fullflexible,
