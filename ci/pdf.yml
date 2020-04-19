@@ -10,6 +10,10 @@ PDF build:
 
   script:
     - cd docs
+    - echo "sk_SK ISO-8859-2\nsk_SK.UTF-8 UTF-8" >> /etc/locale.gen
+    - locale-gen
+    - export TIMEZONE="Europe/Bratislava"
+    - export KEYMAP="sk-qwerty.map.gz"
     - export LANG="sk_SK"
     - export LC_ALL=sk_SK.UTF-8
     - export LANGUAGE="sk_SK:sk"
