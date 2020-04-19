@@ -11,21 +11,6 @@ PDF build:
   script:
     - cd docs
     - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
-    - cd out
-    - makeindex paperwork.nlo -s nomencl.ist -o paperwork.nls
-    - rm paperwork.aux || true
-    - rm paperwork.lof || true
-    - rm paperwork.blg || true
-    - rm paperwork.out || true
-    - rm paperwork.pdf || true
-    - rm paperwork.log || true
-    - rm paperwork.toc || true
-    - rm paperwork.fdb_latexmk || true
-    - rm paperwork.fls || true
-    - rm paperwork.bbl || true
-    - cd ..
-    - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
-    - texcount -inc paperwork.tex
   artifacts:
     paths:
       - docs/out/paperwork.pdf
