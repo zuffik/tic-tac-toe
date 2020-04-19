@@ -10,6 +10,8 @@ PDF build:
 
   script:
     - cd docs
+    - export LANG="sk_SK"
+    - export LANGUAGE="sk_SK:sk"
     - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
   artifacts:
     paths:
