@@ -11,6 +11,7 @@ PDF build:
   script:
     - cd docs
     - export LANG="sk_SK"
+    - export LC_ALL=sk_SK.UTF-8
     - export LANGUAGE="sk_SK:sk"
     - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
   artifacts:
