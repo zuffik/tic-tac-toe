@@ -7,7 +7,8 @@ stages:
 PDF build:
   image: tianon/latex
   stage: build
-
+  before_scrtipt:
+    - apt-get install -y locales
   script:
     - cd docs
     - echo "sk_SK ISO-8859-2\nsk_SK.UTF-8 UTF-8" >> /etc/locale.gen
