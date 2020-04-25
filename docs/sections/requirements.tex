@@ -14,24 +14,66 @@ súčasnosti udržiavaný komunitou programátorov.
 Tieto požiadavky najlepšie spĺňajú\cite{best_ai_languages} aj tieto jazyky:
 
 \subsubsection{Python}
+
 Python je veľmi obľúbený jazyk medzi programátormi kvôli jeho jednoduchosti, netradičným programátorským
 konštrukciám, ktoré skracujú a sprehľadňujú zdrojový kód aplikácií.
 Poskytuje aj balíčky, ktoré pomáhajú s matematickými operáciami (napr. práca s maticami, funkciami, \dots).
 Týchto balíčkov je veľké množstvo a je len na architektovi systému, ktorý si vyberie.
-Pri výbere tohto jazyka zavážili aj skúsentosti autora tejto práce v jazyku python.
+Pri výbere tohto jazyka zavážili aj skúsenosti autora tejto práce v jazyku python.
+
+Tento jazyk je interpretovaný (tzn. nie kompilovaný) programovací jazyk vytvorený v roku 1991 programátorom
+Guido van Rossum-om.\cite{lang_python}
+Jeho dizajn je zameraný na \emph{čitateľnosť kódu} s využitím najmä "bielych znakov" (medzery, tabulátory) a odsadenie,
+čo je signifikantný rozdiel oproti iným komerčným jazykom, ktoré používajú prevažne zátvorky \shellcmd{\{\dots\}} na
+vyznačenie schémy kódu (pozn. "schéma kódu" je preložená z angl. scope).
+Python nie je striktne typovaný jazyk, čo sa môže javiť ako jeho nevýhoda, no statické typovanie je možné jednoducho
+pridať.
+Je multi-paradigmový, čo znamená, že podporuje viacero prístupov k programovaniu.
+Medzi tieto prístupy patrí: objektovo-orientované programovanie, štrukturálne programovanie, funkcionálne programovanie
+apod.
+Tento jazyk ovplyvnil aj rôzne ďalšie jazyky ako ECMAScript, Go, Kotlin, Swift\dots.
 
 \subsubsection{R}
 
 Programovací jazyk R je efektívny najmä kvôli práci so súbormi, poskytuje možnosti jednoduchej analýzy.
 Tento programovací jazyk má ale zložitejšiu syntax, ktorá napriek skvelému spracovaniu pre umelú inteligenciu,
 nespĺňala výhodu.
+Tento jazyk je zameraný najmä na štatistické výpočty a prvý krát sa objavil v roku 1976.\cite{lang_r}
+Jeho autorom je John Cambers a vyvinuli ho v tíme známej spoločnosti Bell Labs.
+Podobne ako jazyky MatLab alebo APL vie aj tento programovací jazyk pracovať s maticami, vektormi a ponúka aj možnosti
+pre prácu s relačnými databázami vo forme dátových rámcov (data frame).
+
+Ako bolo spomenuté, R dobre pracuje so štatistickými modelmi.
+Ak existuje na disku csv súbor (čiarkou oddelené hodnoty, angl. comma separated values), potom napríklad lineárnu
+regresiu v tomto jazyku je možné zapísať nasledovne (y je závislá premenná, x sú nezávislé premenné):
+\begin{lstlisting}[
+  mathescape,
+  columns=fullflexible,
+  basicstyle=\fontfamily{lmvtt}\selectfont,
+]
+    data = read.csv('subor.csv')
+    model <- lm(y~x1+x2+x3)
+    summary(model)
+\end{lstlisting}
 
 \subsubsection{Lisp}
 
 Názov vychádza z anglického \textbf{Lis}t \textbf{p}rocessing a je to rodina jazykov vytvorených v roku 1958.
 Tento programovací jazyk (alebo rodina jazykov) je jeden z najstarších programovacích jazykov a vznikol pod rukou
 John-a McCarthy-ho, ktorý sa zároveň považuje za otca umelej inteligencie.\cite{father_of_ai}
+Starší je už len jazyk Fortran (o 1 rok).
 Jazyk lisp v súčasnosti nie je udržiavaný komunitou natoľko, aby bol dostatočný pre túto prácu.
+Pôvodne bol jazyk vyvinutý ako matematický zápis pre počítačové programy a rýchlo sa adaptoval ako jazyk pre
+výskum umelej inteligencie.
+Jazyk pracuje s tzv. S-výrazmi (S-expressions) a sú to v podstate volania funkcii s rôznymi argumentami.
+Volanie funkcie \shellcmd{func} s argumentami \shellcmd{arg1, arg2, arg3, arg4} je zapísané ako:
+\begin{lstlisting}[
+  mathescape,
+  columns=fullflexible,
+  basicstyle=\fontfamily{lmvtt}\selectfont,
+]
+    (func arg1 arg2 arg3 arg4)
+\end{lstlisting}
 
 \subsection{Požiadavky pre implementáciu grafickej časti}\label{subsec:requirements-game}
 
@@ -44,17 +86,27 @@ Je teda nutné, aby bol zvolený grafický editor (resp. grafický engine), ktor
 \end{enumerate}
 Keďže grafické enginy používajú najmä herné štúdiá a individualisti tvoriaci hry s veľmi variabilným obsahom,
 ukazovateľom pre výber editora môže byť okrem vypísaných aj jeho popularita.
+Pri tvorbe je nutné dbať na kompatibilitu s prostredím Cave, no veľkou výhodou je možnosť kompilácie projektu
+pre čo najväčší počet rôznych platforiem.
 Práve na základe popularity\cite{best_3d_game_engines} boli porovnávané 3 najpoužívanejšie grafické enginy.
 
 \subsubsection{Godot}
+
 Herný engine, ktorý kladie dôraz na dve veci: jednoduchosť a škálovateľnosť.\cite{game_engine_godot}
 Oproti ostatným herným enginom ponúka širokú podporu rôznych programovacích jazykov ako python, C\# alebo C++.
 Ponúka grafický editor, ktorý zaberá na disku veľmi málo miesta, no funguje na mnohých komerčných operačných systémoch
 ako MacOS, Windows a Linux.
 Všetky tieto výhody by z tohto engine spravili najlepšieho kandidáta pre túto prácu, bohužiaľ tento prostriedok je na
-trhu relatívne krátko a má teda malú podporu pre prostredie Cave.
+trhu relatívne krátko (prvá verzia bola vydaná v roku 2007) a má teda malú podporu pre prostredie Cave.
+
+Hlavným cieľom tohto grafického enginu je možnosť vytvorenia hry "from scratch" (teda úplne od základov) bez použitia
+akýchkoľvek nástrojov okrem tých na tvorbu obsahu.
+Je multiplatformový a ponúka zostavenie produktu pre 3 hlavné desktopové operačné systémy: Windows s rôznymi nástrojmi,
+macOS, Linux, tak isto zostavenie pre mobilné operačné systémy Android, iOS a dokonca aj BlackBerry a v neposlednom
+rade aj podporu pre HTML5, a WebAssembly, čo je v súčasnosti veľmi žiadané.
 
 \subsubsection{Unity}
+
 Unity je jeden z najstarších a zároveň najrozšírenejších herných enginov.\cite{game_engine_unity}
 Ponúka podporu pre programovacie jazyky založené na jazyku C (teda C\# a C++).
 Tento engine má, vďaka jeho dlhej prítomnosti na trhu, veľkú komunitu používateľov a tým pádom aj veľkú podporu tejto
@@ -64,9 +116,20 @@ Silne a natívne podporuje umelú inteligenciu\cite{game_engine_unity_ml_agents}
 Cave prostredie\cite{game_engine_unity_kave}.
 Pre tento engine bol vytvorený aj tzv. asset store, kde používatelia zdieľajú alebo predávajú svoje výtvory (ako napr.
 modely pre hru, pozadia, textúry,\dots).
-Tento herný engine je najlepší kandidát a to aj z dôvodu znalostí a skúseností s týmto enginom.
+
+Unity vznikol v roku 2005 v spoločnosti Apple, Inc. ako herný engine vytvorený exkluzívne pre systém MacOS (vtedy OSX).
+Tak isto ako Godot ponúka aj Unity možnosť zostavenia aplikácie do rôznych platforiem.
+Sú to všetky platformy, ktoré ponúka Godot ale navyše je možné kompilovať kód pre PlayStation, Xbox, Oculus a iné
+komerčné VR (virtuálna realita) platformy, ďalej pre Nintendo, Smart TV (ako napr. tvOS od Apple, Samsung Smart TV),
+pre online herné platformy ako je Facebook Gameroom a rôzne AR platformy (Apple ARKit, Google ARCore).
+
+Navyše pre potreby umelej inteligencie bol v rámci enginu Unity vyvinutý projekt Unity ML Agents.
+Tento balík ponúka prostredie pre tréning inteligentných \emph{agentov} pre použitie v hrách.
+Je teda zjavné, že táto možnosť toho ponúka oveľa viac ako Godot a teda tento herný engine je najlepší kandidát a to
+aj z dôvodu znalostí a skúseností autora s týmto enginom.
 
 \subsubsection{Unreal Engine}
+
 Spolu s Unity je tento herný engine jedným z najstarších priekopníkov v hernom
 priemysle.\cite{game_engine_unreal_engine}
 Dôraz kladie najmä na kvalitu, čo je vidno aj na hrách postavených na v tomto prostriedku.
@@ -75,11 +138,23 @@ nevýhoda pre iné operačné systémy.
 Pracuje v jazyku Visual C++ a podporuje aj prepojenie s umelou inteligenciou no už menšiu podporu má pre Cave
 prostredie.
 
+Tento herný engine vznikol v spoločnosti Epic Games v roku 1998 ako súčasť hry \emph{Unreal}, čo bola akčná hra z
+pohľadu prvej osoby (angl. first person shooter, skr. FPS).
+Cieľom Unreal Engine je priniesť užívateľovi čo najpresnejšiu a najvernejšiu kópiu reálneho objektu alebo prostredia
+a dá sa povedať, že všetky platformy, ktoré podporuje Unity, podporuje aj tento Unreal Engine.
+
 \subsection{Ostatné požiadavky}\label{subsec:requirements-other}
 
 K ostatným požiadavkám patrí najmä výpočtová sila pri trénovaní umelej neurónovej siete a prístup k zostavenému
 prostrediu Cave.
-Toto prostredie je dostupné na Žilinskej univerzite vo vedeckom parku.
+Toto prostredie je dostupné na Žilinskej univerzite vo vedeckom parku, no z dôvodu nedostatočných zdrojov implementáciu
+do Cave nebolo možné uskutočniť.
+Ak by táto platforma bola dostupná, použiteľnosť unity by bolo nutné zabezpečiť len pre platformu Windows.
+Toto obmedzenie existuje z dôvodu využitia knižnice \emph{GetReal3D}\cite{getreal3d}, ktorá je dostupná len pre Unity
+a bola jedným z dôvodov, prečo bol zvolený Unity engine.
+Knižnica zabezpečuje nielen zobrazovanie obrazu v 3D rozhraní, ale poskytuje aj možnosť premietnutia obrazu aj do Cave
+prostredia.
+Tento systém by bolo nutné pred použitím kalibrovať, aby poskytoval plnohodnotný užívateľský zážitok.
 \\
 \\
 Na základe spomínaných výhod, nevýhod a skúseností bol zvolený programovací jazyk \emph{Python} kvôli jeho jednoduchému
