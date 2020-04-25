@@ -1,5 +1,5 @@
 \clearpage
-\section{Implementácia}\label{sec:programming}
+\section{Implementácia zvolených možností riešenia}\label{sec:programming}
 
 Aplikácia pozostáva z dvoch častí a to \textbf{časť umelej inteligencie} a \textbf{hra}.
 V časti umelej inteligencie sa vytvára a trénuje umelá neurónová sieť, v hernej časti sa dá hra ovládať pomocou
@@ -186,7 +186,7 @@ V aplikácii je použitá pre načítanie modelov z disku a ich použitie v samo
     \caption{Implementácia použitia ANN v aplikácii}
 \end{figure}\label{figure:ann-usage-impl}
 
-\subsection{Cloud computing}\label{subsec:ci}
+\subsection{Cloud computing a automatické zostavenie}\label{subsec:ci}
 
 Za účelom automatizácie a zrýchlenia zostavenia bol nastavený aj continuous deployment (súvislé nahrávanie, ďalej len
 "CD") na \emph{GitLab-CI}.
@@ -200,98 +200,3 @@ serveru s predinštalovanou aplikáciou Unity.
     \includegraphics[width=1\textwidth]{images/impl-cd.png}
     \caption{Zobrazenie zotavenia aplikácie v rámci continuous deployment}
 \end{figure}\label{figure:cd}
-
-\subsection{Príručky}\label{subsec:helpers}
-\subsubsection{Umelá inteligencia}
-Ako bolo vyššie spomenuté, časť aplikácie, ktorá je zameraná na umelú inteligenciu, je implementovaná v jazyku python.
-Interakcia s touto časťou je vykonávaná prostredníctvom rozhrania príkazového riadku (skr. CLI, angl. command line
-interface), pričom pre použitie je potrebné mať nainštalovaný interpreter jazyka python.
-Znamená to, že program nie je skompilovaný do jedného binárneho balíku (bundle) a je nutné pracovať priamo so zdrojovým
-kódom.
-Pri vývoji aplikácie boli použité Python verzie 3.7.4 a pip 19.0.3 (čo je nástroj pre správu závislostí projektu).
-Pred začatím používania je nutné nainštalovať všetky závislosti zo súboru \emph{requirements.txt}.
-Tento súbor obsahuje informácie o balíčkoch a ich konkrétnych verziách použitých v projekte.
-Pre odstránenie potenciálneho konfliktu už nainštalovanej verzie je odporúčané vytvoriť si tzv. virtuálne prostredie
-(angl. virtual environment).
-Jedná sa o vytvorenie priečinku, v ktorom sú obsiahnuté všetky informácie (interpreter, balíčky) týkajúce sa daných
-požiadaviek projektu (najmä závislosti).
-Takýmto spôsobom sa vytvorí izolované prostredie pre projekt, ktoré je nezávislé od potenciálne vytvoreného globálneho
-prostredia.
-Použitie aplikácie je napr.: \shellcmd{python ./src/\_\_main\_\_.py game}.
-
-Predpis použitia je \shellcmd{python ./src/\_\_main\_\_.py [task] [parameters]} a aplikácia prijíma nasledovné
-argumenty:
-\begin{itemize}
-    \item \shellcmd{task}: (slovensky \enquote{úloha}) vyjadruje analogicky úlohu, ktorá sa má vykonať.
-    Možný je výber z nasledujúcich:
-    \begin{itemize}
-        \item \shellcmd{ann}: spustenie simulácie s trénovaním umelej neurónovej siete
-        \item \shellcmd{minmax}: spustenie simulácie s využitím algoritmu minimax
-        \item \shellcmd{analyze}: spustenie experimentov s rôznymi plochami
-        \item \shellcmd{game}: spustenie experimentov s rôznymi modelmi
-        \item \shellcmd{playground}: z názvu vyplýva, že je na programátorovi, čo sa spustí v rámci tohto príkazu, pričom sú
-        dostupné všetky potrebné náležitosti, ktoré majú dostupné aj iné úlohy (napr. model ANN, model minimax-u, atď.)
-        \item \shellcmd{store-ann}: natrénovanie a uloženie neurónovej siete
-    \end{itemize}
-    \item \shellcmd{\texttt{-{}-}size=[number]}: rozmer hracej plochy (resp. hracieho priestoru); ekvivalent $r$
-    \item \shellcmd{\texttt{-{}-}to-win=[number]}: počet rovnakých, za sebou idúcich znakov potrebných pre výhru; ekvivalent $w$
-    \item \shellcmd{\texttt{-{}-}dimension=[number]}: dimenzia (2 alebo 3); ekvivalent $d$
-    \item \shellcmd{\texttt{-{}-}player=[X,O]}: preferovaný (cieľový) hráč
-    \item \shellcmd{\texttt{-{}-}simulations=[number]}: počet simulácii hier (resp. veľkosť trénovacej množiny +
-    veľkosť testovacej množiny)
-    \item \shellcmd{\texttt{-{}-}validations=[number]}: počet validácii (slúži pre získanie reálnych štatistík)
-    \item \shellcmd{\texttt{-{}-}max-depth=[number]}: maximálna veľkosť vyhľadávacieho stromu pri algoritme \emph{minimax};
-    ekvivalent $l$
-    \item \shellcmd{\texttt{-{}-}ann-model=[adaptive,large]}: zvolený model \emph{umelej neurónovej siete}
-    \begin{itemize}
-        \item \shellcmd{adaptive} je model popísaný v \autoref{subsec:algo-ann}
-        \item \shellcmd{large} je model použitý pri experimentoch, popísaný v \autoref{subsec:experiments-board}
-    \end{itemize}
-\end{itemize}
-
-\subsubsection{Hra}
-
-\paragraph{Programátorská príručka}
-V rámci projektov unity je odporúčané držať sa verzie, v ktorej je projekt vyvíjaný (2019.2.17f1), pretože pri
-zložitejších štruktúrach môže dôjsť ku konfliktom.
-Pre otvorenie projektu vo vývojovom prostredí je nutné mať nainštalovanú túto verziu unity a aplikáciu
-\enquote{unity editor}.
-V tomto programe je možné upravovať vizuálnu stránku aplikácie, vytvárať moduly a meniť väzby medzi nimi.
-Pre úpravu kódu v rámci jazyka C\# je možné použiť akékoľvek vývojové prostredie (skr. IDE, angl. integrated development
-environment), ktoré podporuje tento jazyk.
-Medzi najpoužívanejšie patria \emph{Microsoft Visual Studio} alebo \emph{JetBrains Rider}, v ktorom bola aplikácia
-vyvíjaná.
-Aplikáciu je možné skompilovať dvoma spôsobmi:
-\begin{enumerate}
-    \item odporúčaným spôsobom v danom IDE
-    \item pomocou príkazového riadku.
-    Ako príklad je možné uviesť kompilovanie v OS Windows:
-    \shellcmd{"c:{\textbackslash}Program Files{\textbackslash}Unity{\textbackslash}Hub{\textbackslash}Editor{\textbackslash}2019.2.17f1{\textbackslash}Editor{\textbackslash}Unity.exe"\\ \-batchmode \-nographics \-executeMethod BuildScript.PerformBuild \-quit \\\-projectPath game \-logFile \-}
-    Tento konkrétny zápis je použitý aj pri zostavení aplikácie v GitLab-CI .
-\end{enumerate}
-
-\paragraph{Používateľská príručka}
-Zostavený program je pripravený pre použitie aj na klasickom desktopovom počítači a sčasti aj v prostredí Cave.
-Pri zapnutí programu sa zobrazí hlavné menu, kde sú dve možnosti: začať hru a ukončiť program (oba s anglickými
-názvami).
-Navigácia v menu je vykonávaná pomocou vertikálnej osi.
-Zvolením možnosti ukončiť program sa aplikácia vypne, po zvolení možnosti začať hru je zobrazené ďalšie menu, kde si
-používateľ volí parametre hry.
-Konkrétne ide o veľkosť hracieho priestoru (3-8), počet za sebou idúcich znakov potrebných pre výhru a znak hráča, s
-ktorým chce užívateľ hrať.
-Pri voľbe parametrov sa výber $w$ automaticky zhora ohraničí na základe rozmeru hracieho poľa a teda
-$w \in {3, \dots, r}$.
-Parametre sa volia využitím horizontálnej osi.
-Po vyplnení všetkých potrebných parametrov sa hra spustí.
-Pomocou oboch osí je možné otáčať hrací priestor, pričom najbližšie políčko, na ktoré sa \enquote{pozerá kamera} je
-vyznačené zelenou guľou.
-V hre sa navyše využívajú navyše ešte 3 osi pre akčné tlačidlá:
-\begin{enumerate}
-    \item priblíženie v rámci hracieho priestoru
-    \item oddialenie v rámci hracieho priestoru
-    \item priradenie vlastného znaku na označené políčko
-\end{enumerate}
-Po priradení znaku sa automaticky vyplní aj jedno políčko protihráča, ktoré vyberie algoritmus umelej inteligencie.
-V prípade, že jeden z hráčov vyhrá alebo nastane remíza s tým, že všetky políčka sú už obsadené, vypíše sa na obrazovku
-informácia o stave hry a po 7 sekundách je uskutočnený návrat do hlavného menu.
-

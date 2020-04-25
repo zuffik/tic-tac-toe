@@ -1,4 +1,4 @@
-\section{Piškvorky}\label{sec:tic-tac-toe}
+\subsection{Piškvorky}\label{subsec:tic-tac-toe}
 
 Piškvorky sú hra známa pravdepodobne väčšine obyvateľov tejto Zeme.
 Je to hra, ktorá sa hrá s dvoma hráčmi prevažne na štvorcovej ploche.
@@ -23,7 +23,7 @@ Menej pozornosti sa ale venuje trojrozmerným piškvorkám.
 S pridaním jedného rozmeru sa, samozrejme, väčšina z týchto algoritmov výrazne komplikuje a niektoré je nutné úplne
 prerobiť.
 
-\subsection{Označenie}\label{subsec:label}
+\subsubsection{Označenie}
 
 Pre použitie je nutné zaviesť nasledujúce označenia:
 \begin{itemize}
@@ -36,7 +36,7 @@ Pre použitie je nutné zaviesť nasledujúce označenia:
     $i$-tom riadku a $j$-tom stĺpci (resp. $k$-tu hodnotu v $i$-tom riadku a $j$-tom stĺpci)
 \end{itemize}
 
-\subsection{Pravidlá}\label{subsec:rules}
+\subsubsection{Pravidlá}
 
 \begin{enumerate}
     \item Každý hráč má pridelený znak \textbf{X} alebo \textbf{O}
@@ -58,18 +58,36 @@ Pre použitie je nutné zaviesť nasledujúce označenia:
     \item hracia plocha je vždy štvorec alebo kocka, resp. $r$ je rovnaké vo všetkých rozmeroch
 \end{enumerate}
 
-\subsection{Úloha}\label{subsec:task}
+\subsubsection{Zložitosť hry}
 
-Ak je daný rozmer pre hru 3x3 tak túto hru je možné ukončiť nasledovnými spôsobmi:\cite{number_of_wins}
+\paragraph{Teoretická zložitosť}
+
+V piškvorkách sú políčka, ktoré sú reprezentované troma stavmi: \textbf{X}, \textbf{O} alebo prázdne.
+Pre porovnanie, sú nižšie vypísané počty kombinácii pre všetky stavy hry v niektorých rozmeroch.
+Počty sú počítané takým spôsobom, ktorý reprezentuje skutočnú hru, tzn. že sa hráči pri hre striedajú a počet voľných
+políčok sa znižuje vždy o 1.
+Teoreticky túto hodnotu reprezentuje hodnota $r^d!$.
+\begin{itemize}
+    \item $\mathbf{3 \times 3}$: $362\ 880$
+    \item $\mathbf{4 \times 4}$: $\approx 2.10^{13}$
+    \item $\mathbf{10 \times 10}$: $\approx 9.10^{157}$
+    \item $\mathbf{100 \times 100}$: $\approx 2.10^{35\ 659}$
+    \item $\mathbf{3 \times 3 \times 3}$: $10^{28}$
+    \item $\mathbf{4 \times 4 \times 4}$: $\approx 10^{89}$
+    \item $\mathbf{10 \times 10 \times 10}$: $\approx 4.10^{2\ 567}$
+    \item $\mathbf{100 \times 100 \times 100}$: $\approx 2.10^{5\ 565\ 708}$
+\end{itemize}
+Z toho vyplýva, že priestor, v ktorom sa prehľadáva riešenie je konečný (ohraničený).
+Preto boli vybrané algoritmy, ktoré vedeli pracovať s \emph{ohraničeným} priestorom riešení.
+Je možné si všimnúť, že počty kombinácií sú extrémne vysoké na to, aby ich zvládla komerčná výpočtová technika.
+
+\paragraph{Zložitosť v praxi}
+
+Ak je daný rozmer pre hru $3 \times 3$ tak túto hru je možné ukončiť nasledovnými spôsobmi:\cite{number_of_wins}
 \begin{itemize}
     \item remíza: \emph{46 080 spôsobov}
     \item výhra prvého hráča (\textbf{X}): \emph{131 184 spôsobov}
     \item výhra druhého hráča: (\textbf{O}): \emph{77 904 spôsobov}
 \end{itemize}
-Z toho vyplýva, že priestor, v ktorom sa prehľadáva riešenie je konečný (ohraničený).
-Preto boli vybrané algoritmy, ktoré vedeli pracovať s \emph{ohraničeným} priestorom riešení.
 S pridaním jedného rozmeru len v ploche ($4 \times 4$) nebolo možné prerátať tieto počty a ani po 1 hodine výsledok
 nebol známy.
-
-Cieľom práce je implementácia algoritmu, ktorý je protihráčom v hre piškvorky hranej v trojrozmernom hracom priestore
-v prostredí Cave.

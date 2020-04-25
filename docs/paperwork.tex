@@ -19,7 +19,6 @@
 \usepackage{multirow}
 \usepackage{regexpatch}
 \usepackage{longtable}
-\usepackage[notintoc]{nomencl}
 \usepackage{verbatim}
 \usepackage{comment}
 \usepackage{float}
@@ -29,7 +28,6 @@
 \usepackage{amssymb}
 \usepackage{gensymb}
 \usepackage{lastpage}
-\makenomenclature
 \usepackage{hyperref}
 \usepackage{makeidx}
 
@@ -38,12 +36,14 @@
 \begin{document}
     \input{sections/head.tex}
     \input{sections/introduction.tex}
+    \input{sections/current-state.tex}
     \input{sections/tic-tac-toe.tex}
     \input{sections/analysis.tex}
-    \input{sections/algorithms.tex}
+    \input{sections/solution-options.tex}
     \input{sections/requirements.tex}
     \input{sections/implementation.tex}
     \input{sections/experiments.tex}
+    \input{sections/helpers.tex}
     \input{sections/conclusion.tex}
     \clearpage
     \bibliography{references}

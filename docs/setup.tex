@@ -63,23 +63,7 @@
 % Change the `-` delimiter to an active character
 \xpatchparametertext\@@@cmidrule{-}{\cA-}{}{}
 \xpatchparametertext\@cline{-}{\cA-}{}{}
-\makeatother
-\makeatletter
-\patchcmd{\thenomenclature}{\section*}{\section}{}{}
-\makeatother
 
-\renewcommand{\nomname}{Použité skratky}
-\makeatletter
-\def\thenomenclature{
-    \section*{\nomname}
-    \if@intoc\addcontentsline{toc}{section}{\nomname}\fi%
-    \nompreamble
-    \list{}{%
-        \labelwidth\nom@tempdim
-        \leftmargin\labelwidth
-        \advance\leftmargin\labelsep
-        \itemsep\nomitemsep
-        \let\makelabel\nomlabel}}
 \lstset{
     escapeinside={\%*}{*)},
     breaklines=true,
