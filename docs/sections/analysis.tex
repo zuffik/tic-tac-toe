@@ -9,17 +9,19 @@ Ak stroj (aj mechanický) dokáže niečo vykonať bez explicitne zadaného prí
 
 \subsubsection{Metódy}
 
-Umelá inteligencia (angl. artificial intelligence) je široká vedná disciplína, ktorá zahŕňa
+Umelá inteligencia (angl. artificial intelligence) je široká vedná disciplína, ktorá zahŕňa\cite{ai_methods}
 \begin{itemize}
-    \item strojové učenie
-    \item textovú analýza
-    \item analýzu reči
-    \item prevod textu na reč
-    \item expertné systémy
-    \item plánovanie
-    \item optimalizáciu
-    \item robotiku
-    \item analýzu obrazu
+    \item \textbf{fuzzy prístup} k riešeniu nejasných úloh (napr. optimalizácia pri skladových zásobách, ktoré sú nejasné)
+    \item \textbf{pravdepodobnostné grafické modely}: markovove modely, skryté markovove siete, apod.
+    \item \textbf{rozhodovacie stromy} medzi ktoré patrí klasifikácia a regresia
+    \item \textbf{učenie na báze komisií}: výsledok sa určuje na základe "hlasovania" viacerých modelov
+    \item \textbf{učenie s odmenou}: odmeňovanie dobrých výsledkov
+    \item \textbf{expertné systémy}
+    \item \textbf{logické systémy}: odvodzovanie v logike
+    \item \textbf{matematická optimalizácia} (spojitá, diskrétna, \dots)
+    \item \textbf{prehľadávanie stavového priestoru} (napr. minimax)
+    \item \textbf{analýza jazyka}: textová analýza, oprava pravopisu, predikcia, preklad, generovanie konspektu, atď.
+    \item \textbf{dátová analýza}
     \item a mnoho ďalšieho
 \end{itemize}
 Metódy niektorých skupín sa môžu prelínať (napr. na analýzu obrazu a na analýzu zvuku je možné použiť umelé neurónové
@@ -103,13 +105,34 @@ najmenšia vzdialenosť bodu od nadroviny bola čo najväčšia (maximálna)
 Typickým príkladom použitia metódy podporných vektorov je rozdelenie e-mailovej komunikácie do dvoch skupín: relevantnú
 a nevyžiadanú poštu (spam), no podporné vektory sa dajú použiť aj na spracovanie obrazu, či textu.
 
-\paragraph{Iné metódy}
+\paragraph{Umelé neurónové siete}
 
-Pre umelú inteligenciu existuje veľké množstvo algoritmov a ich alternatív, z ktorých sú ešte často používané
-\emph{umelé neurónové siete}, ktoré sú bližšie popísané v \autoref{subsec:algo-ann} a ako rozhodovacie pravidlo v
-teórii hier pri vyhľadávacích stromoch je často využívaný algoritmus \emph{minimax} (viac v
-\autoref{subsec:algo-minmax}).
+Umelé neurónové siete (skr. ANN, z angl. artificial neural networks) je metóda umelej inteligencie vychádzajúca z
+biologických (prirodzených) neurónových sietí.
+Pre túto metódu je špecifická najmä jej štruktúra, ktorá sa dá reprezentovať grafom a teda je jednoduchá na pochopenie.
+Umelé neurónové siete sú jednou z najrozšírenejších metód a majú výborne spracované matematické pozadie, vďaka ktorému
+sú v riešení svojho problému efektívne v súvislosti s výkonom a výpočtovým časom no aj so správnosťou riešenia.
+Na druhú stranu výstupy z umelých neurónových sietí sú porovnateľné s heuristickými a metaheuristickými metódami, tzn.
+nie vždy je umelá neurónová sieť vo svojom výsledku správna.
+Riešenie na jej výstupe je teda suboptimálne.
+Zároveň je pri tejto metóde nutné dbať na jej štruktúru, ktorá je vždy špecifická pre daný problém a je nutné túto
+štruktúru navrhnúť a vyladiť tak, aby dobre riešila daný problém.
+Umelé neurónové siete sú bližšie popísané v \autoref{subsec:algo-ann}.
+
+\paragraph{MiniMax}
+
+Tento algoritmus patrí medzi metódy prehľadávanie stavového priestoru.
+Základným princípom tejto metódy je \textbf{mini}malizácia úžitku oponenta v hre a \textbf{max}imalizácia úžitku
+cieľového hráča.
+Ak z každého stavu (najmä) hry sa dá do ďalšieho stavu dostať zmenou jednej premennej (z $n$ premenných),
+vytvorí sa na základe pravidiel stavový strom (resp. rozhodovací strom), cieľový stav (list) sa ohodnotí reálnym číslom
+a na základe toho sú ohodnotené aj stavy až kým algoritmus nepríde do koreňa.
+Z koreňa je potom jasné, do ktorého stavu sa presunúť, aby úžitok cieľového hráča bol čo najväčší (maximálny).
+Metóda Minimax je bližšie popísaná v \autoref{subsec:algo-minmax}.
 \\
 \\
 V súčasnom stave je teda jednoduché vytvoriť, analyzovať a implementovať už vytvorené algoritmy a transformovať ich
 do ktoréhokoľvek prostredia (napr. aj Cave).
+Na základe zamerania aplikácie boli pre implementáciu zvolené \emph{umelé neurónové siete}, ktoré sú bližšie popísané v
+\autoref{subsec:algo-ann} a ako rozhodovacie pravidlo v teórii hier pri vyhľadávacích stromoch často využívaný
+algoritmus \emph{minimax} (viac v \autoref{subsec:algo-minmax}).
