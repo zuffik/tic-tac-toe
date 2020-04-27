@@ -164,6 +164,18 @@ Tabuľka je vertikálne rozdelená na 2 časti:
 \end{table}
 \clearpage
 
+\paragraph{Vyhodnotenie výsledkov}
+
+Pri algoritme minimax je zjavné, že je to exaktný algoritmus, pretože časy jednotlivých hier hlavne pri vyšších
+rozmeroch boli extrémne veľké (pričom maximálna hĺbka stromu pri $i>2$ bola nastavená na $l=2$) a rástli exponenciálne.
+Aj keď vo variante s náhodným ťahom oponenta sú časy značne nižšie, sú stále veľmi vysoké pre reálne použitie.
+
+Výsledky metódy umelých neurónových sietí boli v prípade variantu, kde proti sebe hrala tá istá neurónová sieť
+približne rovnaké so vstupnými údajmi a teda so simuláciami náhodných hier.
+Z týchto výsledkov je možné usúdiť, že sieť je natrénovaná veľmi dobre a dokonca pri variante s náhodnými ťahmi oponenta
+bola v drvivej väčšine prípadov úspešná.
+Znamená to, že táto umelá neurónová sieť by mala byť úspešná vo väčšine prípadov pri hre so sofistikovanejším oponentom.
+
 \subsection{Experimenty s rôznymi modelmi}\label{subsec:experiments-versus}
 Tieto typy experimentov boli vykonávané na ploche s veľkosťou $10 \times 10$ s počtom znakov potrebných pre výhru 3
 (resp. $r = 10$, $w = 3$ a $d = 2$), pričom použité boli 3 algoritmy:
@@ -208,23 +220,18 @@ Tieto typy experimentov boli vykonávané na ploche s veľkosťou $10 \times 10$
     \caption{Výsledky experimentov s rôznymi modelmi}\label{table:experiments-versus}
 \end{table}
 
-\subsection{Vyhodnotenie experimentov}\label{subsec:experiment-results}
-
-\paragraph{Experimenty s rôznymi plochami}
-
-Pri algoritme minimax je zjavné, že je to exaktný algoritmus, pretože časy jednotlivých hier hlavne pri vyšších
-rozmeroch boli extrémne veľké (pričom maximálna hĺbka stromu pri $i>2$ bola nastavená na $l=2$) a rástli exponenciálne.
-Aj keď vo variante s náhodným ťahom oponenta sú časy značne nižšie, sú stále veľmi vysoké pre reálne použitie.
-
-Výsledky metódy umelých neurónových sietí boli v prípade variantu, kde proti sebe hrala tá istá neurónová sieť
-približne rovnaké so vstupnými údajmi a teda so simuláciami náhodných hier.
-Z týchto výsledkov je možné usúdiť, že sieť je natrénovaná veľmi dobre a dokonca pri variante s náhodnými ťahmi oponenta
-bola v drvivej väčšine prípadov úspešná.
-Znamená to, že táto umelá neurónová sieť by mala byť úspešná vo väčšine prípadov pri hre so sofistikovanejším oponentom.
-
 \paragraph{Experimenty s rôznymi modelmi}
 
 Napriek tomu, že umelá neurónová sieť bola úspešná pri hre s inou umelou neurónovou sieťou, nevyrovná sa to exaktnému
 algoritmu minimax, pri ktorom úplne pohorela.
 Ak ale je cieľom efektivita, nie je možné použiť algoritmus minimax vzhľadom na čas, ktorý algoritmus potrebuje pre
 vykonanie výpočtov.
+
+\subsection{Celkové vyhodnotenie}\label{subsec:results-analysis}
+
+Umelá neurónová sieť navrhnutá v \autoref{subsec:algo-ann} bola oproti externej umelej neurónovej sieti úspešnejšia, no
+na druhej strane je citeľne slabšia v hre s exaktným algoritmom (minimax).
+Implementovaná štruktúra má silnú šancu vyhrať nad oponentom s náhodným výberom a menšiu (no stále pravdepodobnejšiu)
+šancu vyhrať v hre s inteligentným oponentom na rôznych plochách.
+Pravdepodobnosť výhry sa v tomto prípade dá zvýšiť zväčšením vzorky dát, s ktorými umelá neurónová sieť pracuje
+(trénuje).

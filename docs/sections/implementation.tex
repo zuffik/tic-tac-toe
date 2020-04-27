@@ -51,7 +51,7 @@ Zvyšné súbory sú generované vývojovým prostredím.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/unity.png}
+    \includegraphics[width=0.8\textwidth]{images/unity.jpg}
     \caption{Prostredie unity}
 \end{figure}\label{figure:unity}
 
@@ -118,7 +118,7 @@ jeden neurón (index s najväčšou pravdepodobnosťou výhry), knižnica Tensor
 Dôvodom tohto prístupu je fakt, že z technického hľadiska sa jedná o \emph{klasifikáciu} (zaradenie vstupu k jednému z
 výstupov).
 Knižnica z $r^d$ možností pohybu hráča rozhodne o tom, ktoré políčko má pre hráča najvyššiu pravdepodobnosť výhry
-pomocou tzv. \emph{one-hot array}.
+pomocou tzv. \emph{one-hot array}\cite{one_hot}.
 Je to vektor (pole) $s_i$, ktorý má $r^d$ prvkov, $\forall i : i\neq k : s_i=0$ a $s_k=1$, kde $k$ označuje index
 políčka s najpravdepodobnejším víťazstvom.
 Napr. pre $r=3$, $d=3$ a $k=4$ pole vyzerá nasledovne:
@@ -188,10 +188,17 @@ V aplikácii je použitá pre načítanie modelov z disku a ich použitie v samo
 
 \subsection{Cloud computing a automatické zostavenie}\label{subsec:ci}
 
-Za účelom automatizácie a zrýchlenia zostavenia bol nastavený aj continuous deployment (súvislé nahrávanie, ďalej len
-"CD") na \emph{GitLab-CI}.
-Toto nastavenie umožňuje spustiť trénovanie umelej neurónovej siete a zostavenie aplikácie priamo na serveroch,
-Konkrétne sa jedná o servery od spoločnosti \emph{Amazon} v rámci divízie \emph{Amazon web services}.
+Pre programátorov je z hľadiska implementácie komplexnej aplikácie dôležité aj jej jednoduchá distribúcia.
+V rámci tohto projektu bolo nutné zabezpečiť externé zdroje, ktoré by pokryli výpočtové potreby simulácií a trénovania
+umelých neurónových sietí.
+Za účelom automatizácie a zrýchlenia zostavenia bolo nastavené súvislé nahrávanie (angl. continuous deployment, skr. a
+ďalej len "CD") prostredníctvom služby \emph{GitLab-CI}\cite{gitlab_ci}, ktorá ponúka spustenie sekvencie príkazov s
+nakonfigurovaným prostredím prostredníctvom tzv. "pipelines", ktoré predstavujú skupinu sekvencii, pričom každá skupina
+má svoju vlastnú konfiguráciu.
+Zároveň každá pipeline ponúka možnosť vybrať súbory, ktoré poskytne pre iné pipelines, tzv. artefakty.
+Toto nastavenie umožňuje spustiť trénovanie umelej neurónovej siete a zostavenie aplikácie priamo na serveroch.
+
+Konkrétne sa jedná o servery od spoločnosti \emph{Amazon} v rámci divízie \emph{Amazon web services}\cite{aws}.
 Na trénovanie ANN sa použila inštancia Linuxového serveru optimalizovaného pre lepší výkon operačnej pamäte.
 Pre zostavenie unity aplikácie (s využitím natrénovanej umelej neurónovej siete) bola použitá inštancia Windows
 serveru s predinštalovanou aplikáciou Unity.
@@ -201,8 +208,63 @@ serveru s predinštalovanou aplikáciou Unity.
     \caption{Zobrazenie zotavenia aplikácie v rámci continuous deployment}
 \end{figure}\label{figure:cd}
 
+V projekte sú nastavené 3 základné \emph{skupiny} pipelines:
+\begin{enumerate}
+    \item proces pre natrénovanie neurónovej siete a zostavenie grafickej časti aplikácie
+        \begin{enumerate}
+            \item spustenie výpočtového serveru
+            \item spustenie trénovania na výpočtovom serveri
+            \item vypnutie výpočtového serveru a zapnutie serveru pre zostavenie grafickej časti (windows)
+            \item zostavenie grafickej časti aplikácie
+            \item vypnutie všetkých bežiacich zariadení
+        \end{enumerate}
+    \item proces čisto pre zostavenie grafickej časti aplikácie s využitím predom natrénovaných dát uložených na serveri
+        pre zostavenie grafickej časti
+        \begin{enumerate}
+            \item zapnutie serveru pre zostavenie grafickej časti (windows)
+            \item zostavenie grafickej časti aplikácie
+            \item vypnutie všetkých bežiacich zariadení
+        \end{enumerate}
+    \item proces pre zostavenie a distribúciu písomnej časti tejto práce písanej v LaTeX-e\cite{latex}
+        (nie je súčasťou zadania)
+\end{enumerate}
+
 Algoritmy boli implementované na základe návrhu riešenia v \autoref{sec:algorithms}.
 Najdôležitejšou časťou bolo prepojenie implementácie umelej inteligencie s implementáciou grafickej časti a zároveň aj
 najťažšie.
 Problémové bolo najmä nájsť spoločnú cestu pre tieto dve časti a touto cestou bolo práve uloženie natrénovaných modelov
 z časti s umelou inteligenciou do súborového systému a ich načítanie v implementácii grafickej časti.
+
+\subsection{Snímky z aplikácie}\label{subsec:screenshots}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/screenshot-mm-1.jpg}
+    \caption{Snímka úvodného hlavného menu}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/screenshot-mm-2.jpg}
+    \caption{Snímka konfiguračného hlavného menu}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/screenshot-game-1.jpg}
+    \caption{Snímka z hry}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/screenshot-game-2.jpg}
+    \caption{Snímka z hry}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/screenshot-win.jpg}
+    \caption{Snímka z hry so stavom výhry}
+\end{figure}
+
+\clearpage
