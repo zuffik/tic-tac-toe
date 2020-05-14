@@ -19,7 +19,10 @@ PDF build:
     - export LANG="sk_SK"
     - export LC_ALL=sk_SK.UTF-8
     - export LANGUAGE="sk_SK:sk"
-    - latexmk -bibtex -pdf -outdir=out/ paperwork.tex
+    - xelatex -output-directory=out/ paperwork.tex
+    - bibtex out/paperwork
+    - xelatex -output-directory=out/ paperwork.tex
+    - xelatex -output-directory=out/ paperwork.tex
   artifacts:
     paths:
       - docs/out/paperwork.pdf

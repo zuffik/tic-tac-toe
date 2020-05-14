@@ -63,15 +63,16 @@ Vyhľadávanie prebieha potom nasledovne:\cite{algo_minimax_pseudocode}
     \begin{lstlisting}[
       mathescape,
       columns=fullflexible,
+      escapeinside={(@}{@)},
       basicstyle=\fontfamily{lmvtt}\selectfont,
     ]
 def minimax(hraciaPlocha, int maximalnaHlbka, bool maximalizacia):
-    if maximalnaHlbka = 0 or hraciaPlocha nemá žiaden dostupný možný ťah:
+    if maximalnaHlbka = 0 or hraciaPlocha (@ nem\'{a} \v{z}iaden dostupn\'{y} mo\v{z}n\'{y} \v{t}ah @):
         return hodnota hracej plochy
     if maximalizacia:
         najlepsiaHodnota = -$\infty$
-        for všetky dostupné ťahy v hracej ploche:
-            novaHraciaPlocha = vykonaj ťah v hraciaPlocha
+        for (@ v\v{s}etky dostupné \v{t}ahy v hracej ploche @):
+            novaHraciaPlocha = (@ vykonaj \v{t}ah v hraciaPlocha @)
             aktualnaHodnota, aktualnyTah = minimax(novaHraciaPlocha, maximalnaHlbka - 1, false))
             if aktualnaHodnota > najlepsiaHodnota:
                 najlepsiaHodnota := aktualnaHodnota
@@ -79,8 +80,8 @@ def minimax(hraciaPlocha, int maximalnaHlbka, bool maximalizacia):
         return najlepsiaHodnota, najlepsiTah
     else:
         najlepsiaHodnota = $\infty$
-        for všetky dostupné ťahy v hracej ploche:
-            novaHraciaPlocha = vykonaj ťah v hraciaPlocha
+        for (@ v\v{s}etky dostupné \v{t}ahy v hracej ploche @):
+            novaHraciaPlocha = (@ vykonaj \v{t}ah v hraciaPlocha @)
             aktualnaHodnota, aktualnyTah = minimax(novaHraciaPlocha, maximalnaHlbka - 1, true))
             if aktualnaHodnota < najlepsiaHodnota:
                 najlepsiaHodnota := aktualnaHodnota
@@ -442,36 +443,37 @@ pre rozmer $r \times r$, kde $r = w$ má tento problém nasledovné riešenie:
 \begin{lstlisting}[
   mathescape,
   columns=fullflexible,
+  escapeinside={(@}{@)},
   basicstyle=\fontfamily{lmvtt}\selectfont,
 ]
 pre $i=1\dots{r}$:
-    ak $b_{i0}$ je prázdne
+    ak $b_{i0}$ je (@pr\'{a}zdne@)
     inak:
         $z = b_{i0}$
         pre $j=1\dots{r}$:
             ak $b_{ij} \neq z$:
-                prejdi na ďalší riadok
-        víťaz je $z$
+                (@prejdi na \v{d}al\v{s}\'{i} riadok@)
+        (@v\'{i}\v{t}az je@) $z$
 pre $j=1\dots{r}$:
     ak $b_{0j}$
     inak:
         $z = b_{0j}$
         pre $i=1\dots{r}$:
             ak $b_{ij} \neq z$:
-                prejdi na ďalší stĺpec
-        víťaz je $z$
-ak $b_{00}$ nie je prázdny znak
+                (@prejdi na \v{d}al\v{s}\'{i} st\'{l}pec@)
+        (@v\'{i}\v{t}az je@) $z$
+ak $b_{00}$ (@nie je pr\'{a}zdny znak@)
     $z = b_{00}$
     pre $i=1\dots{r}$:
         ak $b_{ii} \neq z$, koniec cyklu
-    víťaz je $z$
-ak $b_{0,r-i}$ nie je prázdny znak
+    v\'{i}\v{t}az je $z$
+ak $b_{0,r-i}$ (@nie je pr\'{a}zdny znak@)
     $z = b_{0,r-i}$
     pre $i=1\dots{r}$:
         ak $b_{i,r-i} \neq z$, koniec cyklu
-    víťaz je $z$
-ak žiadny z predošlých cyklov nevyhodnotí víťaza a
-neexistuje žiaden možný ťah pre hráča, nastala remíza
+    (@v\'{i}\v{t}az je@) $z$
+(@ak \v{z}iadny z predo\v{s}l\'{y}ch cyklov nevyhodnot\'{i} v\'{i}\v{t}aza a@)
+(@neexistuje \v{z}iaden mo\v{z}n\'{y} \v{t}ah pre hr\'{a}\v{c}a, nastala rem\'{i}za@)
 \end{lstlisting}
 Prvá a druhá časť skúmajú potenciálnych víťazov v riadku a stĺpci, druhá časť skúma výsledky diagonálne.
 Keďže $r = w$ stačí preskúmať hlavnú a vedľajšiu diagonálu, pretože tie sú jediné, ktoré môžu obsahovať $w$ znakov.
@@ -485,6 +487,7 @@ Algoritmus je možné prepísať nasledovne:
 \begin{lstlisting}[
   mathescape,
   columns=fullflexible,
+  escapeinside={(@}{@)},
   basicstyle=\fontfamily{lmvtt}\selectfont,
 ]
 $R=\{\}$
@@ -504,9 +507,9 @@ pridanie $M_v$ do $R$
 pre $k=1\dots{|R|}$:
     $z$ = $k$-ty prvok z $R$
     pre $i=1\dots{r}$:
-        ak $z_0 = z_i$, potom $z_0$ je víťaz
-ak predošlý cyklus nevyhodnotí víťaza a
-neexistuje žiaden možný ťah pre hráča, nastala remíza
+        ak $z_0 = z_i$, (@potom $z_0$ je v\'{i}\v{t}az@)
+(@ak predo\v{s}l\'{y} cyklus nevyhodnot\'{i} v\'{i}\v{t}aza a@)
+(@neexistuje \v{z}iaden mo\v{z}n\'{y} \v{t}ah pre hr\'{a}\v{c}a, nastala rem\'{i}za@)
 \end{lstlisting}
 Algoritmus najskôr vytvorí množinu $R$ z každého stĺpca a riadku ($M_r$ a $M_s$) a postupne plní množiny hlavnej a
 vedľajšej diagonály ($M_h$ a $M_s$).
@@ -526,6 +529,7 @@ Algoritmus je možné upraviť nasledovne:
 \begin{lstlisting}[
   mathescape,
   columns=fullflexible,
+  escapeinside={(@}{@)},
   basicstyle=\fontfamily{lmvtt}\selectfont,
 ]
 Nech $skontroluj(x, y)$:
@@ -546,11 +550,11 @@ Nech $skontroluj(x, y)$:
     pre $k=1\dots{|R|}$:
         $z$ = $k$-ty prvok z $R$
         pre $i=1\dots{w}$:
-            ak $z_0 = z_i$, potom $z_0$ je víťaz
-    ak predošlý cyklus nevyhodnotí víťaza tak:
-        ak $[x + 1, y]$ nebolo skontrolované $skontroluj(x + 1, y)$
-        ak $[x, y + 1]$ nebolo skontrolované $skontroluj(x, y + 1)$
-        ak $[x + 1, y + 1]$ nebolo skontrolované $skontroluj(x + 1, y + 1)$
+            ak $z_0 = z_i$, potom $z_0$ (@je v\'{i}\v{t}az@)
+    (@ak predo\v{s}l\'{y} cyklus nevyhodnot\'{i} v\'{i}\v{t}aza tak@):
+        ak $[x + 1, y]$ (@nebolo skontrolovan\'{e}@) $skontroluj(x + 1, y)$
+        ak $[x, y + 1]$ (@nebolo skontrolovan\'{e}@) $skontroluj(x, y + 1)$
+        ak $[x + 1, y + 1]$ (@nebolo skontrolovan\'{e}@) $skontroluj(x + 1, y + 1)$
 
 $skontroluj(0, 0)$
 \end{lstlisting}
